@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls.Binders {
-    public class EditorBinder {
+namespace AsNum.XFControls.Binders
+{
+    public class EditorBinder
+    {
 
         public static readonly BindableProperty PlaceHolderProperty =
             BindableProperty.CreateAttached("PlaceHolder",
@@ -12,7 +14,8 @@ namespace AsNum.XFControls.Binders {
                 propertyChanged: Changed
                 );
 
-        public static string GetPlaceHolder(BindableObject view) {
+        public static string GetPlaceHolder(BindableObject view)
+        {
             return (string)view.GetValue(PlaceHolderProperty);
         }
 
@@ -25,15 +28,19 @@ namespace AsNum.XFControls.Binders {
                 propertyChanged: Changed
                 );
 
-        public static Color GetPlaceHolderColor(BindableObject view) {
+        public static Color GetPlaceHolderColor(BindableObject view)
+        {
             return (Color)view.GetValue(PlaceHolderColorProperty);
         }
 
-        private static void Changed(BindableObject bindable, object oldValue, object newValue) {
+        private static void Changed(BindableObject bindable, object oldValue, object newValue)
+        {
             var view = (View)bindable;
-            if (view != null) {
+            if (view != null)
+            {
                 var effect = view.Effects.FirstOrDefault(e => e is EditorEffect);
-                if (effect == null) {
+                if (effect == null)
+                {
                     effect = new EditorEffect();
                     view.Effects.Add(effect);
                 }
@@ -41,9 +48,11 @@ namespace AsNum.XFControls.Binders {
         }
 
 
-        class EditorEffect : RoutingEffect {
+        class EditorEffect : RoutingEffect
+        {
             public EditorEffect()
-                : base("AsNum.EditorEffect") {
+                : base("AsNum.EditorEffect")
+            {
             }
         }
     }

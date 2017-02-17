@@ -7,12 +7,14 @@ using System.Diagnostics;
 using System.Linq;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
     /// <summary>
     /// 
     /// </summary>
     [System.Obsolete("请使用 TabView 替换")]
-    public class TabbedView : ContentView {
+    public class TabbedView : ContentView
+    {
 
         #region itemsSource 数据源
         public static readonly BindableProperty ItemsSourceProperty =
@@ -22,28 +24,36 @@ namespace AsNum.XFControls {
                 Enumerable.Empty<ISelectable>(),//保证 ItemsSource 不为NULL
                 propertyChanged: ItemsSourceChanged);
 
-        public IEnumerable<ISelectable> ItemsSource {
-            get {
+        public IEnumerable<ISelectable> ItemsSource
+        {
+            get
+            {
                 return (IEnumerable<ISelectable>)this.GetValue(ItemsSourceProperty);
             }
-            set {
-                if (value != null) {
+            set
+            {
+                if (value != null)
+                {
                     //保证数据源中,没有 null
                     var source = value.Cast<object>().Where(s => s != null);
                     this.SetValue(ItemsSourceProperty, source);
-                } else {
+                }
+                else
+                {
                     //保证数据源不为 NULL
                     SetValue(ItemsSourceProperty, Enumerable.Empty<object>());
                 }
             }
         }
 
-        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabbedView)bindable;
             tv.UpdateTabs();
             tv.UpdateChildren();
 
-            if (newValue is INotifyCollectionChanged) {
+            if (newValue is INotifyCollectionChanged)
+            {
                 var newCollection = (INotifyCollectionChanged)newValue;
                 tv.InitCollection(newCollection);
             }
@@ -59,16 +69,20 @@ namespace AsNum.XFControls {
                 BindingMode.Default,
                 propertyChanged: TabContainerChanged);
 
-        public ControlTemplate TabContainerTemplate {
-            get {
+        public ControlTemplate TabContainerTemplate
+        {
+            get
+            {
                 return (ControlTemplate)this.GetValue(TabContainerTemplateProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TabContainerTemplateProperty, value);
             }
         }
 
-        private static void TabContainerChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void TabContainerChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabbedView)bindable;
             tv.TabContainer.ControlTemplate = (ControlTemplate)newValue;
         }
@@ -83,16 +97,20 @@ namespace AsNum.XFControls {
                 null,
                 propertyChanged: TabTemplateChanged);
 
-        public DataTemplate TabTemplate {
-            get {
+        public DataTemplate TabTemplate
+        {
+            get
+            {
                 return (DataTemplate)GetValue(TabTemplateProperty);
             }
-            set {
+            set
+            {
                 SetValue(TabTemplateProperty, value);
             }
         }
 
-        private static void TabTemplateChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void TabTemplateChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabbedView)bindable;
             tv.UpdateTabs();
         }
@@ -105,11 +123,14 @@ namespace AsNum.XFControls {
                 typeof(TabbedView),
                 null);
 
-        public DataTemplate ItemTemplate {
-            get {
+        public DataTemplate ItemTemplate
+        {
+            get
+            {
                 return (DataTemplate)GetValue(ItemTemplateProperty);
             }
-            set {
+            set
+            {
                 SetValue(ItemTemplateProperty, value);
             }
         }
@@ -122,11 +143,14 @@ namespace AsNum.XFControls {
                 typeof(TabbedView),
                 null);
 
-        public DataTemplateSelector ItemTemplateSelector {
-            get {
+        public DataTemplateSelector ItemTemplateSelector
+        {
+            get
+            {
                 return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty);
             }
-            set {
+            set
+            {
                 SetValue(ItemTemplateSelectorProperty, value);
             }
         }
@@ -139,11 +163,14 @@ namespace AsNum.XFControls {
                 typeof(TabbedView),
                 null);
 
-        public DataTemplateSelector TabTemplateSelector {
-            get {
+        public DataTemplateSelector TabTemplateSelector
+        {
+            get
+            {
                 return (DataTemplateSelector)GetValue(TabTemplateSelectorProperty);
             }
-            set {
+            set
+            {
                 SetValue(TabTemplateSelectorProperty, value);
             }
         }
@@ -158,30 +185,37 @@ namespace AsNum.XFControls {
                 BindingMode.TwoWay,
                 propertyChanged: SelectedItemChanged);
 
-        public ISelectable SelectedItem {
-            get {
+        public ISelectable SelectedItem
+        {
+            get
+            {
                 return (ISelectable)GetValue(SelectedItemProperty);
             }
-            set {
+            set
+            {
                 SetValue(SelectedItemProperty, value);
             }
         }
 
-        private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabbedView)bindable;
             var flag = true;
 
-            if (oldValue == null) {
+            if (oldValue == null)
+            {
 
                 //重新进入的时候，oldValue 为 null, 但是 itemsSource 中有 IsSelected 为 true 的
                 // Bug ??
                 var restoreSelected = tv.ItemsSource.FirstOrDefault(t => t.IsSelected);
-                if (restoreSelected != null) {
+                if (restoreSelected != null)
+                {
                     flag = false;
                     restoreSelected.IsSelected = true;
                     restoreSelected.NotifyOfPropertyChange("IsSelected");
 
-                    if (newValue != null && !restoreSelected.Equals(newValue)) {
+                    if (newValue != null && !restoreSelected.Equals(newValue))
+                    {
                         ((ISelectable)newValue).IsSelected = false;
                         ((ISelectable)newValue).NotifyOfPropertyChange("IsSelected");
                         //更新选中项，必须
@@ -191,12 +225,15 @@ namespace AsNum.XFControls {
             }
 
 
-            if (flag) {
-                if (oldValue != null) {
+            if (flag)
+            {
+                if (oldValue != null)
+                {
                     ((ISelectable)oldValue).IsSelected = false;
                     ((ISelectable)oldValue).NotifyOfPropertyChange("IsSelected");
                 }
-                if (newValue != null) {
+                if (newValue != null)
+                {
                     ((ISelectable)newValue).IsSelected = true;
                     ((ISelectable)newValue).NotifyOfPropertyChange("IsSelected");
                 }
@@ -212,16 +249,20 @@ namespace AsNum.XFControls {
                 TabPositions.Top,
                 propertyChanged: TabPositionChanged);
 
-        public TabPositions TabPosition {
-            get {
+        public TabPositions TabPosition
+        {
+            get
+            {
                 return (TabPositions)(this.GetValue(TabPositionProperty));
             }
-            set {
+            set
+            {
                 this.SetValue(TabPositionProperty, value);
             }
         }
 
-        private static void TabPositionChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void TabPositionChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabbedView)bindable;
             tv.UpdateTabPosition();
         }
@@ -252,7 +293,8 @@ namespace AsNum.XFControls {
         private Command SelectedCmd = null;
 
 
-        public TabbedView() {
+        public TabbedView()
+        {
 
             this.SelectedCmd = new Command(o => {
                 var model = (ISelectable)o;
@@ -268,7 +310,8 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 布局
         /// </summary>
-        private void PrepareLayout() {
+        private void PrepareLayout()
+        {
             #region 
             var grid = new Grid();
             this.Content = grid;
@@ -291,7 +334,8 @@ namespace AsNum.XFControls {
             this.TabScroller = new ScrollView();
             this.TabContainer.Content = this.TabScroller;
 
-            this.TabInnerContainer = new StackLayout() {
+            this.TabInnerContainer = new StackLayout()
+            {
                 Spacing = 0
             };
             this.TabScroller.Content = this.TabInnerContainer;
@@ -304,11 +348,13 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 更新标签位置
         /// </summary>
-        private void UpdateTabPosition() {
+        private void UpdateTabPosition()
+        {
             int row = 0, col = 0, colSpan = 1, rowSpan = 1;
             ScrollOrientation orientation = ScrollOrientation.Horizontal;
             StackOrientation orientation2 = StackOrientation.Horizontal;
-            switch (this.TabPosition) {
+            switch (this.TabPosition)
+            {
                 case TabPositions.Top:
                     row = 0;
                     col = 0;
@@ -348,10 +394,13 @@ namespace AsNum.XFControls {
             this.TabScroller.VerticalOptions = LayoutOptions.Fill;
 
             this.TabInnerContainer.Orientation = orientation2;
-            if (this.TabInnerContainer.Orientation == StackOrientation.Horizontal) {
+            if (this.TabInnerContainer.Orientation == StackOrientation.Horizontal)
+            {
                 this.TabInnerContainer.HorizontalOptions = LayoutOptions.Center;
                 this.TabInnerContainer.VerticalOptions = LayoutOptions.Center;
-            } else {
+            }
+            else
+            {
                 this.TabInnerContainer.HorizontalOptions = LayoutOptions.Center;
                 this.TabInnerContainer.VerticalOptions = LayoutOptions.Start;
             }
@@ -365,10 +414,12 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 更新主体位置
         /// </summary>
-        private void UpdateChildrenPosition() {
+        private void UpdateChildrenPosition()
+        {
             int row = 0, col = 0, colSpan = 0, rowSpan = 0;
 
-            switch (this.TabPosition) {
+            switch (this.TabPosition)
+            {
                 case TabPositions.Top:
                     row = 1;
                     col = 0;
@@ -400,7 +451,8 @@ namespace AsNum.XFControls {
             Grid.SetColumnSpan(this.ChildrenContainer, colSpan);
         }
 
-        public enum TabPositions {
+        public enum TabPositions
+        {
             Top,
             Bottom,
             Left,
@@ -411,13 +463,16 @@ namespace AsNum.XFControls {
         /// 
         /// </summary>
         /// <param name="collection"></param>
-        private void InitCollection(INotifyCollectionChanged collection) {
+        private void InitCollection(INotifyCollectionChanged collection)
+        {
             if (collection != null)
                 collection.CollectionChanged += Collection_CollectionChanged;
         }
 
-        private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            switch (e.Action) {
+        private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
                 case NotifyCollectionChangedAction.Add:
                     this.InsertChildren(e.NewItems, e.NewStartingIndex);
                     break;
@@ -440,16 +495,19 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 更新子元素
         /// </summary>
-        private void UpdateChildren() {
+        private void UpdateChildren()
+        {
             this.ChildrenContainer.Children.Clear();
 
             var source = this.ItemsSource.Cast<object>();
-            foreach (var d in source) {
+            foreach (var d in source)
+            {
                 View view = this.GetChildView(d);
                 this.ChildrenContainer.Children.Add(view);
             }
 
-            if (this.SelectedItem == null) {
+            if (this.SelectedItem == null)
+            {
                 this.SelectedCmd.Execute(source.FirstOrDefault());
             }
 
@@ -458,9 +516,11 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 更新标签
         /// </summary>
-        private void UpdateTabs() {
+        private void UpdateTabs()
+        {
             this.TabInnerContainer.Children.Clear();
-            foreach (var d in this.ItemsSource) {
+            foreach (var d in this.ItemsSource)
+            {
                 View tabView = this.GetTabView(d);
                 this.TabInnerContainer.Children.Add(tabView);
             }
@@ -471,11 +531,13 @@ namespace AsNum.XFControls {
         /// </summary>
         /// <param name="datas"></param>
         /// <param name="startIdx"></param>
-        private void InsertChildren(IEnumerable datas, int startIdx = 0) {
+        private void InsertChildren(IEnumerable datas, int startIdx = 0)
+        {
             if (datas == null)
                 return;
 
-            foreach (var d in datas) {
+            foreach (var d in datas)
+            {
                 var view = this.GetChildView(d);
                 var tabView = this.GetTabView(d);
 
@@ -490,11 +552,13 @@ namespace AsNum.XFControls {
         /// </summary>
         /// <param name="datas"></param>
         /// <param name="startIdx"></param>
-        private void RemoveChildren(IList datas, int startIdx) {
+        private void RemoveChildren(IList datas, int startIdx)
+        {
             if (datas == null)
                 return;
 
-            foreach (var d in datas) {
+            foreach (var d in datas)
+            {
                 this.ChildrenContainer.Children.RemoveAt(startIdx);
                 this.TabInnerContainer.Children.RemoveAt(startIdx);
                 startIdx++;
@@ -506,15 +570,18 @@ namespace AsNum.XFControls {
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        private View GetChildView(object data) {
+        private View GetChildView(object data)
+        {
             View view = null;
-            if (this.ItemTemplate != null || this.ItemTemplateSelector != null) {
+            if (this.ItemTemplate != null || this.ItemTemplateSelector != null)
+            {
                 if (this.ItemTemplateSelector != null)
                     view = (View)this.ItemTemplateSelector.SelectTemplate(data, null).CreateContent();
                 else if (this.ItemTemplate != null)
                     view = (View)this.ItemTemplate.CreateContent();
 
-                if (view != null) {
+                if (view != null)
+                {
                     view.BindingContext = data;
                 }
             }
@@ -532,7 +599,8 @@ namespace AsNum.XFControls {
         /// </summary>
         /// <param name="view"></param>
         /// <param name="data"></param>
-        private void SetFade(View view, object data) {
+        private void SetFade(View view, object data)
+        {
             var behavior = new FadeBehavior();
             behavior.SetBinding(FadeBehavior.IsSelectedProperty, "IsSelected", BindingMode.TwoWay);
             view.Behaviors.Add(behavior);
@@ -543,18 +611,23 @@ namespace AsNum.XFControls {
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        private View GetTabView(object data) {
+        private View GetTabView(object data)
+        {
             View view = null;
 
-            if (this.TabTemplate != null || this.TabTemplateSelector != null) {
+            if (this.TabTemplate != null || this.TabTemplateSelector != null)
+            {
                 //优先使用 TemplateSelector
-                if (this.TabTemplateSelector != null) {
+                if (this.TabTemplateSelector != null)
+                {
                     // SelectTemplate 的第二个参数，即 TemplateSelector 的 OnSelectTemplate 方法的 container 参数
                     view = (View)this.TabTemplateSelector.SelectTemplate(data, this).CreateContent();
-                } else if (this.TabTemplate != null)
+                }
+                else if (this.TabTemplate != null)
                     view = (View)this.TabTemplate.CreateContent();
 
-                if (view != null) {
+                if (view != null)
+                {
                     //上下文
                     view.BindingContext = data;
                 }

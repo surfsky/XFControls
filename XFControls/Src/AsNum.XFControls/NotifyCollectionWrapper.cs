@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Specialized;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
 
     /// <summary>
     /// 如果数据源是 INotifyCollectionChanged , 则监听变化事件，否则执行 reset 命令
     /// </summary>
-    public class NotifyCollectionWrapper {
+    public class NotifyCollectionWrapper
+    {
 
         public Action Begin { get; }
         public Action<IList, int> Add { get; }
@@ -22,9 +24,11 @@ namespace AsNum.XFControls {
             Action reset = null,
             Action finished = null,
             Action begin = null
-            ) {
+            )
+        {
 
-            if (source is INotifyCollectionChanged) {
+            if (source is INotifyCollectionChanged)
+            {
                 var collection = (INotifyCollectionChanged)source;
                 collection.CollectionChanged -= Collection_CollectionChanged;
                 collection.CollectionChanged += Collection_CollectionChanged;
@@ -45,13 +49,16 @@ namespace AsNum.XFControls {
                 finished.Invoke();
         }
 
-        private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+        private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
             if (this.Begin != null)
                 this.Begin.Invoke();
 
-            switch (e.Action) {
+            switch (e.Action)
+            {
                 case NotifyCollectionChangedAction.Add:
-                    if (this.Add != null) {
+                    if (this.Add != null)
+                    {
                         Device.BeginInvokeOnMainThread(() => {
                             this.Add.Invoke(e.NewItems, e.NewStartingIndex);
                         });
@@ -64,11 +71,12 @@ namespace AsNum.XFControls {
                         });
                     break;
                 case NotifyCollectionChangedAction.Reset:
-                    if (this.Reset != null) {
-						//IOS 下，Device.BeginInvokeOnMainThread 导至 Reset 重复触发，
-						// TODO Android 下不确定，待测
+                    if (this.Reset != null)
+                    {
+                        //IOS 下，Device.BeginInvokeOnMainThread 导至 Reset 重复触发，
+                        // TODO Android 下不确定，待测
                         //Device.BeginInvokeOnMainThread(() => {
-                            this.Reset.Invoke();
+                        this.Reset.Invoke();
                         //});
                     }
                     break;

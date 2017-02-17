@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
 
     /// <summary>
     /// 数据选择器
     /// </summary>
-    public class DataPicker : View {
+    public class DataPicker : View
+    {
 
         #region itemsSource 数据源
         /// <summary>
@@ -22,11 +24,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据源
         /// </summary>
-        public IEnumerable ItemsSource {
-            get {
+        public IEnumerable ItemsSource
+        {
+            get
+            {
                 return (IEnumerable)this.GetValue(ItemsSourceProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemsSourceProperty, value);
             }
         }
@@ -49,11 +54,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中项
         /// </summary>
-        public object SelectedItem {
-            get {
+        public object SelectedItem
+        {
+            get
+            {
                 return this.GetValue(SelectedItemProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SelectedItemProperty, value);
             }
         }
@@ -68,11 +76,14 @@ namespace AsNum.XFControls {
                 Color.Black
                 );
 
-        public Color TextColor {
-            get {
+        public Color TextColor
+        {
+            get
+            {
                 return (Color)this.GetValue(TextColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TextColorProperty, value);
             }
         }
@@ -87,11 +98,14 @@ namespace AsNum.XFControls {
                 15f
                 );
 
-        public float FontSize {
-            get {
+        public float FontSize
+        {
+            get
+            {
                 return (float)this.GetValue(FontSizeProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(FontSizeProperty, value);
             }
         }
@@ -106,11 +120,14 @@ namespace AsNum.XFControls {
                 Color.Gray);
 
 
-        public Color DividerColor {
-            get {
+        public Color DividerColor
+        {
+            get
+            {
                 return (Color)this.GetValue(DividerColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(DividerColorProperty, value);
             }
         }
@@ -134,17 +151,23 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 将数据源转换为可显示文本集合,用于 Render 中的 NativeControl
         /// </summary>
-        public IList<string> StringValues {
-            get {
+        public IList<string> StringValues
+        {
+            get
+            {
 
                 var lst = new List<string>();
 
-                if (this.ItemsSource != null && !string.IsNullOrWhiteSpace(this.DisplayPath)) {
+                if (this.ItemsSource != null && !string.IsNullOrWhiteSpace(this.DisplayPath))
+                {
 
-                    foreach (var d in this.ItemsSource) {
+                    foreach (var d in this.ItemsSource)
+                    {
                         lst.Add(Helper.GetProperty(d, this.DisplayPath)?.ToString());
                     }
-                } else if (this.ItemsSource != null) {
+                }
+                else if (this.ItemsSource != null)
+                {
                     foreach (var d in this.ItemsSource)
                         lst.Add(d.ToString());
                 }
@@ -156,12 +179,17 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中项的序号
         /// </summary>
-        public int SelectedIndex {
-            get {
-                if (this.SelectedItem != null) {
+        public int SelectedIndex
+        {
+            get
+            {
+                if (this.SelectedItem != null)
+                {
                     var str = Helper.GetProperty(this.SelectedItem, this.DisplayPath)?.ToString();
                     return this.StringValues.IndexOf(str);
-                } else {
+                }
+                else
+                {
                     return -1;
                 }
             }

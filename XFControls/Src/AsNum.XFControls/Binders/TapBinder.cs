@@ -2,8 +2,10 @@
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls.Binders {
-    public class TapBinder {
+namespace AsNum.XFControls.Binders
+{
+    public class TapBinder
+    {
 
         #region Command
         public static readonly BindableProperty CmdProperty =
@@ -13,11 +15,13 @@ namespace AsNum.XFControls.Binders {
                 null,
                 propertyChanged: Changed);
 
-        public static void SetCmd(BindableObject view, ICommand cmd) {
+        public static void SetCmd(BindableObject view, ICommand cmd)
+        {
             view.SetValue(CmdProperty, cmd);
         }
 
-        public static ICommand GetCmd(BindableObject view) {
+        public static ICommand GetCmd(BindableObject view)
+        {
             return (ICommand)view.GetValue(CmdProperty);
         }
         #endregion
@@ -30,11 +34,13 @@ namespace AsNum.XFControls.Binders {
                 null,
                 propertyChanged: Changed);
 
-        public static void SetParam(BindableObject view, object param) {
+        public static void SetParam(BindableObject view, object param)
+        {
             view.SetValue(ParamProperty, param);
         }
 
-        public static object GetParam(BindableObject view) {
+        public static object GetParam(BindableObject view)
+        {
             return view.GetValue(ParamProperty);
         }
         #endregion
@@ -48,35 +54,42 @@ namespace AsNum.XFControls.Binders {
                 propertyChanged: Changed
                 );
 
-        public static void SetWithFeedback(BindableObject view, bool withFeedback) {
+        public static void SetWithFeedback(BindableObject view, bool withFeedback)
+        {
             view.SetValue(WithFeedbackProperty, withFeedback);
         }
 
-        public static bool GetWithFeedback(BindableObject view) {
+        public static bool GetWithFeedback(BindableObject view)
+        {
             return (bool)view.GetValue(WithFeedbackProperty);
         }
         #endregion
 
-        private static void Changed(BindableObject bindable, object oldValue, object newValue) {
+        private static void Changed(BindableObject bindable, object oldValue, object newValue)
+        {
             var view = (View)bindable;
 
             var gesture = (TapGestureRecognizer)view.GestureRecognizers.FirstOrDefault(g => g is TapGestureRecognizer);
 
-            if (gesture == null) {
+            if (gesture == null)
+            {
                 gesture = new TapGestureRecognizer();
                 view.GestureRecognizers.Add(gesture);
             }
             gesture.Command = GetCmd(view);
             gesture.CommandParameter = GetParam(view);
 
-            if (GetWithFeedback(bindable)) {
+            if (GetWithFeedback(bindable))
+            {
                 var effect = view.Effects.FirstOrDefault(e => e is TapEffect);
-                if (effect == null) {
+                if (effect == null)
+                {
                     effect = new TapEffect();
                     view.Effects.Add(effect);
                 }
             }
-            else {
+            else
+            {
                 view.Effects.Remove(view.Effects.FirstOrDefault(e => e is TapEffect));
             }
         }
@@ -84,9 +97,11 @@ namespace AsNum.XFControls.Binders {
 
 
 
-        class TapEffect : RoutingEffect {
+        class TapEffect : RoutingEffect
+        {
             public TapEffect()
-                : base("AsNum.TapEffect") {
+                : base("AsNum.TapEffect")
+            {
             }
         }
     }

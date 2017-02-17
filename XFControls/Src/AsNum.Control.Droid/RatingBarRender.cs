@@ -9,21 +9,26 @@ using AG = Android.Graphics;
 using AW = Android.Widget;
 
 [assembly: ExportRenderer(typeof(RatingBar), typeof(RatingBarRender))]
-namespace AsNum.XFControls.Droid {
-    public class RatingBarRender : ViewRenderer<RatingBar, AW.LinearLayout> {
+namespace AsNum.XFControls.Droid
+{
+    public class RatingBarRender : ViewRenderer<RatingBar, AW.LinearLayout>
+    {
 
         private bool IsDisposed = false;
 
         private AW.RatingBar RB = null;
 
-        protected override void OnElementChanged(ElementChangedEventArgs<RatingBar> e) {
+        protected override void OnElementChanged(ElementChangedEventArgs<RatingBar> e)
+        {
             base.OnElementChanged(e);
 
-            if (this.RB != null) {
+            if (this.RB != null)
+            {
                 this.RB.RatingBarChange -= this.RB_RatingBarChange;
             }
 
-            this.RB = new AW.RatingBar(Forms.Context) {
+            this.RB = new AW.RatingBar(Forms.Context)
+            {
                 //放到Update 中，会导致应用挂起
                 //也就是说，运行中，不能修改 Step
                 StepSize = this.Element.Step
@@ -39,15 +44,18 @@ namespace AsNum.XFControls.Droid {
             this.Update();
         }
 
-        private void RB_RatingBarChange(object sender, AW.RatingBar.RatingBarChangeEventArgs e) {
+        private void RB_RatingBarChange(object sender, AW.RatingBar.RatingBarChangeEventArgs e)
+        {
             this.Element.Rate = e.Rating;
         }
 
-        private void Control_RatingBarChange(object sender, AW.RatingBar.RatingBarChangeEventArgs e) {
+        private void Control_RatingBarChange(object sender, AW.RatingBar.RatingBarChangeEventArgs e)
+        {
             this.Element.Rate = e.Rating;
         }
 
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e) {
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
             base.OnElementPropertyChanged(sender, e);
 
             if (e.PropertyName.Equals(RatingBar.IsIndicatorProperty.PropertyName) ||
@@ -56,14 +64,16 @@ namespace AsNum.XFControls.Droid {
                 e.PropertyName.Equals(RatingBar.StepProperty.PropertyName) ||
                 e.PropertyName.Equals(RatingBar.SelectedColorProperty.PropertyName) ||
                 e.PropertyName.Equals(RatingBar.UnSelectedColorProperty.PropertyName)
-                ) {
+                )
+            {
 
                 this.Update();
             }
         }
 
 
-        protected void Update() {
+        protected void Update()
+        {
             this.RB.IsIndicator = this.Element.IsIndicator;
             this.RB.NumStars = this.Element.StarCount;
             this.RB.Rating = this.Element.Rate;
@@ -83,7 +93,8 @@ namespace AsNum.XFControls.Droid {
         }
 
 
-        private Drawable Wrap(Drawable drb, int tint) {
+        private Drawable Wrap(Drawable drb, int tint)
+        {
             var compat = DrawableCompat.Wrap(drb);
             DrawableCompat.SetTint(compat, tint);
             return compat;
@@ -94,12 +105,14 @@ namespace AsNum.XFControls.Droid {
         /// </summary>
         /// <param name="fColor"></param>
         /// <param name="bColor"></param>
-        private void SetColor(AG.Color? fColor, AG.Color? bColor) {
+        private void SetColor(AG.Color? fColor, AG.Color? bColor)
+        {
 
             if (fColor == null && bColor == null)
                 return;
 
-            if (this.RB.ProgressDrawable is LayerDrawable) {
+            if (this.RB.ProgressDrawable is LayerDrawable)
+            {
                 var pDrb = (LayerDrawable)this.RB.ProgressDrawable;
 
                 var drb0 = pDrb.GetDrawable(0);
@@ -118,8 +131,11 @@ namespace AsNum.XFControls.Droid {
                 var layerDrawable = new LayerDrawable(drawables);
 
                 this.RB.ProgressDrawable = layerDrawable;
-            } else {
-                if (fColor.HasValue) {
+            }
+            else
+            {
+                if (fColor.HasValue)
+                {
                     var progressDrawable = this.RB.ProgressDrawable;
                     var compat = DrawableCompat.Wrap(progressDrawable);
                     DrawableCompat.SetTint(compat, fColor.Value);
@@ -128,9 +144,12 @@ namespace AsNum.XFControls.Droid {
             }
         }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing && !this.IsDisposed) {
-                if (this.RB != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && !this.IsDisposed)
+            {
+                if (this.RB != null)
+                {
                     this.RB.Dispose();
                     this.RB = null;
                 }

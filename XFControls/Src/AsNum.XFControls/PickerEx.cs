@@ -2,13 +2,15 @@
 using System.Linq;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
 
     /// <summary>
     /// Picker 扩展,
     /// XF 中的Picker没有数据源,数据只能是string的集合,不方便MVVM绑定
     /// </summary>
-    public class PickerEx : Picker {
+    public class PickerEx : Picker
+    {
 
         /// <summary>
         /// 数据源
@@ -75,11 +77,14 @@ namespace AsNum.XFControls {
         /// 文本大小
         /// </summary>
         [TypeConverter(typeof(FontSizeConverter))]
-        public double FontSize {
-            get {
+        public double FontSize
+        {
+            get
+            {
                 return (double)this.GetValue(FontSizeProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(FontSizeProperty, (object)value);
             }
         }
@@ -87,11 +92,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 文本水平对齐
         /// </summary>
-        public TextAlignment HorizontalTextAlignment {
-            get {
+        public TextAlignment HorizontalTextAlignment
+        {
+            get
+            {
                 return (TextAlignment)this.GetValue(HorizontalTextAlignmentProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(HorizontalTextAlignmentProperty, value);
             }
         }
@@ -109,11 +117,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据源
         /// </summary>
-        public IEnumerable<object> ItemsSource {
-            get {
+        public IEnumerable<object> ItemsSource
+        {
+            get
+            {
                 return (IEnumerable<object>)this.GetValue(ItemsSourceProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemsSourceProperty, value);
             }
         }
@@ -121,11 +132,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中的数据
         /// </summary>
-        public object SelectedItem {
-            get {
+        public object SelectedItem
+        {
+            get
+            {
                 return this.GetValue(SelectedItemProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SelectedItemProperty, value);
             }
         }
@@ -133,43 +147,55 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 要显示的文本的属性路径
         /// </summary>
-        public string DisplayMember {
+        public string DisplayMember
+        {
             get; set;
         }
 
         /// <summary>
         /// 默认选中项序号
         /// </summary>
-        public int DefaultIndex {
-            get {
+        public int DefaultIndex
+        {
+            get
+            {
                 return (int)this.GetValue(DefaultIndexProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(DefaultIndexProperty, value);
             }
         }
 
-        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var picker = (PickerEx)bindable;
             picker.Items.Clear();
             var datas = (IEnumerable<object>)newValue;
-            if (datas == null) {
+            if (datas == null)
+            {
             }
-            else {
-                foreach (var o in datas) {
+            else
+            {
+                foreach (var o in datas)
+                {
                     var d = Helper.TryGetProperty(o, picker.DisplayMember);
-                    if (d != null) {
+                    if (d != null)
+                    {
                         picker.Items.Add(d.ToString());
                     }
                 }
             }
         }
 
-        private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var picker = (PickerEx)bindable;
-            if (newValue != null) {
+            if (newValue != null)
+            {
                 var v = Helper.TryGetProperty(newValue, picker.DisplayMember);
-                if (v != null) {
+                if (v != null)
+                {
                     var idx = picker.Items.IndexOf(v.ToString());
                     picker.SelectedIndex = idx;
                 }

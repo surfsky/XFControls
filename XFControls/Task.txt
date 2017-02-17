@@ -1,0 +1,193 @@
+该项目仅供参考。
+本项目可作为Xamarin.Forms控件的开发示例
+在不了解各平台控件的特性上，还是从最基础的组件开始编写，可能还会快些，模拟QML：
+    圆角矩形    Rectangle
+	渐变        Gradient
+	滚动区域    ScrollView
+	触控事件    MouseArea
+	弹出层      Popup
+	-----------------------
+	布局        Layout
+	对话框      Dialog
+2017-02-17 CJH
+
+
+PS.
+    我实在想象不出简简单单的5、6个控件，居然要这么大的代码量
+    又有一堆的Behavior、Binder、Converter、Effect，而且各平台还要重写一遍#@￥#%@#！！
+    这真是糟糕透顶的UI解决方案
+
+
+------------------------------------------
+概述
+------------------------------------------
+XFControls：http://www.jianshu.com/p/3ed1a3f10955
+Git : https://github.com/gruan01/XFControls
+Nuget : https://www.nuget.org/packages/XFControls
+文档： https://github.com/gruan01/XFControls/blob/master/XFControls/Documents/index.md
+
+
+------------------------------------------
+重构计划
+------------------------------------------
+/ios平台编译运行
+/android平台编译运行
+/读懂示例项目
+/给android加上欢迎页面，避免白屏。估计有4s呆滞时间。进去后还是快的。
+读懂源码项目，两类控件:
+    完全的XamarinForms控件 
+    用 DependencyService 扩展的平台控件
+规范和精简代码
+    改为c#风格
+    去掉多余的行
+    精简BindableProperty代码
+    修改不合适的属性名：如CheckBox.OnImg -> ImageOn
+
+UI优化
+	优化主界面，展示所有功能（或改为标准的nest list方式来展示控件）
+	优化RadioGroup外观（换图即可）
+	优化RadioButtonGroup外观
+
+其它
+    修改AsNum命名空间：XForms，怕重名的话就用 XamarinForms，或换个自定义的单词
+    ctrls改为xfc
+
+
+        
+------------------------------------------
+XFControls 原有功能
+xmlns:ctrls="clr-namespace:AsNum.XFControls;assembly=AsNum.XFControls"
+------------------------------------------
+Border（边框，使用Render）
+    <ctrls:Border CornerRadius="15"
+        Stroke="#999999"
+        StrokeThickness="0.5"
+        WidthRequest="60"
+        IsClippedToBorder="True"
+        IsClippedToBounds="True"
+        Padding="5"
+        >
+        <Label Text="Title"
+            HorizontalTextAlignment="Center"
+            FontSize="12" />
+    </ctrls:Border>
+
+CheckBox（复选框）
+    <ctrls:CheckBox Grid.Row="8"
+        Grid.Column="1"
+        ShowLabel="True"
+        Text="保存为常用地址"
+        HorizontalOptions="End"
+        Checked="True"
+        />
+    OnImg
+    OffImg
+
+CircleBox（圆形，使用Render）
+    <ctrls:CircleBox Radius="50" 
+                     Grid.Row="1" 
+                     BackgroundColor="Lime">
+        <Image Source="http://v1.qzone.cc/pic/201407/13/11/05/53c1f77cdbd01600.jpg%21600x600.jpg" WidthRequest="100" HeightRequest="100" Aspect="AspectFill" />
+    </ctrls:CircleBox>
+
+
+DataPicker（数据选择器，使用Render）
+    <ctrls:DataPicker Grid.Column="0" Grid.Row="0"
+        ItemsSource="{Binding Datas}"
+        DisplayPath="AreaName"
+        SelectedItem="{Binding Province}"
+        x:Name="d1"
+        />
+    <ctrls:DataPicker Grid.Column="1" Grid.Row="0"
+        ItemsSource="{Binding Path=SelectedItem.Children, Source={x:Reference d1}}"
+        DisplayPath="AreaName"
+        SelectedItem="{Binding City}"
+        x:Name="d2"
+        />
+    <ctrls:DataPicker Grid.Column="2" Grid.Row="0"
+        ItemsSource="{Binding Path=SelectedItem.Children, Source={x:Reference d2}}"
+        DisplayPath="AreaName"
+        SelectedItem="{Binding County}"
+        />
+
+Flip（轮播，使用Render））
+    <ctrls:Flip Grid.Row="0"
+        AutoPlay="True"
+        Interval="3000"
+        ItemsSource="{Binding FlipSource}"
+        >
+      <ctrls:Flip.ItemTemplate>
+        <DataTemplate>
+          <Grid>
+            <Image Source="{Binding Img}" Aspect="AspectFill" />
+            <Label Text="{Binding Desc}"
+                   HorizontalTextAlignment="Start"
+                   VerticalTextAlignment="End"
+                   TextColor="White"
+                   Margin="10"
+                   />
+          </Grid>
+        </DataTemplate>
+      </ctrls:Flip.ItemTemplate>
+    </ctrls:Flip>
+           
+FontIcon（字体图标，使用Render）
+    <ContentPage.Resources>
+    <ResourceDictionary>
+      <OnPlatform x:TypeArguments="x:String"
+                  Android="Fonts/iconfont.woff"
+                  iOS="iconfont"
+                  WinPhone="Fonts/iconfont.woff"
+                  x:Key="font" />
+    </ResourceDictionary>
+    </ContentPage.Resources>
+    <ctrls:FontIcon FontFamily="{StaticResource font}" 
+                    Glyph="&#xe626;" 
+                    FontSize="20"
+                    Color="Red"
+                    Grid.Row="2" />
+
+
+Marquee（跑马灯）
+    <ctrls:Marquee ItemsSource="{Binding MarqueeSource}">
+        <ctrls:Marquee.ItemTemplate>
+          <DataTemplate>
+            <Label VerticalOptions="Center"
+                    LineBreakMode="TailTruncation"
+                    Text="{Binding}"
+                    Margin="2"
+                   FontSize="18"
+            />
+          </DataTemplate>
+        </ctrls:Marquee.ItemTemplate>
+      </ctrls:Marquee>
+
+
+RadioGroup（单选框组）
+    <ctrls:RadioGroup Orientation="Vertical"
+          ItemsSource="{Binding StockOutOptions}"
+          DisplayPath="Value"
+          />
+
+RadioButtonGroup（单选按钮组）            
+    <ctrls:RadioButtonGroup ItemsSource="{Binding Datas}"
+        SelectedItem="{Binding BigCat}"
+        DisplayPath="Data.Name"
+        SelectedItemControlTemplate="{StaticResource Selected}"
+        UnSelectedItemControlTemplate="{StaticResource UnSelected}"
+        />
+
+
+RatingBar（打分条）
+Reperater
+Segment
+Stepper
+TabView
+UniformGrid
+WrapLayout
+
+Binders
+    TabBinder       TapGestureRecognizer 的增强功能。Used to enhancement TapGestureRecognizer.
+    ListViewBinder	ListView 的增强功能。 Used to enhancement ListView.
+    CmdBinder	    MVVM 的事件绑定增强。 MVVM Event to Command
+       

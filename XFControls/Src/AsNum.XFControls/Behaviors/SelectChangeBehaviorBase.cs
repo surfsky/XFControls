@@ -1,7 +1,9 @@
 ﻿using Xamarin.Forms;
 
-namespace AsNum.XFControls.Behaviors {
-    public abstract class SelectChangeBehaviorBase : BindableBehavior<VisualElement> {
+namespace AsNum.XFControls.Behaviors
+{
+    public abstract class SelectChangeBehaviorBase : BindableBehavior<VisualElement>
+    {
 
         #region IsSelected
         public static readonly BindableProperty IsSelectedProperty =
@@ -12,16 +14,20 @@ namespace AsNum.XFControls.Behaviors {
                 BindingMode.Default,
                 propertyChanged: IsSelectedChanged);
 
-        public bool IsSelected {
-            get {
+        public bool IsSelected
+        {
+            get
+            {
                 return (bool)GetValue(IsSelectedProperty);
             }
-            set {
+            set
+            {
                 SetValue(IsSelectedProperty, value);
             }
         }
 
-        private static void IsSelectedChanged(BindableObject bindable, object oldvalue, object newvalue) {
+        private static void IsSelectedChanged(BindableObject bindable, object oldvalue, object newvalue)
+        {
             var behavior = (SelectChangeBehaviorBase)bindable;
 
             behavior.OnSelectedChanged();
@@ -29,7 +35,8 @@ namespace AsNum.XFControls.Behaviors {
         #endregion
 
 
-        protected virtual void OnSelectedChanged() {
+        protected virtual void OnSelectedChanged()
+        {
 
         }
     }

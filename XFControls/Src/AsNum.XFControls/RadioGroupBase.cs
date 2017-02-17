@@ -5,11 +5,13 @@ using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
     /// <summary>
     /// 单选按钮组的基类
     /// </summary>
-    public abstract class RadioGroupBase : ContentView {
+    public abstract class RadioGroupBase : ContentView
+    {
 
         #region SelectedItem
         /// <summary>
@@ -23,7 +25,8 @@ namespace AsNum.XFControls {
                 BindingMode.TwoWay,
                 propertyChanged: SelectedItemChanged);
 
-        private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var rg = (RadioGroupBase)bindable;
             if (!rg.IsInnerChanged)
                 rg.UpdateSelected();
@@ -32,11 +35,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中的数据
         /// </summary>
-        public object SelectedItem {
-            get {
+        public object SelectedItem
+        {
+            get
+            {
                 return this.GetValue(SelectedItemProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SelectedItemProperty, value);
             }
         }
@@ -57,16 +63,20 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据源
         /// </summary>
-        public IEnumerable ItemsSource {
-            get {
+        public IEnumerable ItemsSource
+        {
+            get
+            {
                 return (IEnumerable)this.GetValue(ItemsSourceProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemsSourceProperty, value);
             }
         }
 
-        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var rg = (RadioGroupBase)bindable;
             rg.Container.Children.Clear();
 
@@ -92,11 +102,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 要作为标签文本显示的属性路径
         /// </summary>
-        public string DisplayPath {
-            get {
+        public string DisplayPath
+        {
+            get
+            {
                 return (string)this.GetValue(DisplayPathProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(DisplayPathProperty, value);
             }
         }
@@ -117,11 +130,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 按钮大小,默认25
         /// </summary>
-        public double RadioSize {
-            get {
+        public double RadioSize
+        {
+            get
+            {
                 return (double)this.GetValue(RadioSizeProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(RadioSizeProperty, value);
             }
         }
@@ -141,11 +157,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中时的 ControlTemplate
         /// </summary>
-        public ControlTemplate SelectedItemControlTemplate {
-            get {
+        public ControlTemplate SelectedItemControlTemplate
+        {
+            get
+            {
                 return (ControlTemplate)this.GetValue(SelectedItemControlTemplateProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SelectedItemControlTemplateProperty, value);
             }
         }
@@ -166,11 +185,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 未选中时的 ControlTemplate
         /// </summary>
-        public ControlTemplate UnSelectedItemControlTemplate {
-            get {
+        public ControlTemplate UnSelectedItemControlTemplate
+        {
+            get
+            {
                 return (ControlTemplate)this.GetValue(UnSelectedItemControlTemplateProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(UnSelectedItemControlTemplateProperty, value);
             }
         }
@@ -185,11 +207,14 @@ namespace AsNum.XFControls {
                 ImageSource.FromResource("AsNum.XFControls.Imgs.Radio-Checked.png")
                 );
 
-        public ImageSource OnImg {
-            get {
+        public ImageSource OnImg
+        {
+            get
+            {
                 return (ImageSource)this.GetValue(OnImgProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(OnImgProperty, value);
             }
         }
@@ -201,11 +226,14 @@ namespace AsNum.XFControls {
                 ImageSource.FromResource("AsNum.XFControls.Imgs.Radio-Unchecked.png")
                 );
 
-        public ImageSource OffImg {
-            get {
+        public ImageSource OffImg
+        {
+            get
+            {
                 return (ImageSource)this.GetValue(OffImgProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(OffImgProperty, value);
             }
         }
@@ -235,7 +263,8 @@ namespace AsNum.XFControls {
 
         private bool IsInnerChanged = false;
 
-        public RadioGroupBase() {
+        public RadioGroupBase()
+        {
             this.Container = this.GetContainer();
             this.Content = this.Container;
 
@@ -247,7 +276,8 @@ namespace AsNum.XFControls {
 
                 var item = (Radio)o;
 
-                if (this.SelectedRadio != null) {
+                if (this.SelectedRadio != null)
+                {
                     this.SelectedRadio.IsSelected = false;
                     this.SelectedRadio.ControlTemplate = this.UnSelectedItemControlTemplate ?? DefaultControlTemplate;
                 }
@@ -264,7 +294,8 @@ namespace AsNum.XFControls {
             this.WrapItemsSource();
         }
 
-        private void WrapItemsSource() {
+        private void WrapItemsSource()
+        {
             new NotifyCollectionWrapper(this.ItemsSource,
                 add: (datas, idx) => this.Add(datas, idx),
                 remove: (datas, idx) => this.Remove(datas, idx),
@@ -272,10 +303,12 @@ namespace AsNum.XFControls {
                 finished: () => { });
         }
 
-        private void Add(IList datas, int idx) {
+        private void Add(IList datas, int idx)
+        {
             var c = this.Container.Children.Count;
 
-            foreach (var d in datas) {
+            foreach (var d in datas)
+            {
                 var v = this.GetRadio(d);
                 if (idx < c)
                     this.Container.Children.Insert(idx++, v);
@@ -284,33 +317,43 @@ namespace AsNum.XFControls {
             }
         }
 
-        private void Remove(IList datas, int idx) {
+        private void Remove(IList datas, int idx)
+        {
             var rms = this.Container.Children.Skip(idx).Take(datas.Count);
-            foreach (var rm in rms) {
+            foreach (var rm in rms)
+            {
                 this.Container.Children.Remove(rm);
             }
         }
 
-        private void Reset() {
+        private void Reset()
+        {
             this.Container.Children.Clear();
             if (this.ItemsSource != null)
-                foreach (var d in this.ItemsSource) {
+                foreach (var d in this.ItemsSource)
+                {
                     var v = this.GetRadio(d);
                     this.Container.Children.Add(v);
                 }
         }
 
-        protected virtual Radio GetRadio(object data) {
+        protected virtual Radio GetRadio(object data)
+        {
             Radio item = null;
-            if (data is Radio) {
+            if (data is Radio)
+            {
                 item = (Radio)data;
-            } else {
+            }
+            else
+            {
                 item = new Radio();
                 item.Value = data;
 
-                if (!string.IsNullOrWhiteSpace(this.DisplayPath)) {
+                if (!string.IsNullOrWhiteSpace(this.DisplayPath))
+                {
                     item.SetBinding(Radio.TextProperty, new Binding(this.DisplayPath, source: data));
-                } else
+                }
+                else
                     item.Text = data.ToString();
             }
 
@@ -319,7 +362,8 @@ namespace AsNum.XFControls {
             item.SetBinding(Radio.OnImgProperty, new Binding(nameof(OnImg), source: this));
             item.SetBinding(Radio.OffImgProperty, new Binding(nameof(OffImg), source: this));
 
-            if (this.UnSelectedItemControlTemplate != null) {
+            if (this.UnSelectedItemControlTemplate != null)
+            {
                 item.ControlTemplate = this.UnSelectedItemControlTemplate;
             }
 
@@ -330,7 +374,8 @@ namespace AsNum.XFControls {
             return item;
         }
 
-        private void UpdateSelected() {
+        private void UpdateSelected()
+        {
             var item = this.SelectedItem;
             //TODO 地址引用型数据，这里会找不到相同的值的
             var radio = this.Container.Children.FirstOrDefault(r => ((Radio)r).Value.Equals(item));
@@ -338,7 +383,8 @@ namespace AsNum.XFControls {
         }
 
 
-        public enum RadioGroupOrientation {
+        public enum RadioGroupOrientation
+        {
             Vertical = 0,
             Horizontal = 1,
             HorizontalWrap = 2

@@ -5,13 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
 
     /// <summary>
     /// 左右滑动幻灯片
     /// </summary>
     [ContentProperty("Children")]
-    public class Flip : View {
+    public class Flip : View
+    {
 
         /// <summary>
         /// 下一侦
@@ -39,16 +41,20 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据源
         /// </summary>
-        public IEnumerable ItemsSource {
-            get {
+        public IEnumerable ItemsSource
+        {
+            get
+            {
                 return (IEnumerable)this.GetValue(ItemsSourceProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemsSourceProperty, value);
             }
         }
 
-        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var flip = (Flip)bindable;
             flip.WrapItemsSource();
         }
@@ -90,11 +96,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据模板
         /// </summary>
-        public DataTemplate ItemTemplate {
-            get {
+        public DataTemplate ItemTemplate
+        {
+            get
+            {
                 return (DataTemplate)this.GetValue(ItemTemplateProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemTemplateProperty, value);
             }
         }
@@ -116,21 +125,28 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 是否自动播放
         /// </summary>
-        public bool AutoPlay {
-            get {
+        public bool AutoPlay
+        {
+            get
+            {
                 return (bool)this.GetValue(AutoPlayProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(AutoPlayProperty, value);
             }
         }
 
 
-        private static void AutoPlayChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void AutoPlayChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var flip = (Flip)bindable;
-            if ((bool)newValue) {
+            if ((bool)newValue)
+            {
                 flip.Play();
-            } else {
+            }
+            else
+            {
                 flip.Stop();
             }
         }
@@ -149,11 +165,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 播放间隔, 单位毫秒,默认2000
         /// </summary>
-        public int Interval {
-            get {
+        public int Interval
+        {
+            get
+            {
                 return (int)this.GetValue(IntervalProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(IntervalProperty, value);
             }
         }
@@ -174,11 +193,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 是否显示指示点
         /// </summary>
-        public bool ShowIndicator {
-            get {
+        public bool ShowIndicator
+        {
+            get
+            {
                 return (bool)this.GetValue(ShowIndicatorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ShowIndicatorProperty, value);
             }
         }
@@ -200,11 +222,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 当前侦序号,从0开始
         /// </summary>
-        public int Current {
-            get {
+        public int Current
+        {
+            get
+            {
                 return (int)this.GetValue(CurrentProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(CurrentProperty, value);
             }
         }
@@ -212,8 +237,10 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 从1开始,区别于 Current, 为了方便在界面上显示序号
         /// </summary>
-        public int Index {
-            get {
+        public int Index
+        {
+            get
+            {
                 if (this.Children.Count > 0)
                     return (int)Current + 1;
                 else
@@ -221,11 +248,13 @@ namespace AsNum.XFControls {
             }
         }
 
-        private static void CurrentChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void CurrentChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var flip = (Flip)bindable;
             flip.OnPropertyChanged("Index");
 
-            if (flip.IndexRequired != null && !oldValue.Equals(newValue)) {
+            if (flip.IndexRequired != null && !oldValue.Equals(newValue))
+            {
                 flip.IndexRequired.Invoke(flip, new IndexRequestEventArgs((int)newValue));
             }
         }
@@ -245,12 +274,15 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 条目总数,为了方便界面显示
         /// </summary>
-        public int Total {
-            get {
+        public int Total
+        {
+            get
+            {
                 //注意: TotalPropertyKey.BindableProperty
                 return (int)this.GetValue(TotalPropertyKey.BindableProperty);
             }
-            private set {
+            private set
+            {
                 //注意: TotalPropertyKey
                 this.SetValue(TotalPropertyKey, value);
             }
@@ -259,7 +291,8 @@ namespace AsNum.XFControls {
         #endregion
 
 
-        public ObservableCollection<View> Children {
+        public ObservableCollection<View> Children
+        {
             get;
         } = new ObservableCollection<View>();
 
@@ -268,7 +301,8 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 订阅数据源变化通知
         /// </summary>
-        private void WrapItemsSource() {
+        private void WrapItemsSource()
+        {
             new NotifyCollectionWrapper(this.ItemsSource,
                             add: (datas, idx) => this.Add(datas, idx),
                             remove: (datas, idx) => this.Remove(datas, idx),
@@ -279,34 +313,44 @@ namespace AsNum.XFControls {
         }
 
 
-        private void Add(IList datas, int idx) {
+        private void Add(IList datas, int idx)
+        {
             var c = this.Children.Count();
 
-            foreach (var d in datas) {
+            foreach (var d in datas)
+            {
                 var i = idx++;
                 var v = this.GetChild(d);
-                if (i < c) {
+                if (i < c)
+                {
                     this.Children.Insert(i, v);
-                } else {
+                }
+                else
+                {
                     this.Children.Add(v);
                 }
             }
         }
 
-        private void Remove(IList datas, int idx) {
+        private void Remove(IList datas, int idx)
+        {
             var headers = this.Children.Skip(idx).Take(datas.Count);
 
-            for (var i = idx; i < datas.Count; i++) {
+            for (var i = idx; i < datas.Count; i++)
+            {
                 this.Children.RemoveAt(i);
             }
         }
 
-        private void Reset() {
+        private void Reset()
+        {
             this.Children.Clear();
 
-            if (this.ItemsSource != null) {
+            if (this.ItemsSource != null)
+            {
                 var idx = 0;
-                foreach (var d in this.ItemsSource) {
+                foreach (var d in this.ItemsSource)
+                {
                     var i = idx++;
                     var v = this.GetChild(d);
                     this.Children.Add(v);
@@ -320,22 +364,28 @@ namespace AsNum.XFControls {
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        private View GetChild(object data) {
+        private View GetChild(object data)
+        {
             View view = null;
-            if (this.ItemTemplate != null) {
+            if (this.ItemTemplate != null)
+            {
                 view = (View)this.ItemTemplate.CreateContent();
                 view.BindingContext = data;
                 view.Parent = this;
-            } else {
+            }
+            else
+            {
                 view = new Label() { Text = "Not Set ItemTemplate" };
             }
             return view;
         }
 
-        protected override void OnSizeAllocated(double width, double height) {
+        protected override void OnSizeAllocated(double width, double height)
+        {
             base.OnSizeAllocated(width, height);
 
-            foreach (var c in this.Children) {
+            foreach (var c in this.Children)
+            {
                 if (c.Parent == null)
                     c.Parent = this;
                 c.Layout(new Rectangle(0, 0, width, height));
@@ -344,16 +394,19 @@ namespace AsNum.XFControls {
 
 
 
-        public void Play() {
+        public void Play()
+        {
             this.AutoPlay = true;
             this.InnerPlay();
         }
 
-        public void Stop() {
+        public void Stop()
+        {
             this.AutoPlay = false;
         }
 
-        private void InnerPlay() {
+        private void InnerPlay()
+        {
             if (this.AutoPlay)
                 Task.Delay(this.Interval)
                     .ContinueWith(t => {
@@ -367,11 +420,13 @@ namespace AsNum.XFControls {
 
 
 
-        public class IndexRequestEventArgs : EventArgs {
+        public class IndexRequestEventArgs : EventArgs
+        {
 
             public int Index { get; }
 
-            public IndexRequestEventArgs(int idx) {
+            public IndexRequestEventArgs(int idx)
+            {
                 this.Index = idx;
             }
         }

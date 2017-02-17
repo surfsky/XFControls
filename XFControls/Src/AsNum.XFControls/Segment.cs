@@ -6,13 +6,15 @@ using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
 
     /// <summary>
     /// Segment 模拟
     /// </summary>
     [ContentProperty("Items")]
-    public class Segment : ContentView {
+    public class Segment : ContentView
+    {
 
 
         #region IsMutliSelectable
@@ -28,11 +30,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 是否可多选
         /// </summary>
-        public bool IsMutliSelectable {
-            get {
+        public bool IsMutliSelectable
+        {
+            get
+            {
                 return (bool)this.GetValue(IsMutliSelectableProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(IsMutliSelectableProperty, value);
             }
         }
@@ -54,11 +59,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中的数据
         /// </summary>
-        public object SelectedItem {
-            get {
+        public object SelectedItem
+        {
+            get
+            {
                 return this.GetValue(SelectedItemProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SelectedItemProperty, value);
             }
         }
@@ -84,11 +92,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中的数据, 仅作用于 IsMutliSelectable = true
         /// </summary>
-        public IList SelectedItems {
-            get {
+        public IList SelectedItems
+        {
+            get
+            {
                 return (IList)this.GetValue(SelectedItemsPropertyKey.BindableProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SelectedItemsPropertyKey, value);
             }
         }
@@ -107,11 +118,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据模板
         /// </summary>
-        public DataTemplate ItemTemplate {
-            get {
+        public DataTemplate ItemTemplate
+        {
+            get
+            {
                 return (DataTemplate)this.GetValue(ItemTemplateProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemTemplateProperty, value);
             }
         }
@@ -148,19 +162,24 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据源
         /// </summary>
-        public IEnumerable ItemsSource {
-            get {
+        public IEnumerable ItemsSource
+        {
+            get
+            {
                 return (IEnumerable)this.GetValue(ItemsSourceProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemsSourceProperty, value);
             }
         }
 
-        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var seg = (Segment)bindable;
             seg.Items.Clear();
-            if (newValue != null) {
+            if (newValue != null)
+            {
                 var source = (IEnumerable<object>)newValue;
                 seg.Add(source.ToList(), 0);
             }
@@ -180,11 +199,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中项的背景颜色
         /// </summary>
-        public Color SelectedItemBackgroundColor {
-            get {
+        public Color SelectedItemBackgroundColor
+        {
+            get
+            {
                 return (Color)this.GetValue(SelectedItemBackgroundColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SelectedItemBackgroundColorProperty, value);
             }
         }
@@ -193,7 +215,8 @@ namespace AsNum.XFControls {
 
 
         private Grid Container;
-        public ObservableCollection<SegmentItem> Items {
+        public ObservableCollection<SegmentItem> Items
+        {
             get;
         } = new ObservableCollection<SegmentItem>();
 
@@ -201,8 +224,10 @@ namespace AsNum.XFControls {
 
         private SegmentItem SelectedSegment = null;
 
-        public Segment() {
-            this.Container = new Grid() {
+        public Segment()
+        {
+            this.Container = new Grid()
+            {
                 ColumnSpacing = 0
             };
             this.Content = this.Container;
@@ -210,20 +235,27 @@ namespace AsNum.XFControls {
             this.SelectedCmd = new Command((o) => {
                 var item = (SegmentItem)o;
 
-                if (this.IsMutliSelectable) {
-                    if (this.SelectedItems.Contains(item.Value)) {
+                if (this.IsMutliSelectable)
+                {
+                    if (this.SelectedItems.Contains(item.Value))
+                    {
                         this.SelectedItems.Remove(item.Value);
                         item.BackgroundColor = Color.Transparent;
                         item.IsSelected = false;
                         //item.ControlTemplate = null;
-                    } else {
+                    }
+                    else
+                    {
                         this.SelectedItems.Add(item.Value);
                         item.BackgroundColor = this.SelectedItemBackgroundColor;
                         item.IsSelected = true;
                         //item.ControlTemplate = this.SelectedItemControlTemplate;
                     }
-                } else {
-                    if (this.SelectedSegment != null) {
+                }
+                else
+                {
+                    if (this.SelectedSegment != null)
+                    {
                         this.SelectedSegment.BackgroundColor = Color.Transparent;
                         this.SelectedSegment.IsSelected = false;
                         //item.ControlTemplate = null;
@@ -244,16 +276,20 @@ namespace AsNum.XFControls {
         }
 
 
-        private void Add(IList datas, int idx) {
-            for (var i = idx; i < datas.Count; i++) {
-                if (this.Container.Children.Count > i) {
+        private void Add(IList datas, int idx)
+        {
+            for (var i = idx; i < datas.Count; i++)
+            {
+                if (this.Container.Children.Count > i)
+                {
                     var v = this.Container.Children[i];
                     var c = Grid.GetColumn(v) + datas.Count;
                     Grid.SetColumn(v, c);
                 }
             }
 
-            foreach (var d in datas) {
+            foreach (var d in datas)
+            {
                 var v = this.GetSegmentItem(d);
                 Grid.SetColumn(v, idx++);
                 this.Container.Children.Add(v);
@@ -261,9 +297,12 @@ namespace AsNum.XFControls {
 
         }
 
-        private void Remove(IList datas, int idx) {
-            for (var i = idx; i < datas.Count; i++) {
-                if (this.Container.Children.Count > i) {
+        private void Remove(IList datas, int idx)
+        {
+            for (var i = idx; i < datas.Count; i++)
+            {
+                if (this.Container.Children.Count > i)
+                {
                     var v = this.Container.Children[i];
                     var c = Grid.GetColumn(v) - datas.Count;
                     Grid.SetColumn(v, c);
@@ -271,26 +310,35 @@ namespace AsNum.XFControls {
             }
         }
 
-        private void Reset() {
+        private void Reset()
+        {
             this.Container.Children.Clear();
             var idx = 0;
-            foreach (var d in this.Items) {
+            foreach (var d in this.Items)
+            {
                 var v = this.GetSegmentItem(d);
                 Grid.SetColumn(v, idx++);
                 this.Container.Children.Add(v);
             }
         }
 
-        private SegmentItem GetSegmentItem(object data) {
+        private SegmentItem GetSegmentItem(object data)
+        {
             SegmentItem item = null;
-            if (data is SegmentItem) {
+            if (data is SegmentItem)
+            {
                 item = (SegmentItem)data;
-            } else {
+            }
+            else
+            {
                 item = new SegmentItem();
                 var view = (View)this.ItemTemplate.CreateContent();
-                if (view is SegmentItem) {
+                if (view is SegmentItem)
+                {
                     item = (SegmentItem)view;
-                } else {
+                }
+                else
+                {
                     item.Content = view;
                 }
                 item.BindingContext = data;
@@ -309,7 +357,8 @@ namespace AsNum.XFControls {
         }
     }
 
-    public class SegmentItem : ContentView {
+    public class SegmentItem : ContentView
+    {
 
         #region value
         public static BindableProperty ValueProperty =
@@ -317,11 +366,14 @@ namespace AsNum.XFControls {
                 typeof(object),
                 typeof(SegmentItem));
 
-        public object Value {
-            get {
+        public object Value
+        {
+            get
+            {
                 return this.GetValue(ValueProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ValueProperty, value);
             }
         }
@@ -337,15 +389,19 @@ namespace AsNum.XFControls {
                 propertyChanged: IsSelectedChanged
                 );
 
-        private static void IsSelectedChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void IsSelectedChanged(BindableObject bindable, object oldValue, object newValue)
+        {
 
         }
 
-        public bool IsSelected {
-            get {
+        public bool IsSelected
+        {
+            get
+            {
                 return (bool)this.GetValue(IsSelectedProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(IsSelectedProperty, value);
             }
         }

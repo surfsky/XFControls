@@ -13,11 +13,12 @@ using Xamarin.Forms.Platform.iOS;
 [assembly: ExportRenderer(typeof(DataPicker), typeof(DataPickerRender))]
 namespace AsNum.XFControls.iOS
 {
+    /// <summary>
+    /// DataPicker 渲染器
+    /// </summary>
 	public class DataPickerRender : ViewRenderer<DataPicker, UIPickerView>
 	{
-
 		private DataPickerModel Model;
-
 		private bool IsDisposed = false;
 
 		protected override void OnElementChanged(ElementChangedEventArgs<DataPicker> e)
@@ -104,20 +105,16 @@ namespace AsNum.XFControls.iOS
 				
 				this.Element.SelectedItem = source.ElementAt(idx);
 			}
-			else {
+			else
 				this.Element.SelectedItem = null;
-			}
 		}
 
 		private void UpdatePickerSelected(int idx)
 		{
 			if (idx != -1)
-			{
 				this.Control.Select(idx, 0, true);
-			}
-			else {
+			else
 				this.Control.Select(0, 0, true);
-			}
 		}
 
 
@@ -126,7 +123,6 @@ namespace AsNum.XFControls.iOS
 			if (disposing && !this.IsDisposed)
 			{
 				this.IsDisposed = true;
-
 				if (this.Model != null)
 				{
 					this.Model.Dispose();
@@ -139,15 +135,10 @@ namespace AsNum.XFControls.iOS
 	public class DataPickerModel : UIPickerViewModel
 	{
 		private IList<string> Values;
-
 		private UIColor TextColor = null;
-
 		private UIColor DividerColor = null;
-
 		private nfloat FontSize;
-
 		public event EventHandler<PickerChangedEventArgs> PickerChanged;
-
 
 		public void SetValues(IList<string> values)
 		{
@@ -160,7 +151,6 @@ namespace AsNum.XFControls.iOS
 			this.DividerColor = dividerColor;
 			this.FontSize = fontSize;
 		}
-
 
 		public DataPickerModel(IList<string> values, UIColor txtColor, UIColor dividerColor, nfloat fontSize)
 		{
@@ -196,9 +186,7 @@ namespace AsNum.XFControls.iOS
 		public override void Selected(UIPickerView pickerView, nint row, nint component)
 		{
 			if (this.PickerChanged != null)
-			{
 				this.PickerChanged(this, new PickerChangedEventArgs { SelectedIndex = (int)row });
-			}
 		}
 
 		public override UIView GetView(UIPickerView pickerView, nint row, nint component, UIView view)
@@ -226,9 +214,7 @@ namespace AsNum.XFControls.iOS
 			foreach (var v in picker.Subviews)
 			{
 				if (v.Frame.Size.Height < 1)
-				{
 					v.BackgroundColor = color;
-				}
 			}
 		}
 	}

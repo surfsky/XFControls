@@ -1,11 +1,14 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls.Behaviors {
-    public abstract class BindableBehavior<T> : Behavior<T> where T : BindableObject {
+namespace AsNum.XFControls.Behaviors
+{
+    public abstract class BindableBehavior<T> : Behavior<T> where T : BindableObject
+    {
         public T AssociatedObject { get; private set; }
 
-        protected override void OnAttachedTo(T view) {
+        protected override void OnAttachedTo(T view)
+        {
             base.OnAttachedTo(view);
 
             this.AssociatedObject = view;
@@ -16,21 +19,25 @@ namespace AsNum.XFControls.Behaviors {
             view.BindingContextChanged += OnBindingContextChanged;
         }
 
-        private void OnBindingContextChanged(object sender, EventArgs e) {
+        private void OnBindingContextChanged(object sender, EventArgs e)
+        {
             this.OnBindingContextChanged();
         }
 
-        protected override void OnDetachingFrom(T view) {
+        protected override void OnDetachingFrom(T view)
+        {
             view.BindingContextChanged -= this.OnBindingContextChanged;
         }
 
-        protected override void OnBindingContextChanged() {
+        protected override void OnBindingContextChanged()
+        {
             base.OnBindingContextChanged();
             this.BindingContext = this.AssociatedObject.BindingContext;
         }
     }
 
-    public abstract class BindableBehavoir : BindableBehavior<VisualElement> {
+    public abstract class BindableBehavoir : BindableBehavior<VisualElement>
+    {
 
     }
 }

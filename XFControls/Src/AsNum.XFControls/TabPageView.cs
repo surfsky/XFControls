@@ -1,10 +1,12 @@
 ﻿using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
     /// <summary>
     /// 选项卡标签
     /// </summary>
-    public class TabPageView : ContentView {
+    public class TabPageView : ContentView
+    {
 
         #region IsSelected
         public static readonly BindableProperty IsSelectedProperty =
@@ -14,11 +16,14 @@ namespace AsNum.XFControls {
                 false
                 );
 
-        public bool IsSelected {
-            get {
+        public bool IsSelected
+        {
+            get
+            {
                 return (bool)this.GetValue(IsSelectedProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(IsSelectedProperty, value);
             }
         }
@@ -31,11 +36,14 @@ namespace AsNum.XFControls {
                 typeof(TabPageView),
                 0);
 
-        public int Index {
-            get {
+        public int Index
+        {
+            get
+            {
                 return (int)this.GetValue(IndexProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(IndexProperty, value);
             }
         }
@@ -49,11 +57,14 @@ namespace AsNum.XFControls {
                 new ContentView()
                 );
 
-        public ContentView Header {
-            get {
+        public ContentView Header
+        {
+            get
+            {
                 return (ContentView)this.GetValue(HeaderProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(HeaderProperty, value);
             }
         }
@@ -66,18 +77,23 @@ namespace AsNum.XFControls {
                 typeof(TabPageView),
                 propertyChanged: TitleChanged);
 
-        public string Title {
-            get {
+        public string Title
+        {
+            get
+            {
                 return (string)this.GetValue(TitleProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TitleProperty, value);
             }
         }
 
-        private static void TitleChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void TitleChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var pv = (TabPageView)bindable;
-            pv.Header.Content = new Label() {
+            pv.Header.Content = new Label()
+            {
                 Text = (string)newValue
             };
         }
@@ -90,11 +106,14 @@ namespace AsNum.XFControls {
                 typeof(TabPageView),
                 TabViewPositions.Top);
 
-        public TabViewPositions TabPosition {
-            get {
+        public TabViewPositions TabPosition
+        {
+            get
+            {
                 return (TabViewPositions)this.GetValue(TabPositionProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TabPositionProperty, value);
             }
         }

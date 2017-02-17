@@ -9,16 +9,20 @@ using Xamarin.Forms.Platform.iOS;
 
 [assembly: ResolutionGroupName("AsNum")]
 [assembly: ExportEffect(typeof(ShadowEffect), "ShadowEffect")]
-namespace AsNum.XFControls.iOS.Effects {
-
-
-    public class ShadowEffect : PlatformEffect {
+namespace AsNum.XFControls.iOS.Effects
+{
+    /// <summary>
+    /// Shadow 渲染效果
+    /// </summary>
+    public class ShadowEffect : PlatformEffect
+    {
         private CGSize _originalOffset;
         private CGColor _originalColor;
         private float _originalOpacity;
         private nfloat _originalRadius;
 
-        protected override void OnAttached() {
+        protected override void OnAttached()
+        {
             if (this.Container == null)
                 return;
             this._originalOffset = this.Container.Layer.ShadowOffset;
@@ -28,7 +32,8 @@ namespace AsNum.XFControls.iOS.Effects {
             this.UpdateShadow();
         }
 
-        protected override void OnDetached() {
+        protected override void OnDetached()
+        {
             if (this.Container == null)
                 return;
             this.Container.Layer.ShadowColor = this._originalColor;
@@ -37,17 +42,20 @@ namespace AsNum.XFControls.iOS.Effects {
             this.Container.Layer.ShadowRadius = this._originalRadius;
         }
 
-        protected override void OnElementPropertyChanged(PropertyChangedEventArgs e) {
+        protected override void OnElementPropertyChanged(PropertyChangedEventArgs e)
+        {
             base.OnElementPropertyChanged(e);
             if (e.PropertyName.Equals(Shadow.RadiusProperty.PropertyName)
                 || e.PropertyName.Equals(Shadow.ColorProperty.PropertyName)
                 || e.PropertyName.Equals(Shadow.XProperty)
-                || e.PropertyName.Equals(Shadow.YProperty)) {
+                || e.PropertyName.Equals(Shadow.YProperty))
+            {
                 this.UpdateShadow();
             }
         }
 
-        private void UpdateShadow() {
+        private void UpdateShadow()
+        {
             this.Container.Layer.ShadowOpacity = 1f;
 
             var radius = Shadow.GetRadius(this.Element);

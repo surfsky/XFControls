@@ -3,12 +3,14 @@ using System;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
 
     /// <summary>
     /// 复选框(模拟)
     /// </summary>
-    public class CheckBox : ContentView {
+    public class CheckBox : ContentView
+    {
 
         /// <summary>
         /// 选中事件
@@ -32,18 +34,22 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 是否选中, 默认未选中
         /// </summary>
-        public bool Checked {
-            get {
+        public bool Checked
+        {
+            get
+            {
                 return (bool)this.GetValue(CheckedProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(CheckedProperty, value);
             }
         }
 
-        private static void CheckedChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void CheckedChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var chk = (CheckBox)bindable;
-            var source = chk.Checked ? chk.OnImg: chk.OffImg;
+            var source = chk.Checked ? chk.OnImg : chk.OffImg;
             chk.Icon.Source = source;// new BytesImageSource(datas);
         }
         #endregion
@@ -62,11 +68,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 是否显示标签文本,默认不显示
         /// </summary>
-        public bool ShowLabel {
-            get {
+        public bool ShowLabel
+        {
+            get
+            {
                 return (bool)this.GetValue(ShowLabelProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ShowLabelProperty, value);
             }
         }
@@ -88,11 +97,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签文本
         /// </summary>
-        public string Text {
-            get {
+        public string Text
+        {
+            get
+            {
                 return (string)this.GetValue(TextProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TextProperty, value);
             }
         }
@@ -112,16 +124,20 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选择框大小, 默认25, 只控制选择框, 对文本不起作用
         /// </summary>
-        public double Size {
-            get {
+        public double Size
+        {
+            get
+            {
                 return (double)this.GetValue(SizeProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SizeProperty, value);
             }
         }
 
-        private static void IconSizeChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void IconSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var chk = (CheckBox)bindable;
             chk.Icon.WidthRequest = chk.Icon.HeightRequest = (double)newValue;
 
@@ -141,11 +157,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中状态变化时触发的命令, 带一个 bool 参数
         /// </summary>
-        public ICommand CheckChangedCmd {
-            get {
+        public ICommand CheckChangedCmd
+        {
+            get
+            {
                 return (ICommand)this.GetValue(CheckChangedCmdProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(CheckChangedCmdProperty, value);
             }
         }
@@ -160,11 +179,14 @@ namespace AsNum.XFControls {
                 propertyChanged: ImgSourceChanged
                 );
 
-        public ImageSource OnImg {
-            get {
+        public ImageSource OnImg
+        {
+            get
+            {
                 return (ImageSource)this.GetValue(OnImgProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(OnImgProperty, value);
             }
         }
@@ -177,21 +199,26 @@ namespace AsNum.XFControls {
                 propertyChanged: ImgSourceChanged
                 );
 
-        public ImageSource OffImg {
-            get {
+        public ImageSource OffImg
+        {
+            get
+            {
                 return (ImageSource)this.GetValue(OffImgProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(OffImgProperty, value);
             }
         }
 
-        private static void ImgSourceChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ImgSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var chk = (CheckBox)bindable;
             chk.UpdateImageSource(chk.OnImg, chk.OffImg);
         }
 
-        private void UpdateImageSource(ImageSource on, ImageSource off) {
+        private void UpdateImageSource(ImageSource on, ImageSource off)
+        {
             this.Icon.Source = this.Checked ? on : off;
         }
 
@@ -228,7 +255,8 @@ namespace AsNum.XFControls {
         //    }
         //}
 
-        public CheckBox() {
+        public CheckBox()
+        {
             this.TapCmd = new Command(() => {
                 this.Checked = !this.Checked;
 
@@ -242,7 +270,8 @@ namespace AsNum.XFControls {
             var cols = new ColumnDefinitionCollection();
             cols.Add(new ColumnDefinition() { Width = GridLength.Auto });
             cols.Add(new ColumnDefinition() { Width = GridLength.Auto });
-            this.Grid = new Grid() {
+            this.Grid = new Grid()
+            {
                 ColumnDefinitions = cols,
             };
 
@@ -251,7 +280,8 @@ namespace AsNum.XFControls {
 
             this.Content = this.Grid;
 
-            this.Label = new Label() {
+            this.Label = new Label()
+            {
                 BindingContext = this,
                 VerticalTextAlignment = TextAlignment.Center
             };
@@ -261,7 +291,8 @@ namespace AsNum.XFControls {
 
             this.Grid.Children.Add(this.Label);
 
-            this.Icon = new Image() {
+            this.Icon = new Image()
+            {
                 WidthRequest = this.Size,
                 HeightRequest = this.Size,
                 Source = this.OffImg

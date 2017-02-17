@@ -5,21 +5,26 @@ using System.Collections.Generic;
 using System.Text;
 using UIKit;
 
-namespace AsNum.XFControls.iOS {
+namespace AsNum.XFControls.iOS
+{
 
-
-	public class RatingBarRateChangeEventArgs : EventArgs { 
-		public float Rate { get; set; }
-	}
+    /// <summary>
+    /// 
+    /// </summary>
+    public class RatingBarRateChangeEventArgs : EventArgs
+    {
+        public float Rate { get; set; }
+    }
 
 
     /// <summary>
+    /// 评分工具条
     /// https://onevcat.com/2013/04/using-blending-in-ios/
     /// https://github.com/saiwu-bigkoo/iOS-RatingBar
     /// </summary>
-    public class RatingBar : UIView {
-
-		public event EventHandler<RatingBarRateChangeEventArgs> RateChanged;
+    public class RatingBar : UIView
+    {
+        public event EventHandler<RatingBarRateChangeEventArgs> RateChanged;
 
         /// <summary>
         /// 星星数
@@ -27,11 +32,14 @@ namespace AsNum.XFControls.iOS {
         public int StarNum { get; set; } = 5;
 
         private float _rate = 0;
-        public float Rate {
-            get {
+        public float Rate
+        {
+            get
+            {
                 return this._rate;
             }
-            set {
+            set
+            {
                 _rate = value < 0 ? 0 : (value > this.StarNum ? this.StarNum : value);
                 this.UpdateRateView();
             }
@@ -70,13 +78,15 @@ namespace AsNum.XFControls.iOS {
         private UIView ForegroundView { get; set; }
         private UIView BackgroundView { get; set; }
 
-        static RatingBar() {
+        static RatingBar()
+        {
             var asm = typeof(RatingBar).Assembly;
             ImgSelected = UIImage.FromResource(asm, "AsNum.XFControls.iOS.Imgs.star_light.png");
             ImgUnSelected = UIImage.FromResource(asm, "AsNum.XFControls.iOS.Imgs.star_dark.png");
         }
 
-        private void Build() {
+        private void Build()
+        {
             this.ForegroundView = this.CreateRatingView(ImgSelected);
             this.BackgroundView = this.CreateRatingView(ImgUnSelected);
             this.UpdateRateView();
@@ -88,20 +98,24 @@ namespace AsNum.XFControls.iOS {
 
         }
 
-        private UIView CreateRatingView(UIImage img) {
-            var view = new UIView() {
+        private UIView CreateRatingView(UIImage img)
+        {
+            var view = new UIView()
+            {
                 Frame = this.Bounds,
                 ClipsToBounds = true,
                 BackgroundColor = UIColor.Clear
             };
 
-            for (var i = 0; i < this.StarNum; i++) {
+            for (var i = 0; i < this.StarNum; i++)
+            {
                 var x = i * this.Bounds.Size.Width / this.StarNum;
                 var y = 0;
                 var w = this.Bounds.Size.Width / StarNum;
                 var h = this.Bounds.Size.Height;
 
-                var imgView = new UIImageView(img) {
+                var imgView = new UIImageView(img)
+                {
                     ContentMode = UIViewContentMode.ScaleAspectFit,
                     Frame = new CGRect(x, y, w, h)
                 };
@@ -111,31 +125,33 @@ namespace AsNum.XFControls.iOS {
             return view;
         }
 
-        private void UpdateRateView() {
+        private void UpdateRateView()
+        {
             var s = this.Rate / this.StarNum;
-			var w = this.Bounds.Size.Width * s;
-			var h = this.Bounds.Size.Height;
+            var w = this.Bounds.Size.Width * s;
+            var h = this.Bounds.Size.Height;
 
-			if (w > 0 && h > 0)
-            	this.ForegroundView.Frame = new CGRect(0, 0, w, h);
+            if (w > 0 && h > 0)
+                this.ForegroundView.Frame = new CGRect(0, 0, w, h);
         }
 
 
         [Export("tapRateView:")]
-        private void Tap(UITapGestureRecognizer tap) {
+        private void Tap(UITapGestureRecognizer tap)
+        {
             if (this.IsIndicator)
                 return;
 
             var p = tap.LocationInView(this);
             var offset = p.X;
 
-			var s = (float)(offset / (this.Bounds.Size.Width / StarNum));
-			this.Rate = this.Incomplete ? s : (float)Math.Ceiling(s);
+            var s = (float)(offset / (this.Bounds.Size.Width / StarNum));
+            this.Rate = this.Incomplete ? s : (float)Math.Ceiling(s);
 
-			if (this.RateChanged != null)
-				this.RateChanged.Invoke(this, new RatingBarRateChangeEventArgs() { Rate = this.Rate });
+            if (this.RateChanged != null)
+                this.RateChanged.Invoke(this, new RatingBarRateChangeEventArgs() { Rate = this.Rate });
 
-			//Step 不应该用在 Tap事件中
+            //Step 不应该用在 Tap事件中
             //var s = (float)(offset / (this.Bounds.Size.Width / StarNum));
 
             //if (s < this.Step)
@@ -151,7 +167,8 @@ namespace AsNum.XFControls.iOS {
         }
 
 
-        public override void LayoutSubviews() {
+        public override void LayoutSubviews()
+        {
             base.LayoutSubviews();
 
             this.Build();
@@ -163,10 +180,10 @@ namespace AsNum.XFControls.iOS {
         }
 
 
-		public void UpdateLayout(double width, double height)
-		{
-			this.Frame = new CGRect(0, 0, width, height);
-			this.SetNeedsLayout();
-		}
+        public void UpdateLayout(double width, double height)
+        {
+            this.Frame = new CGRect(0, 0, width, height);
+            this.SetNeedsLayout();
+        }
     }
 }

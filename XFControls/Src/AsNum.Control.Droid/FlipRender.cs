@@ -13,8 +13,10 @@ using AV = Android.Views;
 using AW = Android.Widget;
 
 [assembly: ExportRenderer(typeof(Flip), typeof(FlipRender))]
-namespace AsNum.XFControls.Droid {
-    public class FlipRender : ViewRenderer<Flip, AW.RelativeLayout> {
+namespace AsNum.XFControls.Droid
+{
+    public class FlipRender : ViewRenderer<Flip, AW.RelativeLayout>
+    {
 
         private bool IsDisposed = false;
 
@@ -26,9 +28,11 @@ namespace AsNum.XFControls.Droid {
 
         private static readonly Color DefaultPointColor = Color.Gray;
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Flip> e) {
+        protected override void OnElementChanged(ElementChangedEventArgs<Flip> e)
+        {
             base.OnElementChanged(e);
-            if (e.OldElement != null) {
+            if (e.OldElement != null)
+            {
                 e.OldElement.Children.CollectionChanged -= this.Children_CollectionChanged;
                 e.OldElement.NextRequired -= this.Element_NextRequired;
                 e.OldElement.IndexRequired -= this.Element_IndexRequired;
@@ -71,7 +75,8 @@ namespace AsNum.XFControls.Droid {
             this.Element.Children.CollectionChanged += Children_CollectionChanged;
         }
 
-        private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+        private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
             if (this.Adapter != null)
                 Device.BeginInvokeOnMainThread(() => {
                     this.Adapter.SetItems(this.GetChildrenViews().ToList());
@@ -83,15 +88,18 @@ namespace AsNum.XFControls.Droid {
                 });
         }
 
-        private void Adapter_PosChanged(object sender, FlipViewAdapter.PosChangedEventArgs e) {
+        private void Adapter_PosChanged(object sender, FlipViewAdapter.PosChangedEventArgs e)
+        {
             if (this.Element == null)
                 return;
 
             this.Element.Current = e.Pos;
         }
 
-        private void Element_IndexRequired(object sender, Flip.IndexRequestEventArgs e) {
-            if (this.VP != null) {
+        private void Element_IndexRequired(object sender, Flip.IndexRequestEventArgs e)
+        {
+            if (this.VP != null)
+            {
                 //Device.BeginInvokeOnMainThread(() => {
                 var adapter = ((FlipViewAdapter)this.VP.Adapter);
                 adapter.Goto(e.Index);
@@ -99,14 +107,16 @@ namespace AsNum.XFControls.Droid {
             }
         }
 
-        private void Element_NextRequired(object sender, EventArgs e) {
+        private void Element_NextRequired(object sender, EventArgs e)
+        {
             Device.BeginInvokeOnMainThread(() => {
                 if (this.VP != null)
                     ((FlipViewAdapter)this.VP.Adapter).Next();
             });
         }
 
-        private void VP_PageSelected(object sender, ViewPager.PageSelectedEventArgs e) {
+        private void VP_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
+        {
             if (this.Element == null)
                 return;
 
@@ -115,12 +125,16 @@ namespace AsNum.XFControls.Droid {
             this.SetPointColor(realPos, Color.White);
         }
 
-        private IEnumerable<AV.View> GetChildrenViews() {
-            if (this.Element != null) {
-                foreach (var v in this.Element.Children) {
+        private IEnumerable<AV.View> GetChildrenViews()
+        {
+            if (this.Element != null)
+            {
+                foreach (var v in this.Element.Children)
+                {
                     //var render = RendererFactory.GetRenderer(v);
                     var render = v.GetOrCreateRenderer(); //Platform.CreateRenderer(v);
-                    if (render.ViewGroup.Parent == null) {
+                    if (render.ViewGroup.Parent == null)
+                    {
                         var c = new AW.FrameLayout(this.Context);
                         //c.SetBackgroundColor(Color.Blue.ToAndroid());
                         c.AddView(render.ViewGroup, LayoutParams.MatchParent, LayoutParams.MatchParent);
@@ -132,7 +146,8 @@ namespace AsNum.XFControls.Droid {
             }
         }
 
-        private void SetPoints() {
+        private void SetPoints()
+        {
             this.PointsContainer.RemoveAllViews();
 
             var lp = new LinearLayout.LayoutParams(10, 10);
@@ -144,7 +159,8 @@ namespace AsNum.XFControls.Droid {
             var dr = new ShapeDrawable(shape);
             dr.Paint.Color = DefaultPointColor.ToAndroid();
 
-            for (var i = 0; i < this.Element.Children.Count; i++) {
+            for (var i = 0; i < this.Element.Children.Count; i++)
+            {
                 var v = new AV.View(this.Context);
                 //v.SetBackgroundDrawable(dr);
                 v.Background = dr;
@@ -153,9 +169,11 @@ namespace AsNum.XFControls.Droid {
             }
         }
 
-        private void SetPointColor(int idx, Color? color = null) {
+        private void SetPointColor(int idx, Color? color = null)
+        {
             var point = this.PointsContainer.GetChildAt(idx);
-            if (point != null) {
+            if (point != null)
+            {
                 var shape = new OvalShape();
                 var dr = new ShapeDrawable(shape);
                 dr.Paint.Color = (color ?? DefaultPointColor).ToAndroid();
@@ -165,29 +183,35 @@ namespace AsNum.XFControls.Droid {
             this.LastPos = idx;
         }
 
-        protected override void Dispose(bool disposing) {
+        protected override void Dispose(bool disposing)
+        {
 
-            if (disposing && !this.IsDisposed) {
+            if (disposing && !this.IsDisposed)
+            {
                 this.IsDisposed = true;
 
-                if (this.Element != null) {
+                if (this.Element != null)
+                {
                     this.Element.Children.CollectionChanged -= this.Children_CollectionChanged;
                     this.Element.NextRequired -= this.Element_NextRequired;
                     this.Element.IndexRequired -= this.Element_IndexRequired;
                 }
 
-                if (this.VP != null) {
+                if (this.VP != null)
+                {
                     this.VP.RemoveFromParent();
                     this.VP.Dispose();
                     this.VP = null;
                 }
 
-                if (this.Adapter != null) {
+                if (this.Adapter != null)
+                {
                     this.Adapter.Dispose();
                     this.Adapter = null;
                 }
 
-                if (this.PointsContainer != null) {
+                if (this.PointsContainer != null)
+                {
                     this.PointsContainer.RemoveFromParent();
                     this.PointsContainer.Dispose();
                     this.PointsContainer = null;

@@ -1,11 +1,13 @@
 ﻿using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
 
     /// <summary>
     /// 边框
     /// </summary>
-    public class Border : ContentView {
+    public class Border : ContentView
+    {
 
         /// <summary>
         /// 圆角大小
@@ -53,11 +55,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 圆角大小
         /// </summary>
-        public CornerRadius CornerRadius {
-            get {
+        public CornerRadius CornerRadius
+        {
+            get
+            {
                 return (CornerRadius)base.GetValue(CornerRadiusProperty);
             }
-            set {
+            set
+            {
                 base.SetValue(CornerRadiusProperty, value);
             }
         }
@@ -66,11 +71,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 边框颜色
         /// </summary>
-        public Color Stroke {
-            get {
+        public Color Stroke
+        {
+            get
+            {
                 return (Color)GetValue(StrokeProperty);
             }
-            set {
+            set
+            {
                 SetValue(StrokeProperty, value);
             }
         }
@@ -78,11 +86,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 边框宽度
         /// </summary>
-        public Thickness StrokeThickness {
-            get {
+        public Thickness StrokeThickness
+        {
+            get
+            {
                 return (Thickness)GetValue(StrokeThicknessProperty);
             }
-            set {
+            set
+            {
                 SetValue(StrokeThicknessProperty, value);
             }
         }
@@ -90,11 +101,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 是否裁剪超出部分
         /// </summary>
-        public bool IsClippedToBorder {
-            get {
+        public bool IsClippedToBorder
+        {
+            get
+            {
                 return (bool)GetValue(IsClippedToBorderProperty);
             }
-            set {
+            set
+            {
                 SetValue(IsClippedToBorderProperty, value);
             }
         }

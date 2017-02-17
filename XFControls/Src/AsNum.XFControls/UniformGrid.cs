@@ -5,16 +5,18 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using System.Diagnostics;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
     /// <summary>
     /// 
     /// </summary>
-    public class UniformGrid : Grid {
+    public class UniformGrid : Grid
+    {
 
-		/// <summary>
-		/// 上一次数据源的Item Count
-		/// </summary>
-		private int _ChildCount = 0;
+        /// <summary>
+        /// 上一次数据源的Item Count
+        /// </summary>
+        private int _ChildCount = 0;
 
         #region itemsSource 数据源
         public static readonly BindableProperty ItemsSourceProperty =
@@ -24,16 +26,20 @@ namespace AsNum.XFControls {
                 null,
                 propertyChanged: ItemsSourceChanged);
 
-        public IEnumerable ItemsSource {
-            get {
+        public IEnumerable ItemsSource
+        {
+            get
+            {
                 return (IEnumerable)this.GetValue(ItemsSourceProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemsSourceProperty, value);
             }
         }
 
-        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var g = (UniformGrid)bindable;
             g.WrapItemsSource();
         }
@@ -46,11 +52,14 @@ namespace AsNum.XFControls {
                 typeof(UniformGrid),
                 1);
 
-        public int Count {
-            get {
+        public int Count
+        {
+            get
+            {
                 return (int)this.GetValue(CountProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(CountProperty, value);
             }
         }
@@ -64,11 +73,14 @@ namespace AsNum.XFControls {
                 UniformGridFixBy.Column
                 );
 
-        public UniformGridFixBy FixBy {
-            get {
+        public UniformGridFixBy FixBy
+        {
+            get
+            {
                 return (UniformGridFixBy)this.GetValue(FixByProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(FixByProperty, value);
             }
         }
@@ -81,11 +93,14 @@ namespace AsNum.XFControls {
                 typeof(UniformGrid),
                 null);
 
-        public DataTemplate ItemTemplate {
-            get {
+        public DataTemplate ItemTemplate
+        {
+            get
+            {
                 return (DataTemplate)GetValue(ItemTemplateProperty);
             }
-            set {
+            set
+            {
                 SetValue(ItemTemplateProperty, value);
             }
         }
@@ -98,11 +113,14 @@ namespace AsNum.XFControls {
                 typeof(UniformGrid),
                 null);
 
-        public DataTemplateSelector ItemTemplateSelector {
-            get {
+        public DataTemplateSelector ItemTemplateSelector
+        {
+            get
+            {
                 return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty);
             }
-            set {
+            set
+            {
                 SetValue(ItemTemplateSelectorProperty, value);
             }
         }
@@ -116,19 +134,24 @@ namespace AsNum.XFControls {
                 propertyChanged: ItemTapedCmdChanged
                 );
 
-        private static void ItemTapedCmdChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ItemTapedCmdChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var g = (UniformGrid)bindable;
             var flag = (newValue != null || g.ItemTapedCmd != null);
-            foreach (var v in g.Children) {
+            foreach (var v in g.Children)
+            {
                 TapBinder.SetWithFeedback(v, flag);
             }
         }
 
-        public ICommand ItemTapedCmd {
-            get {
+        public ICommand ItemTapedCmd
+        {
+            get
+            {
                 return (ICommand)this.GetValue(ItemTapedCmdProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemTapedCmdProperty, value);
             }
         }
@@ -145,11 +168,14 @@ namespace AsNum.XFControls {
                 GridLength.Star
                 );
 
-        public GridLength ColumnWidth {
-            get {
+        public GridLength ColumnWidth
+        {
+            get
+            {
                 return (GridLength)this.GetValue(ColumnWidthProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ColumnWidthProperty, value);
             }
         }
@@ -161,13 +187,18 @@ namespace AsNum.XFControls {
         /// <param name="data"></param>
         /// <param name="idx"></param>
         /// <returns></returns>
-        private View GetChild(object data) {
+        private View GetChild(object data)
+        {
 
             View child = null;
-            if (this.ItemTemplate != null || this.ItemTemplateSelector != null) {
-                if (this.ItemTemplateSelector != null) {
+            if (this.ItemTemplate != null || this.ItemTemplateSelector != null)
+            {
+                if (this.ItemTemplateSelector != null)
+                {
                     child = (View)this.ItemTemplateSelector.SelectTemplate(data, this).CreateContent();
-                } else if (this.ItemTemplate != null) {
+                }
+                else if (this.ItemTemplate != null)
+                {
                     child = (View)this.ItemTemplate.CreateContent();
                 }
 
@@ -188,7 +219,8 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 订阅数据源变化通知
         /// </summary>
-        private void WrapItemsSource() {
+        private void WrapItemsSource()
+        {
             new NotifyCollectionWrapper(
                 this.ItemsSource,
                 add: (datas, idx) => this.Add(datas, idx),
@@ -206,12 +238,13 @@ namespace AsNum.XFControls {
 
 
 
-        private void UpdateRowCol() {
+        private void UpdateRowCol()
+        {
             var c = this.Children.Count;
-			if (c == 0 || c == _ChildCount)
+            if (c == 0 || c == _ChildCount)
                 return;
 
-			this._ChildCount = c;
+            this._ChildCount = c;
 
             var rc = (int)Math.Ceiling((double)c / this.Count);
             if (rc == 0)
@@ -222,26 +255,33 @@ namespace AsNum.XFControls {
             this.ColumnDefinitions = new ColumnDefinitionCollection();
             this.RowDefinitions = new RowDefinitionCollection();
 
-            for (var i = 0; i < row; i++) {
-                this.RowDefinitions.Add(new RowDefinition() {
+            for (var i = 0; i < row; i++)
+            {
+                this.RowDefinitions.Add(new RowDefinition()
+                {
                     Height = GridLength.Auto
                 });
             }
 
-            for (var i = 0; i < col; i++) {
+            for (var i = 0; i < col; i++)
+            {
                 var cf = new ColumnDefinition();
                 cf.SetBinding(ColumnDefinition.WidthProperty, new Binding(nameof(this.ColumnWidth), source: this));
                 this.ColumnDefinitions.Add(cf);
             }
         }
 
-        private void UpdateChildGridRowCol(View child, int i) {
+        private void UpdateChildGridRowCol(View child, int i)
+        {
             int r, c;
 
-            if (this.FixBy == UniformGridFixBy.Column) {
+            if (this.FixBy == UniformGridFixBy.Column)
+            {
                 r = i / this.Count;
                 c = i % this.Count;
-            } else {
+            }
+            else
+            {
                 r = i % this.Count;
                 c = i / this.Count;
             }
@@ -250,55 +290,70 @@ namespace AsNum.XFControls {
             Grid.SetColumn(child, c);
         }
 
-        private void UpdateChildrenRowCol() {
-			this.BatchBegin();
+        private void UpdateChildrenRowCol()
+        {
+            this.BatchBegin();
             int i = 0;
-            foreach (var c in this.Children) {
+            foreach (var c in this.Children)
+            {
                 this.UpdateChildGridRowCol(c, i++);
             }
-			this.BatchCommit();
-			this.UpdateChildrenLayout();
+            this.BatchCommit();
+            this.UpdateChildrenLayout();
         }
 
-        private void Add(object d, int i) {
+        private void Add(object d, int i)
+        {
             var v = this.GetChild(d);
             this.Children.Add(v);
         }
 
-        private void Insert(object d, int i) {
+        private void Insert(object d, int i)
+        {
             var v = this.GetChild(d);
             this.Children.Insert(i, v);
         }
 
-        private void Remove(int i) {
+        private void Remove(int i)
+        {
             this.Children.RemoveAt(i);
         }
 
-        private void Add(IList datas, int idx) {
+        private void Add(IList datas, int idx)
+        {
             var c = this.Children.Count;
 
-            foreach (var d in datas) {
+            foreach (var d in datas)
+            {
                 var i = idx++;
-                if (i < c) {
+                if (i < c)
+                {
                     this.Insert(d, i);
-                } else {
+                }
+                else
+                {
                     this.Add(d, i);
                 }
             }
         }
 
-        private void Remove(IList datas, int idx) {
-            for (var i = idx; i < datas.Count; i++) {
+        private void Remove(IList datas, int idx)
+        {
+            for (var i = idx; i < datas.Count; i++)
+            {
                 this.Remove(i);
             }
         }
 
-        private void Reset() {
+        private void Reset()
+        {
             this.Children.Clear();
 
-            if (this.ItemsSource != null) {
+            if (this.ItemsSource != null)
+            {
                 var idx = 0;
-                foreach (var d in this.ItemsSource) {
+                foreach (var d in this.ItemsSource)
+                {
                     this.Add(d, idx++);
                 }
             }
@@ -307,7 +362,8 @@ namespace AsNum.XFControls {
     }
 
 
-    public enum UniformGridFixBy {
+    public enum UniformGridFixBy
+    {
         Row,
         Column
     }

@@ -12,10 +12,13 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(DataPicker), typeof(DataPickerRender))]
-namespace AsNum.XFControls.Droid {
-    public class DataPickerRender : ViewRenderer<DataPicker, NumberPicker> {
+namespace AsNum.XFControls.Droid
+{
+    public class DataPickerRender : ViewRenderer<DataPicker, NumberPicker>
+    {
 
-        protected override void OnElementChanged(ElementChangedEventArgs<DataPicker> e) {
+        protected override void OnElementChanged(ElementChangedEventArgs<DataPicker> e)
+        {
             base.OnElementChanged(e);
 
             if (this.Control != null)
@@ -33,34 +36,45 @@ namespace AsNum.XFControls.Droid {
             this.UpdateDatas();
         }
 
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e) {
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
             base.OnElementPropertyChanged(sender, e);
 
-            if (e.PropertyName.Equals(DataPicker.ItemsSourceProperty.PropertyName)) {
+            if (e.PropertyName.Equals(DataPicker.ItemsSourceProperty.PropertyName))
+            {
                 this.UpdateDatas();
 
-            } else if (e.PropertyName.Equals(DataPicker.FontSizeProperty.PropertyName) ||
-                    e.PropertyName.Equals(DataPicker.TextColorProperty.PropertyName)) {
+            }
+            else if (e.PropertyName.Equals(DataPicker.FontSizeProperty.PropertyName) ||
+                  e.PropertyName.Equals(DataPicker.TextColorProperty.PropertyName))
+            {
 
                 this.UpdateApperance(this.Element.TextColor.ToAndroid(), Context.ToPixels(this.Element.FontSize));
 
 
-            } else if (e.PropertyName.Equals(DataPicker.DividerColorProperty.PropertyName)) {
+            }
+            else if (e.PropertyName.Equals(DataPicker.DividerColorProperty.PropertyName))
+            {
 
                 this.UpdateDividerColor(this.Element.DividerColor.ToAndroid());
             }
         }
 
 
-        private void UpdateDatas() {
-            if (this.Element.ItemsSource != null) {
+        private void UpdateDatas()
+        {
+            if (this.Element.ItemsSource != null)
+            {
                 var c = this.Element.ItemsSource.Cast<object>().Count() - 1;
                 var cc = this.Control.MaxValue;
 
-                if (c <= cc) {
+                if (c <= cc)
+                {
                     this.Control.MaxValue = c;
                     this.Control.SetDisplayedValues(this.Element.StringValues.ToArray());
-                } else {
+                }
+                else
+                {
                     this.Control.SetDisplayedValues(this.Element.StringValues.ToArray());
                     this.Control.MaxValue = c;
                 }
@@ -73,17 +87,21 @@ namespace AsNum.XFControls.Droid {
         }
 
 
-        private void Control_ValueChanged(object sender, NumberPicker.ValueChangeEventArgs e) {
+        private void Control_ValueChanged(object sender, NumberPicker.ValueChangeEventArgs e)
+        {
             this.UpdateSelectedItem(e.NewVal);
         }
 
-        private void UpdateSelectedItem(int idx) {
+        private void UpdateSelectedItem(int idx)
+        {
             this.Element.SelectedItem = this.Element.ItemsSource.Cast<object>().ElementAt(idx);
         }
 
 
-        private void UpdateDividerColor(Android.Graphics.Color color) {
-            try {
+        private void UpdateDividerColor(Android.Graphics.Color color)
+        {
+            try
+            {
                 var fld = this.Control.Class.GetDeclaredField("mSelectionDivider");
                 fld.Accessible = true;
 
@@ -92,7 +110,9 @@ namespace AsNum.XFControls.Droid {
                 d.InvalidateSelf();
                 this.Control.PostInvalidate(); // Drawable is dirty
 
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
 
             }
         }
@@ -107,12 +127,16 @@ namespace AsNum.XFControls.Droid {
         private void UpdateApperance(
             Android.Graphics.Color txtColor,
             float textSize
-            ) {
+            )
+        {
             int count = this.Control.ChildCount;
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
                 var child = this.Control.GetChildAt(i);
-                if (child is EditText) {
-                    try {
+                if (child is EditText)
+                {
+                    try
+                    {
                         var fld = this.Control.Class.GetDeclaredField("mSelectorWheelPaint");
                         fld.Accessible = true;
 
@@ -126,7 +150,9 @@ namespace AsNum.XFControls.Droid {
                         paint.TextSize = TypedValue.ApplyDimension(ComplexUnitType.Px, textSize, this.Control.Resources.DisplayMetrics);
                         paint.Color = txtColor;
                         paint.SetTypeface(edt.Typeface);
-                    } catch {
+                    }
+                    catch
+                    {
 
                     }
                 }

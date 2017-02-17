@@ -3,8 +3,10 @@ using System.Reflection;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls.Binders {
-    public class CmdBinder {
+namespace AsNum.XFControls.Binders
+{
+    public class CmdBinder
+    {
 
 
         #region
@@ -29,15 +31,18 @@ namespace AsNum.XFControls.Binders {
                 typeof(CmdBinder),
                 null);
 
-        public static object GetParam(BindableObject o) {
+        public static object GetParam(BindableObject o)
+        {
             return o.GetValue(ParamProperty);
         }
 
-        public static ICommand GetCmd(BindableObject o) {
+        public static ICommand GetCmd(BindableObject o)
+        {
             return (ICommand)o.GetValue(CmdProperty);
         }
 
-        public static string GetEvent(BindableObject o) {
+        public static string GetEvent(BindableObject o)
+        {
             return (string)o.GetValue(EventProperty);
         }
         #endregion
@@ -46,7 +51,8 @@ namespace AsNum.XFControls.Binders {
         private static MethodInfo FireMethod = null;
         private static bool CanUse = false;
 
-        static CmdBinder() {
+        static CmdBinder()
+        {
             //CreateDelegateMethod = typeof(Delegate)
             //    .GetRuntimeMethods()
             //    .FirstOrDefault(m => m.Name.Equals("CreateDelegate"));
@@ -55,7 +61,8 @@ namespace AsNum.XFControls.Binders {
             CreateDelegateMethod = typeof(Delegate)
                 .GetRuntimeMethod("CreateDelegate", new Type[] { typeof(Type), typeof(MethodInfo) });
 
-            if (CreateDelegateMethod != null) {
+            if (CreateDelegateMethod != null)
+            {
                 FireMethod = typeof(CmdBinder).GetTypeInfo()
                     .GetDeclaredMethod("Fire");
 
@@ -63,18 +70,22 @@ namespace AsNum.XFControls.Binders {
             }
         }
 
-        private static void CommandChanged(BindableObject bindable, object oldValue, object newValue) {
-            if (CanUse) {
+        private static void CommandChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (CanUse)
+            {
                 var evt = bindable.GetType().GetTypeInfo().GetDeclaredEvent(GetEvent(bindable));
 
-                if (evt != null) {
+                if (evt != null)
+                {
                     var handler = (Delegate)CreateDelegateMethod.Invoke(null, new object[] { evt.EventHandlerType, FireMethod });
                     evt.AddEventHandler(bindable, handler);
                 }
             }
         }
 
-        private static void Fire(object sender, EventArgs e) {
+        private static void Fire(object sender, EventArgs e)
+        {
             var ele = (BindableObject)sender;
             var param = GetParam(ele);
             var cmd = GetCmd(ele);

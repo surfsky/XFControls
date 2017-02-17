@@ -7,8 +7,10 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(CircleBox), typeof(CircleBoxRender))]
-namespace AsNum.XFControls.Droid {
-    public class CircleBoxRender : VisualElementRenderer<CircleBox> {
+namespace AsNum.XFControls.Droid
+{
+    public class CircleBoxRender : VisualElementRenderer<CircleBox>
+    {
 
         private static bool Flag;
 
@@ -16,7 +18,8 @@ namespace AsNum.XFControls.Droid {
 
         private Android.Graphics.Color BgColor;
 
-        static CircleBoxRender() {
+        static CircleBoxRender()
+        {
             //clipPath with hardware acceleration is only supported in API level 18 and higher
             Flag = (int)Build.VERSION.SdkInt >= 18;
             //if (!Flag) {
@@ -26,12 +29,14 @@ namespace AsNum.XFControls.Droid {
 
 
 
-        protected override void OnElementChanged(ElementChangedEventArgs<CircleBox> e) {
+        protected override void OnElementChanged(ElementChangedEventArgs<CircleBox> e)
+        {
             base.OnElementChanged(e);
             this.Element.HorizontalOptions = LayoutOptions.Center;
             this.Element.VerticalOptions = LayoutOptions.Center;
 
-            if (this.Element.Content != null) {
+            if (this.Element.Content != null)
+            {
                 this.Element.Content.HorizontalOptions = LayoutOptions.Center;
                 this.Element.Content.VerticalOptions = LayoutOptions.Center;
 
@@ -48,16 +53,20 @@ namespace AsNum.XFControls.Droid {
 
         }
 
-        protected override void UpdateBackgroundColor() {
-            if (!Flag && !this.Element.BackgroundColor.Equals(Xamarin.Forms.Color.Transparent)) {
+        protected override void UpdateBackgroundColor()
+        {
+            if (!Flag && !this.Element.BackgroundColor.Equals(Xamarin.Forms.Color.Transparent))
+            {
                 this.BgColor = this.Element.BackgroundColor.ToAndroid();
                 this.Element.BackgroundColor = Xamarin.Forms.Color.Transparent;
             }
             base.UpdateBackgroundColor();
         }
 
-        public override void Draw(Canvas canvas) {
-            if (Flag) {
+        public override void Draw(Canvas canvas)
+        {
+            if (Flag)
+            {
                 //¿¹¾â³Ý
                 canvas.DrawFilter = new PaintFlagsDrawFilter(PaintFlags.AntiAlias | PaintFlags.FilterBitmap, PaintFlags.AntiAlias | PaintFlags.FilterBitmap);
                 var density = this.Context.Resources.DisplayMetrics.Density;
@@ -67,7 +76,8 @@ namespace AsNum.XFControls.Droid {
                 canvas.DrawColor(this.Element.BackgroundColor.ToAndroid());
                 path.Dispose();
             }
-            else {
+            else
+            {
                 var bmp = this.GetClip(canvas.Width, canvas.Height, this.BgColor);
                 var paint = new Paint(PaintFlags.AntiAlias);
                 canvas.DrawBitmap(bmp, 0, 0, paint);
@@ -84,7 +94,8 @@ namespace AsNum.XFControls.Droid {
         /// <param name="height"></param>
         /// <param name="color"></param>
         /// <returns></returns>
-        private Bitmap GetClip(int width, int height, Android.Graphics.Color color) {
+        private Bitmap GetClip(int width, int height, Android.Graphics.Color color)
+        {
             Bitmap output = Bitmap.CreateBitmap(width, height, Bitmap.Config.Argb8888);
             Canvas canvas = new Canvas(output);
             var paint = new Paint();

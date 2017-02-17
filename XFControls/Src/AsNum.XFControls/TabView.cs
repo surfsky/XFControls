@@ -9,15 +9,17 @@ using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
 
     /// <summary>
     /// 选项卡
     /// </summary>
     [ContentProperty("Pages")]
-    public class TabView : Grid {
+    public class TabView : Grid
+    {
 
-		private bool IsInnerUpdate = false;
+        private bool IsInnerUpdate = false;
 
         #region itemsSource 数据源
         /// <summary>
@@ -33,16 +35,20 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据源
         /// </summary>
-        public IEnumerable ItemsSource {
-            get {
+        public IEnumerable ItemsSource
+        {
+            get
+            {
                 return (IEnumerable)this.GetValue(ItemsSourceProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemsSourceProperty, value);
             }
         }
 
-        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabView)bindable;
             tv.WrapItemsSource();
             var a = tv.SelectedItem;
@@ -68,16 +74,20 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签条的控件模板
         /// </summary>
-        public ControlTemplate TabBarControlTemplate {
-            get {
+        public ControlTemplate TabBarControlTemplate
+        {
+            get
+            {
                 return (ControlTemplate)this.GetValue(TabBarControlTemplateProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TabBarControlTemplateProperty, value);
             }
         }
 
-        private static void TabBarControlChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void TabBarControlChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabView)bindable;
             tv.TabBar.ControlTemplate = (ControlTemplate)newValue;
         }
@@ -99,11 +109,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签头的数据模板
         /// </summary>
-        public DataTemplate TabTemplate {
-            get {
+        public DataTemplate TabTemplate
+        {
+            get
+            {
                 return (DataTemplate)GetValue(TabTemplateProperty);
             }
-            set {
+            set
+            {
                 SetValue(TabTemplateProperty, value);
             }
         }
@@ -122,11 +135,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签头模板选择器
         /// </summary>
-        public DataTemplateSelector TabTemplateSelector {
-            get {
+        public DataTemplateSelector TabTemplateSelector
+        {
+            get
+            {
                 return (DataTemplateSelector)GetValue(TabTemplateSelectorProperty);
             }
-            set {
+            set
+            {
                 SetValue(TabTemplateSelectorProperty, value);
             }
         }
@@ -146,11 +162,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签头的控件模板
         /// </summary>
-        public ControlTemplate TabControlTemplate {
-            get {
+        public ControlTemplate TabControlTemplate
+        {
+            get
+            {
                 return (ControlTemplate)this.GetValue(TabControlTemplateProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TabControlTemplateProperty, value);
             }
         }
@@ -171,11 +190,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签页数据模板
         /// </summary>
-        public DataTemplate ItemTemplate {
-            get {
+        public DataTemplate ItemTemplate
+        {
+            get
+            {
                 return (DataTemplate)GetValue(ItemTemplateProperty);
             }
-            set {
+            set
+            {
                 SetValue(ItemTemplateProperty, value);
             }
         }
@@ -194,11 +216,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签页模板选择器
         /// </summary>
-        public DataTemplateSelector ItemTemplateSelector {
-            get {
+        public DataTemplateSelector ItemTemplateSelector
+        {
+            get
+            {
                 return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty);
             }
-            set {
+            set
+            {
                 SetValue(ItemTemplateSelectorProperty, value);
             }
         }
@@ -222,22 +247,26 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 选中的数据
         /// </summary>
-        public object SelectedItem {
-            get {
+        public object SelectedItem
+        {
+            get
+            {
                 return GetValue(SelectedItemProperty);
             }
-            set {
+            set
+            {
                 SetValue(SelectedItemProperty, value);
             }
         }
 
-        private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             if (newValue == null)
                 return;
 
             var tv = (TabView)bindable;
-			if (tv.IsInnerUpdate)
-				return;
+            if (tv.IsInnerUpdate)
+                return;
 
             var p = tv.TabPages.FirstOrDefault(t => t.BindingContext.Equals(newValue)) ?? tv.TabPages.FirstOrDefault();
             tv.UpdateSelected((TabPageView)p);
@@ -259,19 +288,23 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 当前选中的序号
         /// </summary>
-        public int SelectedIndex {
-            get {
+        public int SelectedIndex
+        {
+            get
+            {
                 return (int)this.GetValue(SelectedIndexProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SelectedIndexProperty, value);
             }
         }
 
-        private static void SelectedIndexChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void SelectedIndexChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabView)bindable;
-			if (tv.IsInnerUpdate)
-				return;
+            if (tv.IsInnerUpdate)
+                return;
 
             //RaiseChild 会改变 Children (TabPages) 的顺序, 所以,不能直接按顺序取
             //var page = (TabPageView)(tv.TabPages.ElementAtOrDefault((int)newValue) ?? tv.TabPages.FirstOrDefault());
@@ -299,11 +332,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签头宽度 默认80
         /// </summary>
-        public double TabWidthRequest {
-            get {
+        public double TabWidthRequest
+        {
+            get
+            {
                 return (double)this.GetValue(TabWidthRequestProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TabWidthRequestProperty, value);
             }
         }
@@ -323,11 +359,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签头高度,默认40
         /// </summary>
-        public double TabHeightRequest {
-            get {
+        public double TabHeightRequest
+        {
+            get
+            {
                 return (double)this.GetValue(TabHeightRequestProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TabHeightRequestProperty, value);
             }
         }
@@ -349,16 +388,20 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签条的位置,默认 Top
         /// </summary>
-        public TabViewPositions TabPosition {
-            get {
+        public TabViewPositions TabPosition
+        {
+            get
+            {
                 return (TabViewPositions)(this.GetValue(TabPositionProperty));
             }
-            set {
+            set
+            {
                 this.SetValue(TabPositionProperty, value);
             }
         }
 
-        private static void TabPositionChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void TabPositionChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabView)bindable;
             tv.UpdatePosition();
         }
@@ -378,11 +421,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 标签条的背景颜色,默认透明
         /// </summary>
-        public Color TabBarBackgroundColor {
-            get {
+        public Color TabBarBackgroundColor
+        {
+            get
+            {
                 return (Color)this.GetValue(TabBarBackgroundColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TabBarBackgroundColorProperty, value);
             }
         }
@@ -403,18 +449,23 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 转场动画类型,默认 Fade
         /// </summary>
-        public TabViewTransitionTypes TransitionType {
-            get {
+        public TabViewTransitionTypes TransitionType
+        {
+            get
+            {
                 return (TabViewTransitionTypes)this.GetValue(TransitionTypeProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TransitionTypeProperty, value);
             }
         }
 
-        private static void TransitionChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void TransitionChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (TabView)bindable;
-            foreach (var p in tv.TabPages) {
+            foreach (var p in tv.TabPages)
+            {
                 tv.SetTransition((TabPageView)p);
             }
         }
@@ -449,7 +500,8 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 使用 Pages 就不能使用 ItemsSource
         /// </summary>
-        public ObservableCollection<TabPageView> Pages {
+        public ObservableCollection<TabPageView> Pages
+        {
             get;
         } = new ObservableCollection<TabPageView>();
 
@@ -498,7 +550,8 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 
         /// </summary>
-        public TabView() {
+        public TabView()
+        {
             this.PrepareLayout();
 
             this.TabSelectedCmd = new Command(o => {
@@ -510,20 +563,24 @@ namespace AsNum.XFControls {
             this.Pages.CollectionChanged += Pages_CollectionChanged;
         }
 
-        private void Pages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (this.ItemsSource == null) {
+        private void Pages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (this.ItemsSource == null)
+            {
                 this.ItemsSource = this.Pages;
             }
-            else if (!this.ItemsSource.Equals(this.Pages)) {
+            else if (!this.ItemsSource.Equals(this.Pages))
+            {
                 throw new Exception("Can't set TabView Pages when ItemsSource is not null");
             }
         }
 
-        private void UpdateSelected(TabPageView o) {
+        private void UpdateSelected(TabPageView o)
+        {
             if (o == null)
                 return;
 
-			this.IsInnerUpdate = true;
+            this.IsInnerUpdate = true;
 
             var item = (TabPageView)o;
             if (item.Index == this.SelectedIndex &&
@@ -531,7 +588,8 @@ namespace AsNum.XFControls {
                 item.BindingContext.Equals(this.SelectedItem))
                 return;
 
-            if (this.CurrentTabPage != null) {
+            if (this.CurrentTabPage != null)
+            {
                 this.CurrentTabPage.IsSelected = false;
                 this.NotifySelected(this.CurrentTabPage.BindingContext, false);
             }
@@ -550,18 +608,22 @@ namespace AsNum.XFControls {
             //IOS下,必须加上这一句,否则会导至 item 不可操作
             this.PageContainer.RaiseChild(item);
 
-			this.IsInnerUpdate = false;
+            this.IsInnerUpdate = false;
         }
 
 
-        private void NotifySelected(object data, bool isSelected) {
-            if (data != null && (data is ISelectable)) {
+        private void NotifySelected(object data, bool isSelected)
+        {
+            if (data != null && (data is ISelectable))
+            {
                 var s = (ISelectable)data;
-                if (s.IsSelected != isSelected) {
+                if (s.IsSelected != isSelected)
+                {
                     s.IsSelected = isSelected;
                     s.NotifyOfPropertyChange(nameof(s.IsSelected));
                     var cmd = isSelected ? s.SelectedCommand : s.UnSelectedCommand;
-                    if (cmd != null) {
+                    if (cmd != null)
+                    {
                         cmd.Execute(null);
                     }
                 }
@@ -574,13 +636,17 @@ namespace AsNum.XFControls {
         /// <param name="data"></param>
         /// <param name="idx"></param>
         /// <returns></returns>
-        private TabPageView GetTab(object data, int idx) {
+        private TabPageView GetTab(object data, int idx)
+        {
             TabPageView item;
-            if (data is TabPageView) {
+            if (data is TabPageView)
+            {
                 item = (TabPageView)data;
             }
-            else {
-                item = new TabPageView() {
+            else
+            {
+                item = new TabPageView()
+                {
                     Index = idx,
                     BindingContext = data
                 };
@@ -588,16 +654,19 @@ namespace AsNum.XFControls {
                 #region headView
                 View headView = null;
 
-                if (this.TabTemplate != null || this.TabTemplateSelector != null) {
+                if (this.TabTemplate != null || this.TabTemplateSelector != null)
+                {
                     //优先使用 TemplateSelector
-                    if (this.TabTemplateSelector != null) {
+                    if (this.TabTemplateSelector != null)
+                    {
                         // SelectTemplate 的第二个参数，即 TemplateSelector 的 OnSelectTemplate 方法的 container 参数
                         headView = (View)this.TabTemplateSelector.SelectTemplate(data, item).CreateContent();
                     }
                     else if (this.TabTemplate != null)
                         headView = (View)this.TabTemplate.CreateContent();
 
-                    if (headView != null) {
+                    if (headView != null)
+                    {
                         //上下文
                         headView.BindingContext = data;
                     }
@@ -608,7 +677,8 @@ namespace AsNum.XFControls {
 
 
                 //item.Header = headView;
-                item.Header = new ContentView() {
+                item.Header = new ContentView()
+                {
                     Content = headView,
                     BindingContext = item
                 };
@@ -620,11 +690,14 @@ namespace AsNum.XFControls {
 
                 #region bodyView
                 View bodyView = null;
-                if (this.ItemTemplate != null || this.ItemTemplateSelector != null) {
-                    if (this.ItemTemplateSelector != null) {
+                if (this.ItemTemplate != null || this.ItemTemplateSelector != null)
+                {
+                    if (this.ItemTemplateSelector != null)
+                    {
                         bodyView = (View)this.ItemTemplateSelector.SelectTemplate(data, item).CreateContent();
                     }
-                    else if (this.ItemTemplate != null) {
+                    else if (this.ItemTemplate != null)
+                    {
                         bodyView = (View)this.ItemTemplate.CreateContent();
                     }
 
@@ -651,7 +724,8 @@ namespace AsNum.XFControls {
             return item;
         }
 
-        private void SetTransition(TabPageView tab) {
+        private void SetTransition(TabPageView tab)
+        {
             var behavior = TabViewAnimationTypeFactory.GetBehavior(this.TransitionType);
             behavior.SetBinding(SelectChangeBehaviorBase.IsSelectedProperty, new Binding("IsSelected", BindingMode.TwoWay, source: tab));
             tab.Content.Behaviors.Add(behavior);
@@ -660,7 +734,8 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 准备布局
         /// </summary>
-        private void PrepareLayout() {
+        private void PrepareLayout()
+        {
             this.RowSpacing = 0;
             this.ColumnSpacing = 0;
 
@@ -686,7 +761,8 @@ namespace AsNum.XFControls {
             this.TabBarScroller = new ScrollView();
             this.TabBar.Content = this.TabBarScroller;
 
-            this.TabBarInner = new StackLayout() {
+            this.TabBarInner = new StackLayout()
+            {
                 Spacing = 0
             };
             this.TabBarScroller.Content = this.TabBarInner;
@@ -705,7 +781,8 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 更新标签、主体位置
         /// </summary>
-        private void UpdatePosition() {
+        private void UpdatePosition()
+        {
             this.BatchBegin();
             this.UpdateTabPosition();
             this.UpdateChildrenPosition();
@@ -715,11 +792,13 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 更新标签位置
         /// </summary>
-        private void UpdateTabPosition() {
+        private void UpdateTabPosition()
+        {
             int row = 0, col = 0, colSpan = 1, rowSpan = 1;
             ScrollOrientation orientation = ScrollOrientation.Horizontal;
             StackOrientation orientation2 = StackOrientation.Horizontal;
-            switch (this.TabPosition) {
+            switch (this.TabPosition)
+            {
                 case TabViewPositions.Top:
                     row = 0;
                     col = 0;
@@ -759,11 +838,13 @@ namespace AsNum.XFControls {
             this.TabBarScroller.VerticalOptions = LayoutOptions.Fill;
 
             this.TabBarInner.Orientation = orientation2;
-            if (this.TabBarInner.Orientation == StackOrientation.Horizontal) {
+            if (this.TabBarInner.Orientation == StackOrientation.Horizontal)
+            {
                 this.TabBarInner.HorizontalOptions = LayoutOptions.Center;
                 this.TabBarInner.VerticalOptions = LayoutOptions.Center;
             }
-            else {
+            else
+            {
                 this.TabBarInner.HorizontalOptions = LayoutOptions.Center;
                 this.TabBarInner.VerticalOptions = LayoutOptions.Start;
             }
@@ -778,10 +859,12 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 更新主体位置
         /// </summary>
-        private void UpdateChildrenPosition() {
+        private void UpdateChildrenPosition()
+        {
             int row = 0, col = 0, colSpan = 0, rowSpan = 0;
 
-            switch (this.TabPosition) {
+            switch (this.TabPosition)
+            {
                 case TabViewPositions.Top:
                     row = 1;
                     col = 0;
@@ -820,7 +903,8 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 订阅数据源变化通知
         /// </summary>
-        private void WrapItemsSource() {
+        private void WrapItemsSource()
+        {
             new NotifyCollectionWrapper(
                 this.ItemsSource,
                 add: (datas, idx) => this.Add(datas, idx),
@@ -828,53 +912,65 @@ namespace AsNum.XFControls {
                 reset: () => this.Reset());
         }
 
-        private void Add(object d, int i) {
+        private void Add(object d, int i)
+        {
             var v = this.GetTab(d, i);
             this.TabBarInner.Children.Add(v.Header);
             this.PageContainer.Children.Add(v);
         }
 
-        private void Insert(object d, int i) {
+        private void Insert(object d, int i)
+        {
             var v = this.GetTab(d, i);
             this.TabBarInner.Children.Insert(i, v.Header);
             this.PageContainer.Children.Insert(i, v);///////
         }
 
-        private void Remove(int i) {
+        private void Remove(int i)
+        {
             this.TabBarInner.Children.RemoveAt(i);
             this.PageContainer.Children.RemoveAt(i);
         }
 
         object o = new object();
-        private void Add(IList datas, int idx) {
+        private void Add(IList datas, int idx)
+        {
             System.Threading.Monitor.Enter(o);
             var c = this.TabBarInner.Children.Count;
 
-            foreach (var d in datas) {
+            foreach (var d in datas)
+            {
                 var i = idx++;
-                if (i < c) {
+                if (i < c)
+                {
                     this.Insert(d, i);
                 }
-                else {
+                else
+                {
                     this.Add(d, i);
                 }
             }
             System.Threading.Monitor.Exit(o);
         }
 
-        private void Remove(IList datas, int idx) {
-            for (var i = idx; i < datas.Count; i++) {
+        private void Remove(IList datas, int idx)
+        {
+            for (var i = idx; i < datas.Count; i++)
+            {
                 this.Remove(i);
             }
         }
 
-        private void Reset() {
+        private void Reset()
+        {
             this.TabBarInner.Children.Clear();
             this.PageContainer.Children.Clear();
 
-            if (this.ItemsSource != null) {
+            if (this.ItemsSource != null)
+            {
                 var idx = 0;
-                foreach (var d in this.ItemsSource) {
+                foreach (var d in this.ItemsSource)
+                {
                     this.Add(d, idx++);
                 }
             }
@@ -883,7 +979,8 @@ namespace AsNum.XFControls {
 
     }
 
-    public enum TabViewPositions {
+    public enum TabViewPositions
+    {
         /// <summary>
         /// 顶部
         /// </summary>
@@ -902,7 +999,8 @@ namespace AsNum.XFControls {
         Right
     }
 
-    public enum TabViewTransitionTypes {
+    public enum TabViewTransitionTypes
+    {
         /// <summary>
         /// 无动画
         /// </summary>
@@ -913,9 +1011,12 @@ namespace AsNum.XFControls {
         Fade
     }
 
-    class TabViewAnimationTypeFactory {
-        public static SelectChangeBehaviorBase GetBehavior(TabViewTransitionTypes transitionType) {
-            switch (transitionType) {
+    class TabViewAnimationTypeFactory
+    {
+        public static SelectChangeBehaviorBase GetBehavior(TabViewTransitionTypes transitionType)
+        {
+            switch (transitionType)
+            {
                 case TabViewTransitionTypes.None:
                     return new VisibilityBehavior();
                 case TabViewTransitionTypes.Fade:

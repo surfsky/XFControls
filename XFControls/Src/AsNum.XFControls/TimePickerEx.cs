@@ -1,11 +1,13 @@
 ﻿using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
 
     /// <summary>
     /// 时间选择器扩展版
     /// </summary>
-    public class TimePickerEx : TimePicker {
+    public class TimePickerEx : TimePicker
+    {
         //public static readonly BindableProperty TextColorProperty =
         //    BindableProperty.Create(
         //            "TextColor",
@@ -68,39 +70,51 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 占位文本颜色
         /// </summary>
-        public Color PlaceHolderColor {
-            get {
+        public Color PlaceHolderColor
+        {
+            get
+            {
                 return (Color)this.GetValue(PlaceHolderColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(PlaceHolderColorProperty, value);
             }
         }
 
-        public string PlaceHolder {
-            get {
+        public string PlaceHolder
+        {
+            get
+            {
                 return (string)this.GetValue(PlaceHolderProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(PlaceHolderProperty, value);
             }
         }
 
         [TypeConverter(typeof(FontSizeConverter))]
-        public double FontSize {
-            get {
+        public double FontSize
+        {
+            get
+            {
                 return (double)this.GetValue(FontSizeProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(FontSizeProperty, (object)value);
             }
         }
 
-        public TextAlignment HorizontalTextAlignment {
-            get {
+        public TextAlignment HorizontalTextAlignment
+        {
+            get
+            {
                 return (TextAlignment)this.GetValue(HorizontalTextAlignmentProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(HorizontalTextAlignmentProperty, value);
             }
         }

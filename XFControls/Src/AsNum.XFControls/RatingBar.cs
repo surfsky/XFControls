@@ -1,10 +1,12 @@
 ﻿using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
     /// <summary>
     /// 打分条
     /// </summary>
-    public class RatingBar : View /*UniformGrid*/ {
+    public class RatingBar : View /*UniformGrid*/
+    {
 
         #region IsIndicator
         /// <summary>
@@ -19,11 +21,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 是否仅指示,默认 false
         /// </summary>
-        public bool IsIndicator {
-            get {
+        public bool IsIndicator
+        {
+            get
+            {
                 return (bool)this.GetValue(IsIndicatorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(IsIndicatorProperty, value);
             }
         }
@@ -49,11 +54,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 星星数量
         /// </summary>
-        public int StarCount {
-            get {
+        public int StarCount
+        {
+            get
+            {
                 return (int)this.GetValue(StarCountProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(StarCountProperty, value);
             }
         }
@@ -79,11 +87,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 当前分数
         /// </summary>
-        public float Rate {
-            get {
+        public float Rate
+        {
+            get
+            {
                 return (float)this.GetValue(RateProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(RateProperty, value);
             }
         }
@@ -102,11 +113,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 打分步长,默认1
         /// </summary>
-        public float Step {
-            get {
+        public float Step
+        {
+            get
+            {
                 return (float)this.GetValue(StepProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(StepProperty, value);
             }
         }
@@ -119,11 +133,14 @@ namespace AsNum.XFControls {
                 typeof(RatingBar),
                 Color.Default);
 
-        public Color SelectedColor {
-            get {
+        public Color SelectedColor
+        {
+            get
+            {
                 return (Color)this.GetValue(SelectedColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(SelectedColorProperty, value);
             }
         }
@@ -137,11 +154,14 @@ namespace AsNum.XFControls {
                 Color.Default
                 );
 
-        public Color UnSelectedColor {
-            get {
+        public Color UnSelectedColor
+        {
+            get
+            {
                 return (Color)this.GetValue(UnSelectedColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(UnSelectedColorProperty, value);
             }
         }

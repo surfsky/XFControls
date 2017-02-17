@@ -46,6 +46,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Windows", "Example\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsNum.XFControls.UWP", "Src\AsNum.XFControls.UWP\AsNum.XFControls.UWP.csproj", "{D344AB7F-CEFC-4AC7-B842-7017CCF8C2C3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7133ED15-5794-4EF4-9656-6129B12C59DA}"
+	ProjectSection(SolutionItems) = preProject
+		Task.txt = Task.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU

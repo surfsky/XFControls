@@ -5,11 +5,15 @@ using System;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(ToastImpl))]
-namespace AsNum.XFControls.Droid.Services {
-    public class ToastImpl : IToast {
+namespace AsNum.XFControls.Droid.Services
+{
+    public class ToastImpl : IToast
+    {
 
-        public void Show(string msg, bool longShow = false) {
-            try {
+        public void Show(string msg, bool longShow = false)
+        {
+            try
+            {
                 //Looper.PrepareMainLooper();
                 //var toast = Toast.MakeText(Forms.Context, msg, longShow ? ToastLength.Long : ToastLength.Short);
                 //toast.Show();
@@ -20,7 +24,8 @@ namespace AsNum.XFControls.Droid.Services {
                     toast.Dispose();
                 });
             }
-            catch (Exception) {
+            catch (Exception)
+            {
 
             }
         }

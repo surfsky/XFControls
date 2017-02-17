@@ -4,7 +4,8 @@ using System.IO;
 using System.Reflection;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls.Converters {
+namespace AsNum.XFControls.Converters
+{
     /// <summary>
     /// <remark>
     /// 由于GetCallingAssembly返回的是调用处的 Assembly, 
@@ -13,15 +14,19 @@ namespace AsNum.XFControls.Converters {
     /// 所以，这里是抽象类，如果需要，需要在使用的地方继承这个类
     /// </remark>
     /// </summary>
-    public abstract class ResImgConverterBase : IValueConverter {
+    public abstract class ResImgConverterBase : IValueConverter
+    {
 
-        public virtual Assembly Asm {
-            get {
+        public virtual Assembly Asm
+        {
+            get
+            {
                 return this.GetType().GetTypeInfo().Assembly;
             }
         }
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             var source = (string)value;
             if (string.IsNullOrWhiteSpace(source))
                 return null;
@@ -30,7 +35,8 @@ namespace AsNum.XFControls.Converters {
             //var stm = this.Asm.GetManifestResourceStream(source);
             //return ImageSource.FromStream(() => stm);
 
-            using(var stm = this.Asm.GetManifestResourceStream(source)) {
+            using (var stm = this.Asm.GetManifestResourceStream(source))
+            {
                 var bytes = stm.GetBytes();
                 return ImageSource.FromStream(() => new MemoryStream(bytes));
             }
@@ -52,7 +58,8 @@ namespace AsNum.XFControls.Converters {
 
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotImplementedException();
         }
     }

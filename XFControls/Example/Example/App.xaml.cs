@@ -9,8 +9,7 @@ namespace Example {
     public partial class App : Application {
         public App() {
             InitializeComponent();
-
-			MainPage = new FlipExample();// new Home();
+			MainPage = new Home();
         }
 
         protected override void OnStart() {

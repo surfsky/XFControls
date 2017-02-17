@@ -12,7 +12,8 @@ using AColor = Android.Graphics.Color;
 using Java.Lang;
 
 
-namespace AsNum.XFControls.Droid {
+namespace AsNum.XFControls.Droid
+{
 
     ///// <summary>
     ///// NOT WORK CORRECTLLY

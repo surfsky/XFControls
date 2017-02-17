@@ -23,9 +23,9 @@
 	<key>MinimumOSVersion</key>
 	<string>6.0</string>
 	<key>CFBundleDisplayName</key>
-	<string>Example</string>
+	<string>XFExample</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.Example</string>
+	<string>com.cihecompany.Example</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleIconFiles</key>
@@ -51,5 +51,7 @@
 	</array>
 	<key>CFBundleShortVersionString</key>
 	<string></string>
+	<key>CFBundleName</key>
+	<string>XFExample</string>
 </dict>
 </plist>

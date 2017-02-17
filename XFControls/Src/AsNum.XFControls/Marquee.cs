@@ -5,11 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
     /// <summary>
     /// 跑马灯
     /// </summary>
-    public class Marquee : AbsoluteLayout {
+    public class Marquee : AbsoluteLayout
+    {
 
         #region itemsSource 数据源
 
@@ -26,20 +28,25 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据源
         /// </summary>
-        public IEnumerable ItemsSource {
-            get {
+        public IEnumerable ItemsSource
+        {
+            get
+            {
                 return (IList)this.GetValue(ItemsSourceProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ItemsSourceProperty, value);
             }
         }
 
-        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             var tv = (Marquee)bindable;
             tv.UpdateChildren();
 
-            if (newValue is INotifyCollectionChanged) {
+            if (newValue is INotifyCollectionChanged)
+            {
                 var newCollection = (INotifyCollectionChanged)newValue;
                 tv.InitCollection(newCollection);
             }
@@ -59,11 +66,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 数据模板
         /// </summary>
-        public DataTemplate ItemTemplate {
-            get {
+        public DataTemplate ItemTemplate
+        {
+            get
+            {
                 return (DataTemplate)GetValue(ItemTemplateProperty);
             }
-            set {
+            set
+            {
                 SetValue(ItemTemplateProperty, value);
             }
         }
@@ -82,11 +92,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 切换间隔, 单位毫秒,默认3000
         /// </summary>
-        public int Interval {
-            get {
+        public int Interval
+        {
+            get
+            {
                 return (int)this.GetValue(IntervalProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(IntervalProperty, value);
             }
         }
@@ -96,11 +109,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 当前序号
         /// </summary>
-        private int? Current {
-            get {
+        private int? Current
+        {
+            get
+            {
                 return this._current;
             }
-            set {
+            set
+            {
                 this._current = value < 0 ? 0 : value >= this.Children.Count ? 0 : value;
             }
         }
@@ -110,24 +126,29 @@ namespace AsNum.XFControls {
         /// </summary>
         private bool IsRunning = false;
 
-        public Marquee() {
+        public Marquee()
+        {
             //可视范围之外的内容不可见
             this.IsClippedToBounds = true;
             this.ChildAdded += Marquee_ChildAdded;
             //this.Loop();
         }
 
-        private async Task Animate(View view, bool isCurrent) {
+        private async Task Animate(View view, bool isCurrent)
+        {
             //if (isCurrent)
             view.IsVisible = true;
 
             Rectangle beginRect = Rectangle.Zero;
             Rectangle endRect = Rectangle.Zero;
 
-            if (isCurrent) {
+            if (isCurrent)
+            {
                 beginRect = new Rectangle(0, this.Bounds.Height, this.Bounds.Width, this.Bounds.Height);
                 endRect = new Rectangle(0, 0, this.Bounds.Width, this.Bounds.Height);
-            } else {
+            }
+            else
+            {
                 beginRect = new Rectangle(0, 0, this.Bounds.Width, this.Bounds.Height);
                 endRect = new Rectangle(0, -this.Bounds.Height, this.Bounds.Width, this.Bounds.Height);
             }
@@ -140,22 +161,28 @@ namespace AsNum.XFControls {
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private void Begin() {
+        private void Begin()
+        {
             if (this.IsRunning)
                 return;
             else
                 this.Run();
         }
 
-        private async void Run() {
-            if (this.Children.Count > 0) {
+        private async void Run()
+        {
+            if (this.Children.Count > 0)
+            {
                 this.IsRunning = true;
 
-                if (this.Current.HasValue) {
+                if (this.Current.HasValue)
+                {
                     var outEle = this.Children[this.Current.Value];
                     await this.Animate(outEle, false);
                     this.Current++;
-                } else {
+                }
+                else
+                {
                     this.Current = 0;
                 }
 
@@ -167,41 +194,49 @@ namespace AsNum.XFControls {
                     .ContinueWith(t => this.Run(), TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private void Marquee_ChildAdded(object sender, ElementEventArgs e) {
+        private void Marquee_ChildAdded(object sender, ElementEventArgs e)
+        {
             this.InitChildView((View)e.Element);
             this.Begin();
         }
 
-        private void UpdateChildren() {
+        private void UpdateChildren()
+        {
             this.Children.Clear();
             if (this.ItemsSource == null)
                 return;
 
             var source = this.ItemsSource.Cast<object>();
-            foreach (var d in this.ItemsSource) {
+            foreach (var d in this.ItemsSource)
+            {
                 var view = this.GetChildView(d);
                 this.Children.Add(view);
             }
         }
 
-        private View GetChildView(object data) {
+        private View GetChildView(object data)
+        {
             View view = null;
-            if (this.ItemTemplate != null) {
+            if (this.ItemTemplate != null)
+            {
                 if (this.ItemTemplate != null)
                     view = (View)this.ItemTemplate.CreateContent();
 
-                if (view != null) {
+                if (view != null)
+                {
                     view.BindingContext = data;
                 }
             }
 
-            if (view == null) {
+            if (view == null)
+            {
                 view = new Label() { Text = data?.GetType().FullName };
             }
             return view;
         }
 
-        private void InitChildView(View view) {
+        private void InitChildView(View view)
+        {
             view.IsVisible = false;
             view.VerticalOptions = LayoutOptions.CenterAndExpand;
             view.HorizontalOptions = LayoutOptions.StartAndExpand;
@@ -209,13 +244,16 @@ namespace AsNum.XFControls {
             view.Layout(new Rectangle(0, -this.Bounds.Height, this.Bounds.Width, this.Bounds.Height));
         }
 
-        private void InitCollection(INotifyCollectionChanged collection) {
+        private void InitCollection(INotifyCollectionChanged collection)
+        {
             if (collection != null)
                 collection.CollectionChanged += Collection_CollectionChanged;
         }
 
-        private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            switch (e.Action) {
+        private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
                 case NotifyCollectionChangedAction.Add:
                     this.InsertChildren(e.NewItems, e.NewStartingIndex);
                     break;
@@ -239,11 +277,13 @@ namespace AsNum.XFControls {
         /// </summary>
         /// <param name="datas"></param>
         /// <param name="startIdx"></param>
-        private void InsertChildren(IEnumerable datas, int startIdx = 0) {
+        private void InsertChildren(IEnumerable datas, int startIdx = 0)
+        {
             if (datas == null)
                 return;
 
-            foreach (var d in datas) {
+            foreach (var d in datas)
+            {
                 var view = this.GetChildView(d);
 
                 this.Children.Insert(startIdx, view);
@@ -256,11 +296,13 @@ namespace AsNum.XFControls {
         /// </summary>
         /// <param name="datas"></param>
         /// <param name="startIdx"></param>
-        private void RemoveChildren(IList datas, int startIdx) {
+        private void RemoveChildren(IList datas, int startIdx)
+        {
             if (datas == null)
                 return;
 
-            foreach (var d in datas) {
+            foreach (var d in datas)
+            {
                 this.Children.RemoveAt(startIdx);
                 startIdx++;
             }

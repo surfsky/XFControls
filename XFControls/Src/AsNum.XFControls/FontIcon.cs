@@ -3,11 +3,13 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
     /// <summary>
     /// Font 图标
     /// </summary>
-    public class FontIcon : View {
+    public class FontIcon : View
+    {
 
         /// <summary>
         /// 字体名称, 字体需要放到平台项目下面
@@ -83,11 +85,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 字体
         /// </summary>
-        public string FontFamily {
-            get {
+        public string FontFamily
+        {
+            get
+            {
                 return this.GetValue(FontFamilyProperty) as string;
             }
-            set {
+            set
+            {
                 this.SetValue(FontFamilyProperty, value);
             }
         }
@@ -95,11 +100,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 字体大小
         /// </summary>
-        public double FontSize {
-            get {
+        public double FontSize
+        {
+            get
+            {
                 return (double)this.GetValue(FontSizeProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(FontSizeProperty, value);
             }
         }
@@ -107,11 +115,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 要显示的文本的代码
         /// </summary>
-        public string Glyph {
-            get {
+        public string Glyph
+        {
+            get
+            {
                 return this.GetValue(GlyphProperty) as string;
             }
-            set {
+            set
+            {
                 this.SetValue(GlyphProperty, value);
             }
         }
@@ -119,7 +130,8 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 当前使用颜色，在 Renderer 中使用
         /// </summary>
-        public Color CurrentColor {
+        public Color CurrentColor
+        {
             get;
             private set;
         }
@@ -127,11 +139,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 文字颜色,默认 Black
         /// </summary>
-        public Color Color {
-            get {
+        public Color Color
+        {
+            get
+            {
                 return (Color)this.GetValue(ColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(ColorProperty, value);
             }
         }
@@ -139,11 +154,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 禁用状态下的文字颜色,默认 Gray
         /// </summary>
-        public Color DisableColor {
-            get {
+        public Color DisableColor
+        {
+            get
+            {
                 return (Color)this.GetValue(DisableColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(DisableColorProperty, value);
             }
         }
@@ -151,11 +169,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// Tap 命令
         /// </summary>
-        public ICommand TapCmd {
-            get {
+        public ICommand TapCmd
+        {
+            get
+            {
                 return (ICommand)this.GetValue(TapCmdProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TapCmdProperty, value);
             }
         }
@@ -163,46 +184,55 @@ namespace AsNum.XFControls {
         /// <summary>
         /// Tap 命令参数
         /// </summary>
-        public object TapParam {
-            get {
+        public object TapParam
+        {
+            get
+            {
                 return this.GetValue(TapCmdParamProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(TapCmdParamProperty, value);
             }
         }
 
 
-        private static void Changed(BindableObject bindable, object oldValue, object newValue) {
+        private static void Changed(BindableObject bindable, object oldValue, object newValue)
+        {
             var fi = (FontIcon)bindable;
             fi.UpdateColor();
         }
 
-        private void UpdateColor() {
+        private void UpdateColor()
+        {
             this.CurrentColor = this.IsEnabled ? this.Color : this.DisableColor;
             this.OnPropertyChanged("CurrentColor");
         }
 
-        private static void TapCmdParamChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void TapCmdParamChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             TapBinder.SetParam(bindable, newValue);
         }
 
-        private static void TapCmdChanged(BindableObject bindable, object oldValue, object newValue) {
+        private static void TapCmdChanged(BindableObject bindable, object oldValue, object newValue)
+        {
             TapBinder.SetCmd(bindable, (ICommand)newValue);
         }
 
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
             base.OnPropertyChanged(propertyName);
 
-            if (propertyName.Equals("IsEnabled")) {
+            if (propertyName.Equals("IsEnabled"))
+            {
                 this.UpdateColor();
             }
         }
 
-		//protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
-		//{
-		//	//return base.OnMeasure(widthConstraint, heightConstraint);
-		//	return new SizeRequest(new Size(this.FontSize, this.FontSize));
-		//}
+        //protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
+        //{
+        //	//return base.OnMeasure(widthConstraint, heightConstraint);
+        //	return new SizeRequest(new Size(this.FontSize, this.FontSize));
+        //}
     }
 }

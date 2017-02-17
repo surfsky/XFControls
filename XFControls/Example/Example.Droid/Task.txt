@@ -1,1 +1,34 @@
-﻿
+﻿启动速度实在太慢了，估计有10s，换台机子做下测试。
+增加欢迎页面，避免白屏
+http://www.cnblogs.com/mycing/p/5986286.html
+http://www.mendingsoft.com/Website/WebHome/Glaciers/Information?Id=8999e488-7b92-4749-9cc1-0dd6f254204e&PageIndex=1
+
+
+
+其实就算你onCreate啥都不做，仍然会闪一下白屏，因为初始化解析界面时需要一定时间，解决方法是自定义Theme。
+
+自定义如下
+	<style name="AppSplash" parent="android:Theme">   
+	    <item name="android:windowBackground">@drawable/ipod_bg</item>   
+	    <item name="android:windowNoTitle">true</item>   
+	</style>
+
+
+配置文件中配置如下
+ 	<activity  
+           android:theme="@style/AppSplash" 
+           android:name=".SplashActivity" > 
+ 	</activity>
+ 
+欢迎页：
+	[Activity(Label = "", Theme = "@style/AppSplash", MainLauncher = true)]
+	public class StartupActivity : Activity
+	{
+	    protected override void OnCreate(Bundle savedInstanceState)
+	    {
+	        base.OnCreate(savedInstanceState);
+	        StartActivity(typeof(LoginActivity));
+	        OverridePendingTransition(Android.Resource.Animation.SlideInLeft, Android.Resource.Animation.SlideOutRight);
+	        // Create your application here
+	    }
+	}

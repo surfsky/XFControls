@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using System.Windows.Input;
 using System.ComponentModel;
 
-namespace Example {
-    public partial class Home : ContentPage {
+namespace Example 
+{
+    public partial class Home : ContentPage 
+	{
 
         public IEnumerable<FlipItem> FlipSource { get; }
             = new List<FlipItem>() {
@@ -48,18 +49,31 @@ namespace Example {
                 new RadioItem() {ID = 2, Name = "中立" }
             };
 
-        public Home() {
+        public Home() 
+		{
             InitializeComponent();
-
             this.BindingContext = this;
-        }
-    }
+		}
+
+		// Test DataPicker
+		async void Handle_Clicked(object sender, System.EventArgs e)
+		{
+			await Navigation.PushModalAsync(new DataPickerExample());
+		}
+	}
 
 
-    public class FlipItem {
+    public class RadioItem
+	{
+		public string Name { get; set; }
+		public int ID { get; set; }
+	}
 
+
+
+	public class FlipItem 
+	{
         public string Desc { get; set; }
-
         public string Img { get; set; }
     }
 
@@ -67,34 +81,20 @@ namespace Example {
     /// <summary>
     /// Notice : TabView require DataSource's item implementation ISelectable
     /// </summary>
-    public class TabViewItem : ISelectable, INotifyPropertyChanged {
-
-        public char Glyph { get; set; }
-
-        public bool IsSelected {
-            get; set;
-        }
-
-        public ICommand SelectedCommand {
-            get; set;
-        }
-
-        public string Title { get; set; }
-
-        public ICommand UnSelectedCommand {
-            get; set;
-        }
-
+    public class TabViewItem : ISelectable, INotifyPropertyChanged 
+	{
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void NotifyOfPropertyChange(string propertyName) {
+		public char Glyph { get; set; }
+        public bool IsSelected {get; set;}
+        public ICommand SelectedCommand {get; set;}
+        public string Title { get; set; }
+        public ICommand UnSelectedCommand {get; set; }
+
+        public void NotifyOfPropertyChange(string propertyName) 
+		{
             this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
-
-    public class RadioItem {
-        public string Name { get; set; }
-        public int ID { get; set; }
-    }
 }

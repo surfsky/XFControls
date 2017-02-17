@@ -1,11 +1,13 @@
 ﻿using Xamarin.Forms;
 
-namespace AsNum.XFControls {
+namespace AsNum.XFControls
+{
     /// <summary>
     /// DatePicker 扩展
     /// </summary>
     [System.Obsolete("不建议使用")]
-    public class DatePickerEx : DatePicker {
+    public class DatePickerEx : DatePicker
+    {
 
         //public static readonly BindableProperty TextColorProperty =
         //    BindableProperty.Create(
@@ -74,11 +76,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// PlaceHolder 颜色
         /// </summary>
-        public Color PlaceHolderColor {
-            get {
+        public Color PlaceHolderColor
+        {
+            get
+            {
                 return (Color)this.GetValue(PlaceHolderColorProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(PlaceHolderColorProperty, value);
             }
         }
@@ -86,11 +91,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// PlaceHolder
         /// </summary>
-        public string PlaceHolder {
-            get {
+        public string PlaceHolder
+        {
+            get
+            {
                 return (string)this.GetValue(PlaceHolderProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(PlaceHolderProperty, value);
             }
         }
@@ -99,11 +107,14 @@ namespace AsNum.XFControls {
         /// 文本大小
         /// </summary>
         [TypeConverter(typeof(FontSizeConverter))]
-        public double FontSize {
-            get {
+        public double FontSize
+        {
+            get
+            {
                 return (double)this.GetValue(FontSizeProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(FontSizeProperty, (object)value);
             }
         }
@@ -111,11 +122,14 @@ namespace AsNum.XFControls {
         /// <summary>
         /// 文本水平对齐
         /// </summary>
-        public TextAlignment HorizontalTextAlignment {
-            get {
+        public TextAlignment HorizontalTextAlignment
+        {
+            get
+            {
                 return (TextAlignment)this.GetValue(HorizontalTextAlignmentProperty);
             }
-            set {
+            set
+            {
                 this.SetValue(HorizontalTextAlignmentProperty, value);
             }
         }

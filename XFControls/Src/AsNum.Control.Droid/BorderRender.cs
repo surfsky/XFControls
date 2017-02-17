@@ -9,8 +9,10 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(Border), typeof(BorderRender))]
-namespace AsNum.XFControls.Droid {
-    public class BorderRender : VisualElementRenderer<Border> {
+namespace AsNum.XFControls.Droid
+{
+    public class BorderRender : VisualElementRenderer<Border>
+    {
 
         private bool IsDisposed = false;
 
@@ -18,24 +20,29 @@ namespace AsNum.XFControls.Droid {
         private InsetDrawable InsetDab;
         private Path ClipPath;
 
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e) {
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
             base.OnElementPropertyChanged(sender, e);
             this.UpdateBackground(this);
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Border> e) {
+        protected override void OnElementChanged(ElementChangedEventArgs<Border> e)
+        {
             base.OnElementChanged(e);
             this.UpdateBackground(this);
         }
 
-        protected override void DispatchDraw(Canvas canvas) {
-            if (Element.IsClippedToBorder) {
+        protected override void DispatchDraw(Canvas canvas)
+        {
+            if (Element.IsClippedToBorder)
+            {
                 canvas.Save(SaveFlags.Clip);
                 this.SetClipPath(canvas);
                 base.DispatchDraw(canvas);
                 canvas.Restore();
             }
-            else {
+            else
+            {
                 base.DispatchDraw(canvas);
             }
         }
@@ -46,7 +53,8 @@ namespace AsNum.XFControls.Droid {
         //}
 
 
-        private void UpdateBackground(Android.Views.View view) {
+        private void UpdateBackground(Android.Views.View view)
+        {
             var border = this.Element;
             var stroke = border.StrokeThickness;
             var corner = border.CornerRadius;
@@ -54,21 +62,25 @@ namespace AsNum.XFControls.Droid {
 
             var context = view.Context;
 
-            if (this.Dab == null) {
+            if (this.Dab == null)
+            {
                 this.Dab = new GradientDrawable();
                 this.Dab.SetShape(ShapeType.Rectangle);
             }
             var maxWidth = (int)context.ToPixels(Max(stroke));
 
-            if (maxWidth > 0) {
+            if (maxWidth > 0)
+            {
                 this.Dab.SetStroke(maxWidth, border.Stroke.ToAndroid(), 0, 0);
             }
 
-            if ((int)Build.VERSION.SdkInt < 21) {
+            if ((int)Build.VERSION.SdkInt < 21)
+            {
                 //Android 4.4 SetCornerRadii »áºÚÒ»Æ¬
                 this.Dab.SetCornerRadius(context.ToPixels(Max(corner)));
             }
-            else {
+            else
+            {
                 var ctl = context.ToPixels(corner.TopLeft);
                 var ctr = context.ToPixels(corner.TopRight);
                 var cbr = context.ToPixels(corner.BottomRight);
@@ -91,7 +103,8 @@ namespace AsNum.XFControls.Droid {
             var right = -(int)(maxWidth - context.ToPixels(stroke.Right));
             var bottom = -(int)(maxWidth - context.ToPixels(stroke.Bottom));
 
-            if (this.InsetDab == null) {
+            if (this.InsetDab == null)
+            {
                 this.InsetDab = new InsetDrawable(this.Dab, left, top, right, bottom);
             }
 
@@ -104,7 +117,8 @@ namespace AsNum.XFControls.Droid {
                 (int)context.ToPixels(stroke.Bottom + padding.Bottom));
         }
 
-        private double Max(Thickness t) {
+        private double Max(Thickness t)
+        {
             return new double[] {
                 t.Left,
                 t.Top,
@@ -113,7 +127,8 @@ namespace AsNum.XFControls.Droid {
             }.Max();
         }
 
-        private double Max(CornerRadius t) {
+        private double Max(CornerRadius t)
+        {
             return new double[] {
                 t.TopLeft,
                 t.TopRight,
@@ -122,7 +137,8 @@ namespace AsNum.XFControls.Droid {
             }.Max();
         }
 
-        private void SetClipPath(Canvas canvas) {
+        private void SetClipPath(Canvas canvas)
+        {
             var br = this;
             this.ClipPath = new Path();
             var corner = br.Element.CornerRadius;
@@ -151,20 +167,25 @@ namespace AsNum.XFControls.Droid {
         }
 
 
-        protected override void Dispose(bool disposing) {
+        protected override void Dispose(bool disposing)
+        {
 
-            if (disposing && !this.IsDisposed) {
+            if (disposing && !this.IsDisposed)
+            {
                 this.IsDisposed = true;
 
-                if (this.Dab != null) {
+                if (this.Dab != null)
+                {
                     this.Dab.Dispose();
                     this.Dab = null;
                 }
-                if (this.InsetDab != null) {
+                if (this.InsetDab != null)
+                {
                     this.InsetDab.Dispose();
                     this.InsetDab = null;
                 }
-                if (this.ClipPath != null) {
+                if (this.ClipPath != null)
+                {
                     this.ClipPath.Dispose();
                     this.ClipPath = null;
                 }

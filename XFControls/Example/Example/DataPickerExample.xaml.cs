@@ -7,10 +7,19 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Example {
-    public partial class DataPickerExample : ContentPage {
+    public partial class DataPickerExample : ContentPage 
+	{
+        public class DataPickerItem
+		{
+			public int ID { get; set; }
+			public string Name { get; set; }
+			public IEnumerable<DataPickerItem> Children { get; set; }
+		}
 
-        public IEnumerable<DataPickerItem> Datas { get; }
-        = new List<DataPickerItem>() {
+		public DataPickerItem Selected { get; set; }
+
+		public IEnumerable<DataPickerItem> Datas { get; } = new List<DataPickerItem>() 
+		{
             new DataPickerItem() { ID = 1, Name= "Asia", Children=new List<DataPickerItem>() { new DataPickerItem() { Name = "China" }, new DataPickerItem() { Name="Japan"}, new DataPickerItem() { Name= "Singapore" } } },
             new DataPickerItem() { ID = 1, Name= "North America", Children=new List<DataPickerItem>() { new DataPickerItem() { Name = "USA" }, new DataPickerItem() { Name="Mexico"}, new DataPickerItem() { Name="Canda" } } },
             new DataPickerItem() { ID = 1, Name= "Europe", Children=new List<DataPickerItem>() { new DataPickerItem() { Name = "English" }, new DataPickerItem() { Name="Franch"} , new DataPickerItem() { Name="Germany"} } },
@@ -20,25 +29,13 @@ namespace Example {
             new DataPickerItem() { ID = 1, Name= "Antarctica"}
         };
 
-		public DataPickerItem Selected { get; set; }
 
-        public DataPickerExample() {
+        public DataPickerExample() 
+		{
             InitializeComponent();
-
 			this.Selected = this.Datas.ElementAt(1);
-
             this.BindingContext = this;
         }
 
-        public class DataPickerItem {
-
-            public int ID { get; set; }
-
-            public string Name { get; set; }
-
-            public IEnumerable<DataPickerItem> Children {
-                get; set;
-            }
-        }
     }
 }

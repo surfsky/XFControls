@@ -14,18 +14,12 @@ namespace AsNum.XFControls
     [ContentProperty("Source")]
     public class ImageResourceExtension : IMarkupExtension
     {
-
-        public string Source
-        {
-            get; set;
-        }
+        public string Source {get; set;}
 
         public object ProvideValue(IServiceProvider serviceProvider)
         {
             if (Source == null)
-            {
                 return null;
-            }
 
             //ImageSource.FromResource 会去反射获取 CallingAssembly
             //但是如果在这里调用 ImageSource.FromResource, CallingAssembly 就变成当前这个类所在的 Assembly 了。
@@ -40,10 +34,7 @@ namespace AsNum.XFControls
                 });
             }
             else
-            {
-                var img = ImageSource.FromResource(Source);
-                return img;
-            }
+                return ImageSource.FromResource(Source);
         }
     }
 }

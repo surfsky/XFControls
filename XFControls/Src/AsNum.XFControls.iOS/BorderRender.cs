@@ -1,10 +1,10 @@
-﻿using AsNum.XFControls;
+﻿using System;
+using System.ComponentModel;
+using AsNum.XFControls;
 using AsNum.XFControls.iOS;
+using UIKit;
 using CoreAnimation;
 using CoreGraphics;
-using System;
-using System.ComponentModel;
-using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
@@ -16,6 +16,9 @@ namespace AsNum.XFControls.iOS
     /// </summary>
     public class BorderRender : VisualElementRenderer<Border>
     {
+        /// <summary>
+        /// 边框位置
+        /// </summary>
         enum BorderPosition
         {
             Left,
@@ -24,8 +27,10 @@ namespace AsNum.XFControls.iOS
             Bottom
         }
 
+        // 4块边角
         private CALayer[] borderLayers = new CALayer[4];
 
+        // 可视元素变更
         protected override void OnElementChanged(ElementChangedEventArgs<Border> e)
         {
             base.OnElementChanged(e);
@@ -33,6 +38,7 @@ namespace AsNum.XFControls.iOS
                 this.SetupLayer();
         }
 
+        // 属性变更事件
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
@@ -47,31 +53,36 @@ namespace AsNum.XFControls.iOS
             }
         }
 
+        //
         private void SetupLayer()
         {
             if (Element == null || Element.Width <= 0 || Element.Height <= 0)
                 return;
 
-            Layer.CornerRadius = (nfloat)Element.CornerRadius.TopLeft;
+            // 整体形状
+            Layer.CornerRadius = (nfloat)Element.CornerRadius.TopLeft;   // 圆角大小统一用左上角???
             if (Element.BackgroundColor != Color.Default)
                 Layer.BackgroundColor = Element.BackgroundColor.ToCGColor();
             else
                 Layer.BackgroundColor = UIColor.White.CGColor;
-
             Layer.BorderColor = Element.Stroke.ToCGColor();
             Layer.MasksToBounds = true;
 
+            // 画四个边框
             UpdateBorderLayer(BorderPosition.Left, (nfloat)Element.StrokeThickness.Left);
             UpdateBorderLayer(BorderPosition.Top, (nfloat)Element.StrokeThickness.Top);
             UpdateBorderLayer(BorderPosition.Right, (nfloat)Element.StrokeThickness.Right);
             UpdateBorderLayer(BorderPosition.Bottom, (nfloat)Element.StrokeThickness.Bottom);
 
+            // 其它属性
             Layer.RasterizationScale = UIScreen.MainScreen.Scale;
             Layer.ShouldRasterize = true;
             Layer.BorderColor = Element.Stroke.ToCGColor();
             Layer.BorderWidth = (float)Element.StrokeThickness.Left;
         }
 
+        // 用笨笨的办法添加4个边框（小矩形）
+        // 边框不同宽度的意义并不是很大，可以取消掉。圆角不一样大倒是经常遇到，如对话框按钮。
         void UpdateBorderLayer(BorderPosition borderPosition, nfloat thickness)
         {
             var borderLayer = borderLayers[(int)borderPosition];
@@ -109,7 +120,7 @@ namespace AsNum.XFControls.iOS
                 }
 
                 borderLayer.BackgroundColor = Element.Stroke.ToCGColor();
-                borderLayer.CornerRadius = (nfloat)Element.CornerRadius.TopLeft;
+                borderLayer.CornerRadius = (nfloat)Element.CornerRadius.TopLeft; //?????
             }
         }
     }

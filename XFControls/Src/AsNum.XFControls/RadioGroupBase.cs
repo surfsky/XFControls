@@ -12,19 +12,31 @@ namespace AsNum.XFControls
     /// </summary>
     public abstract class RadioGroupBase : ContentView
     {
+        /// <summary>
+        /// 布局方向
+        /// </summary>
+        public enum RadioGroupOrientation
+        {
+            Vertical = 0,
+            Horizontal = 1,
+            HorizontalWrap = 2
+        }
 
-        #region SelectedItem
+
+        // BindaleProperty
+        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create("SelectedItem", typeof(object), typeof(RadioGroupBase), null, BindingMode.TwoWay, propertyChanged: SelectedItemChanged);
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(RadioGroupBase), null, propertyChanged: ItemsSourceChanged);
+        public static readonly BindableProperty DisplayPathProperty = BindableProperty.Create("DisplayPath", typeof(string), typeof(RadioGroupBase));
+        private static readonly BindableProperty RadioSizeProperty = BindableProperty.Create("Size", typeof(double), typeof(RadioGroupBase), 25D);
+        public static readonly BindableProperty SelectedItemControlTemplateProperty = BindableProperty.Create("SelectedItemControlTemplate", typeof(ControlTemplate), typeof(RadioButtonGroup), null);
+        public static readonly BindableProperty UnSelectedItemControlTemplateProperty = BindableProperty.Create("UnSelectedItemControlTemplate", typeof(ControlTemplate), typeof(RadioButtonGroup), null);
+        public static readonly BindableProperty OnImgProperty = BindableProperty.Create("OnImg", typeof(ImageSource), typeof(RadioGroupBase), ImageSource.FromResource("AsNum.XFControls.Imgs.Radio-Checked.png"));
+        public static readonly BindableProperty OffImgProperty = BindableProperty.Create("OffImg", typeof(ImageSource), typeof(RadioGroupBase), ImageSource.FromResource("AsNum.XFControls.Imgs.Radio-Unchecked.png"));
+
+        #region Property
         /// <summary>
         /// 选中的数据
         /// </summary>
-        public static readonly BindableProperty SelectedItemProperty =
-            BindableProperty.Create("SelectedItem",
-                typeof(object),
-                typeof(RadioGroupBase),
-                null,
-                BindingMode.TwoWay,
-                propertyChanged: SelectedItemChanged);
-
         private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var rg = (RadioGroupBase)bindable;
@@ -37,232 +49,97 @@ namespace AsNum.XFControls
         /// </summary>
         public object SelectedItem
         {
-            get
-            {
-                return this.GetValue(SelectedItemProperty);
-            }
-            set
-            {
-                this.SetValue(SelectedItemProperty, value);
-            }
+            get { return this.GetValue(SelectedItemProperty); }
+            set { this.SetValue(SelectedItemProperty, value); }
         }
 
-        #endregion
-
-        #region itemsSource 数据源
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create("ItemsSource",
-                typeof(IEnumerable),
-                typeof(RadioGroupBase),
-                null,
-                propertyChanged: ItemsSourceChanged);
 
         /// <summary>
         /// 数据源
         /// </summary>
         public IEnumerable ItemsSource
         {
-            get
-            {
-                return (IEnumerable)this.GetValue(ItemsSourceProperty);
-            }
-            set
-            {
-                this.SetValue(ItemsSourceProperty, value);
-            }
+            get { return (IEnumerable)this.GetValue(ItemsSourceProperty); }
+            set { this.SetValue(ItemsSourceProperty, value); }
         }
 
         private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var rg = (RadioGroupBase)bindable;
             rg.Container.Children.Clear();
-
-            //if (newValue != null) {
-            //    var source = (IEnumerable<object>)newValue;
-            //    rg.Add(source.ToList(), 0);
-            //}
             rg.WrapItemsSource();
-
             rg.UpdateSelected();
         }
-        #endregion
-
-        #region DisplayPath
-        /// <summary>
-        /// 要作为标签文本显示的属性路径
-        /// </summary>
-        public static readonly BindableProperty DisplayPathProperty =
-            BindableProperty.Create("DisplayPath",
-                                    typeof(string),
-                                    typeof(RadioGroupBase));
 
         /// <summary>
         /// 要作为标签文本显示的属性路径
         /// </summary>
         public string DisplayPath
         {
-            get
-            {
-                return (string)this.GetValue(DisplayPathProperty);
-            }
-            set
-            {
-                this.SetValue(DisplayPathProperty, value);
-            }
+            get { return (string)this.GetValue(DisplayPathProperty); }
+            set { this.SetValue(DisplayPathProperty, value); }
         }
 
-        #endregion
-
-        #region RadioSize
-        /// <summary>
-        /// 按钮大小,默认25
-        /// </summary>
-        private static readonly BindableProperty RadioSizeProperty =
-            BindableProperty.Create("Size",
-                                    typeof(double),
-                                    typeof(RadioGroupBase),
-                                    25D
-                                    );
 
         /// <summary>
         /// 按钮大小,默认25
         /// </summary>
         public double RadioSize
         {
-            get
-            {
-                return (double)this.GetValue(RadioSizeProperty);
-            }
-            set
-            {
-                this.SetValue(RadioSizeProperty, value);
-            }
+            get { return (double)this.GetValue(RadioSizeProperty); }
+            set { this.SetValue(RadioSizeProperty, value); }
         }
-        #endregion
-
-        #region SelectedItemControlTemplate
-        /// <summary>
-        /// 选中时的 ControlTemplate
-        /// </summary>
-        public static readonly BindableProperty SelectedItemControlTemplateProperty =
-            BindableProperty.Create("SelectedItemControlTemplate",
-                                    typeof(ControlTemplate),
-                                    typeof(RadioButtonGroup),
-                                    null
-                );
 
         /// <summary>
         /// 选中时的 ControlTemplate
         /// </summary>
         public ControlTemplate SelectedItemControlTemplate
         {
-            get
-            {
-                return (ControlTemplate)this.GetValue(SelectedItemControlTemplateProperty);
-            }
-            set
-            {
-                this.SetValue(SelectedItemControlTemplateProperty, value);
-            }
+            get { return (ControlTemplate)this.GetValue(SelectedItemControlTemplateProperty); }
+            set { this.SetValue(SelectedItemControlTemplateProperty, value); }
         }
-        #endregion
 
-
-        #region UnSelectedItemControlTemplate
-        /// <summary>
-        /// 未选中时的 ControlTemplate
-        /// </summary>
-        public static readonly BindableProperty UnSelectedItemControlTemplateProperty =
-            BindableProperty.Create("UnSelectedItemControlTemplate",
-                                    typeof(ControlTemplate),
-                                    typeof(RadioButtonGroup),
-                                    null
-                );
 
         /// <summary>
         /// 未选中时的 ControlTemplate
         /// </summary>
         public ControlTemplate UnSelectedItemControlTemplate
         {
-            get
-            {
-                return (ControlTemplate)this.GetValue(UnSelectedItemControlTemplateProperty);
-            }
-            set
-            {
-                this.SetValue(UnSelectedItemControlTemplateProperty, value);
-            }
+            get { return (ControlTemplate)this.GetValue(UnSelectedItemControlTemplateProperty); }
+            set { this.SetValue(UnSelectedItemControlTemplateProperty, value); }
         }
-        #endregion
 
-
-        #region ImgSource
-        public static readonly BindableProperty OnImgProperty =
-            BindableProperty.Create("OnImg",
-                typeof(ImageSource),
-                typeof(RadioGroupBase),
-                ImageSource.FromResource("AsNum.XFControls.Imgs.Radio-Checked.png")
-                );
-
+        //
         public ImageSource OnImg
         {
-            get
-            {
-                return (ImageSource)this.GetValue(OnImgProperty);
-            }
-            set
-            {
-                this.SetValue(OnImgProperty, value);
-            }
+            get { return (ImageSource)this.GetValue(OnImgProperty); }
+            set { this.SetValue(OnImgProperty, value); }
         }
 
-        public static readonly BindableProperty OffImgProperty =
-            BindableProperty.Create("OffImg",
-                typeof(ImageSource),
-                typeof(RadioGroupBase),
-                ImageSource.FromResource("AsNum.XFControls.Imgs.Radio-Unchecked.png")
-                );
 
         public ImageSource OffImg
         {
-            get
-            {
-                return (ImageSource)this.GetValue(OffImgProperty);
-            }
-            set
-            {
-                this.SetValue(OffImgProperty, value);
-            }
+            get { return (ImageSource)this.GetValue(OffImgProperty); }
+            set { this.SetValue(OffImgProperty, value); }
         }
         #endregion
 
 
-        /// <summary>
-        /// 内部使用的选中命令
-        /// </summary>
-        private ICommand SelectedCmd { get; }
-
-        /// <summary>
-        /// 当前选中的 Radio
-        /// </summary>
-        private Radio SelectedRadio = null;
-
-        //private StackLayout Container = null;
+        // private
+        private ICommand SelectedCmd { get; } /// 内部使用的选中命令
+        private Radio SelectedRadio = null; /// 当前选中的 Radio
         internal Layout<View> Container { get; private set; }
-
         private static readonly ControlTemplate DefaultControlTemplate = new DefaultControlTemplate();
 
         /// <summary>
         /// 获取父容器,抽象方法
         /// </summary>
-        /// <returns></returns>
         protected abstract Layout<View> GetContainer();
-
         private bool IsInnerChanged = false;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public RadioGroupBase()
         {
             this.Container = this.GetContainer();
@@ -273,9 +150,7 @@ namespace AsNum.XFControls
                     return;
 
                 this.IsInnerChanged = true;
-
                 var item = (Radio)o;
-
                 if (this.SelectedRadio != null)
                 {
                     this.SelectedRadio.IsSelected = false;
@@ -382,12 +257,5 @@ namespace AsNum.XFControls
             this.SelectedCmd.Execute(radio);
         }
 
-
-        public enum RadioGroupOrientation
-        {
-            Vertical = 0,
-            Horizontal = 1,
-            HorizontalWrap = 2
-        }
     }
 }

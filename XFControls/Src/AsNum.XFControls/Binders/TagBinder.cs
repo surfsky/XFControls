@@ -2,14 +2,12 @@
 
 namespace AsNum.XFControls.Binders
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TagBinder
     {
-
-        public static readonly BindableProperty TagProperty =
-            BindableProperty.Create("Tag",
-                typeof(object),
-                typeof(TagBinder),
-                null);
+        public static readonly BindableProperty TagProperty = BindableProperty.Create("Tag", typeof(object), typeof(TagBinder), null);
 
         public static object GetTag(BindableObject bindable)
         {

@@ -8,15 +8,15 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(CircleBox), typeof(CircleBoxRender))]
+[assembly: ExportRenderer(typeof(Round), typeof(RoundRender))]
 namespace AsNum.XFControls.iOS
 {
     /// <summary>
     /// 圆形盒子渲染器
     /// </summary>
-    public class CircleBoxRender : VisualElementRenderer<CircleBox>
+    public class RoundRender : VisualElementRenderer<Round>
     {
-        protected override void OnElementChanged(ElementChangedEventArgs<CircleBox> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Round> e)
         {
             base.OnElementChanged(e);
             //this.SetLayout();

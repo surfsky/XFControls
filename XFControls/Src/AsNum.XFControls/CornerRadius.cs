@@ -5,46 +5,26 @@ namespace AsNum.XFControls
 {
 
     /// <summary>
-    /// 圆角半径(左上右下)
+    /// 圆角定义，包含四个角半径
     /// </summary>
     [DebuggerDisplay("TopLeft={Left}, TopRight={Top}, BottomRight={Right}, BottomLeft={Bottom}")]
     [TypeConverter(typeof(CornerRadiusConverter))]
     public struct CornerRadius
     {
+        // 四个角半径
+        public double TopLeft { get; set; }
+        public double TopRight { get;  set; }
+        public double BottomRight { get; set; }
+        public double BottomLeft  { get;  set; }
 
-        public double TopLeft
-        {
-            get;
-            set;
-        }
-
-        public double TopRight
-        {
-            get;
-            set;
-        }
-
-        public double BottomRight
-        {
-            get;
-            set;
-        }
-
-        public double BottomLeft
-        {
-            get;
-            set;
-        }
-
+        // 水平方向边距
         public double HorizontalThickness
         {
-            get
-            {
-                return this.TopLeft + this.BottomRight;
-            }
+            get { return this.TopLeft + this.BottomRight; }
         }
 
 
+        // 构造函数
         public CornerRadius(double uniformSize)
         {
             this = new CornerRadius(uniformSize, uniformSize, uniformSize, uniformSize);

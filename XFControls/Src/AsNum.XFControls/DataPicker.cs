@@ -10,130 +10,53 @@ namespace AsNum.XFControls
     /// </summary>
     public class DataPicker : View
     {
+        // BindablProperty
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(DataPicker), null);
+        public static readonly BindableProperty DividerColorProperty = BindableProperty.Create("DividerColor", typeof(Color), typeof(DataPicker), Color.Gray);
+        public static readonly BindableProperty FontSizeProperty = BindableProperty.Create("FontSize", typeof(float), typeof(DataPicker), 15f);
+        public static readonly BindableProperty TextColorProperty = BindableProperty.Create("TextColor", typeof(Color), typeof(DataPicker), Color.Black);
+        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create("SelectedItem", typeof(object), typeof(DataPicker), null, BindingMode.TwoWay);
 
-        #region itemsSource 数据源
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create("ItemsSource",
-                typeof(IEnumerable),
-                typeof(DataPicker),
-                null);
-
+        #region Properties
         /// <summary>
         /// 数据源
         /// </summary>
         public IEnumerable ItemsSource
         {
-            get
-            {
-                return (IEnumerable)this.GetValue(ItemsSourceProperty);
-            }
-            set
-            {
-                this.SetValue(ItemsSourceProperty, value);
-            }
+            get { return (IEnumerable)this.GetValue(ItemsSourceProperty); }
+            set { this.SetValue(ItemsSourceProperty, value); }
         }
-
-        #endregion
-
-        #region SelectedItem
-
-        /// <summary>
-        /// 选中项
-        /// </summary>
-        public static readonly BindableProperty SelectedItemProperty =
-            BindableProperty.Create("SelectedItem",
-                typeof(object),
-                typeof(DataPicker),
-                null,
-                BindingMode.TwoWay
-                );
 
         /// <summary>
         /// 选中项
         /// </summary>
         public object SelectedItem
         {
-            get
-            {
-                return this.GetValue(SelectedItemProperty);
-            }
-            set
-            {
-                this.SetValue(SelectedItemProperty, value);
-            }
+            get { return this.GetValue(SelectedItemProperty); }
+            set { this.SetValue(SelectedItemProperty, value); }
         }
 
-        #endregion
-
-        #region textColor
-        public static readonly BindableProperty TextColorProperty =
-            BindableProperty.Create("TextColor",
-                typeof(Color),
-                typeof(DataPicker),
-                Color.Black
-                );
 
         public Color TextColor
         {
-            get
-            {
-                return (Color)this.GetValue(TextColorProperty);
-            }
-            set
-            {
-                this.SetValue(TextColorProperty, value);
-            }
+            get { return (Color)this.GetValue(TextColorProperty); }
+            set { this.SetValue(TextColorProperty, value); }
         }
 
-        #endregion
-
-        #region FontSize
-        public static readonly BindableProperty FontSizeProperty =
-            BindableProperty.Create("FontSize",
-                typeof(float),
-                typeof(DataPicker),
-                15f
-                );
 
         public float FontSize
         {
-            get
-            {
-                return (float)this.GetValue(FontSizeProperty);
-            }
-            set
-            {
-                this.SetValue(FontSizeProperty, value);
-            }
+            get { return (float)this.GetValue(FontSizeProperty); }
+            set { this.SetValue(FontSizeProperty, value); }
         }
-        #endregion
-
-        #region DividerColor
-        public static readonly BindableProperty DividerColorProperty =
-            BindableProperty.Create(
-                "DividerColor",
-                typeof(Color),
-                typeof(DataPicker),
-                Color.Gray);
 
 
         public Color DividerColor
         {
-            get
-            {
-                return (Color)this.GetValue(DividerColorProperty);
-            }
-            set
-            {
-                this.SetValue(DividerColorProperty, value);
-            }
+            get { return (Color)this.GetValue(DividerColorProperty); }
+            set { this.SetValue(DividerColorProperty, value); }
         }
-        #endregion
 
-        #region
         /// <summary>
         /// 显示值的属性路径
         /// </summary>
@@ -144,8 +67,6 @@ namespace AsNum.XFControls
         /// </summary>
         public string DisplayFormat { get; set; }
 
-        //public Color TextColor { get; set; }
-        //public Color DividerColor { get; set; }
         #endregion
 
         /// <summary>
@@ -155,12 +76,9 @@ namespace AsNum.XFControls
         {
             get
             {
-
                 var lst = new List<string>();
-
                 if (this.ItemsSource != null && !string.IsNullOrWhiteSpace(this.DisplayPath))
                 {
-
                     foreach (var d in this.ItemsSource)
                     {
                         lst.Add(Helper.GetProperty(d, this.DisplayPath)?.ToString());

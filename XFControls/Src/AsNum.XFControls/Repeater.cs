@@ -10,7 +10,9 @@ using Xamarin.Forms;
 
 namespace AsNum.XFControls
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class RepeaterTapEventArgs : EventArgs
     {
         public object SelectedItem
@@ -20,67 +22,57 @@ namespace AsNum.XFControls
     }
 
     /// <summary>
+    /// 方向
+    /// </summary>
+    public enum RepeaterOrientation
+    {
+        /// <summary>
+        /// 垂直
+        /// </summary>
+        Vertical = 0,
+        /// <summary>
+        /// 水平
+        /// </summary>
+        Horizontal = 1,
+        /// <summary>
+        /// 水平,自动换行
+        /// </summary>
+        HorizontalWrap = 2
+    }
+
+    /// <summary>
     /// Repeater
     /// </summary>
     public class Repeater : Layout<View>
     {
-
+        // events
         public event EventHandler<RepeaterTapEventArgs> ItemTaped;
 
-        #region ItemTemplate
-        /// <summary>
-        /// 数据模板
-        /// </summary>
-        public static readonly BindableProperty ItemTemplateProperty =
-            BindableProperty.Create("ItemTemplate",
-                typeof(DataTemplate),
-                typeof(Repeater),
-                null
-                );
+        // BindableProperty
+        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create("ItemTemplate", typeof(DataTemplate), typeof(Repeater), null);
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(Repeater), null, BindingMode.OneWay, propertyChanged: ItemsChanged);
+        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create("SelectedItem", typeof(object), typeof(Repeater), null, defaultBindingMode: BindingMode.TwoWay, propertyChanged: SelectedItemChanged);
+        public static readonly BindableProperty ItemTapedCmdProperty = BindableProperty.Create("ItemTapedCmd", typeof(ICommand), typeof(Repeater), propertyChanged: ItemTapedCmdChanged);
+        public static readonly BindableProperty ItemTemplateSelectorProperty = BindableProperty.Create("ItemTemplateSelector", typeof(DataTemplateSelector), typeof(Repeater), null);
+        public static readonly BindableProperty OrientationProperty = BindableProperty.Create(nameof(Orientation), typeof(RepeaterOrientation), typeof(Repeater), RepeaterOrientation.HorizontalWrap, propertyChanged: OrientationChanged);
 
+        #region Property
         /// <summary>
         /// 数据模板
         /// </summary>
         public DataTemplate ItemTemplate
         {
-            get
-            {
-                return this.GetValue(ItemTemplateProperty) as DataTemplate;
-            }
-
-            set
-            {
-                this.SetValue(ItemTemplateProperty, value);
-            }
+            get { return this.GetValue(ItemTemplateProperty) as DataTemplate; }
+            set { this.SetValue(ItemTemplateProperty, value); }
         }
-        #endregion
-
-        #region ItemsSource
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create("ItemsSource",
-                typeof(IEnumerable),
-                typeof(Repeater),
-                null,
-                BindingMode.OneWay,
-                propertyChanged: ItemsChanged);
-
 
         /// <summary>
         /// 数据源
         /// </summary>
         public IEnumerable ItemsSource
         {
-            get
-            {
-                return this.GetValue(ItemsSourceProperty) as IEnumerable;
-            }
-            set
-            {
-                this.SetValue(ItemsSourceProperty, value);
-            }
+            get { return this.GetValue(ItemsSourceProperty) as IEnumerable; }
+            set { this.SetValue(ItemsSourceProperty, value); }
         }
 
         private static void ItemsChanged(BindableObject bindable, object oldValue, object newValue)
@@ -88,35 +80,14 @@ namespace AsNum.XFControls
             var rp = (Repeater)bindable;
             rp.InitCollection(newValue);
         }
-        #endregion
-
-        #region SelectedItem
-        /// <summary>
-        /// 选中的数据
-        /// </summary>
-        public static readonly BindableProperty SelectedItemProperty =
-            BindableProperty.Create("SelectedItem",
-                typeof(object),
-                typeof(Repeater),
-                null,
-                defaultBindingMode: BindingMode.TwoWay,
-                propertyChanged: SelectedItemChanged
-                );
-
 
         /// <summary>
         /// 选中的数据
         /// </summary>
         public object SelectedItem
         {
-            get
-            {
-                return this.GetValue(SelectedItemProperty);
-            }
-            set
-            {
-                this.SetValue(SelectedItemProperty, value);
-            }
+            get { return this.GetValue(SelectedItemProperty); }
+            set { this.SetValue(SelectedItemProperty, value); }
         }
 
         private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
@@ -130,19 +101,10 @@ namespace AsNum.XFControls
                 });
             }
         }
-        #endregion
 
-        #region ItemTapedCmd
         /// <summary>
         /// Tap 命令
         /// </summary>
-        public static readonly BindableProperty ItemTapedCmdProperty =
-            BindableProperty.Create("ItemTapedCmd",
-                typeof(ICommand),
-                typeof(Repeater),
-                propertyChanged: ItemTapedCmdChanged
-                );
-
         private static void ItemTapedCmdChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var repeater = (Repeater)bindable;
@@ -158,68 +120,26 @@ namespace AsNum.XFControls
         /// </summary>
         public ICommand ItemTapedCmd
         {
-            get
-            {
-                return (ICommand)this.GetValue(ItemTapedCmdProperty);
-            }
-            set
-            {
-                this.SetValue(ItemTapedCmdProperty, value);
-            }
+            get { return (ICommand)this.GetValue(ItemTapedCmdProperty); }
+            set { this.SetValue(ItemTapedCmdProperty, value); }
         }
-        #endregion
-
-        #region itemTemplateSelector 模板选择器
-        /// <summary>
-        /// 模板选择器
-        /// </summary>
-        public static readonly BindableProperty ItemTemplateSelectorProperty =
-            BindableProperty.Create("ItemTemplateSelector",
-                typeof(DataTemplateSelector),
-                typeof(Repeater),
-                null);
 
         /// <summary>
         /// 模板选择器
         /// </summary>
         public DataTemplateSelector ItemTemplateSelector
         {
-            get
-            {
-                return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty);
-            }
-            set
-            {
-                SetValue(ItemTemplateSelectorProperty, value);
-            }
+            get { return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty); }
+            set { SetValue(ItemTemplateSelectorProperty, value); }
         }
-        #endregion
-
-        #region Orientation
-        /// <summary>
-        /// 方向
-        /// </summary>
-        public static readonly BindableProperty OrientationProperty =
-            BindableProperty.Create(nameof(Orientation),
-                typeof(RepeaterOrientation),
-                typeof(Repeater),
-                RepeaterOrientation.HorizontalWrap,
-                propertyChanged: OrientationChanged
-                );
 
         /// <summary>
         /// 方向
         /// </summary>
         public RepeaterOrientation Orientation
         {
-            get
-            {
-                return (RepeaterOrientation)this.GetValue(OrientationProperty);
-            }
-            set
-            {
-                this.SetValue(OrientationProperty, value);
-            }
+            get { return (RepeaterOrientation)this.GetValue(OrientationProperty); }
+            set { this.SetValue(OrientationProperty, value); }
         }
 
         private static void OrientationChanged(BindableObject bindable, object oldValue, object newValue)
@@ -227,13 +147,15 @@ namespace AsNum.XFControls
             var repeater = (Repeater)bindable;
             repeater.SetContainer();
         }
-
         #endregion
 
+        // private
         private Command TapCmd { get; }
-
         private Layout<View> Container { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Repeater()
         {
             this.SetContainer();
@@ -362,17 +284,6 @@ namespace AsNum.XFControls
             this.Container.Layout(new Rectangle(x, y, width, height));
         }
 
-        ////触发 SizeAllocated -> OnSizeAllocated
-        //this.ForceLayout();
-
-        ////触发 ForceLayout
-        //this.InvalidateLayout();
-
-        //var a = (Width <= 0 || Height <= 0 || !IsVisible /*|| !IsNativeStateConsistent || DisableLayout*/);
-
-        //检查是否需要 LayoutChildren -> LayoutChildren
-        //this.UpdateChildrenLayout();
-
 
         protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
         {
@@ -381,21 +292,5 @@ namespace AsNum.XFControls
             return new SizeRequest(size.Request);
             //return base.OnMeasure(size.Request.Width, size.Request.Height);
         }
-    }
-
-    public enum RepeaterOrientation
-    {
-        /// <summary>
-        /// 垂直
-        /// </summary>
-        Vertical = 0,
-        /// <summary>
-        /// 水平
-        /// </summary>
-        Horizontal = 1,
-        /// <summary>
-        /// 水平,自动换行
-        /// </summary>
-        HorizontalWrap = 2
     }
 }

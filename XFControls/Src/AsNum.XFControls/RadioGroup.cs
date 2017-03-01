@@ -7,18 +7,18 @@ namespace AsNum.XFControls
     /// </summary>
     public class RadioGroup : RadioGroupBase
     {
+        // BindableProperty
+        public static readonly BindableProperty OrientationProperty = BindableProperty.Create("Orientation", typeof(StackOrientation), typeof(RadioGroup), StackOrientation.Horizontal, propertyChanged: OrientationChanged);
 
-        #region Orientation
+
         /// <summary>
         /// 方向
         /// </summary>
-        public static readonly BindableProperty OrientationProperty =
-            BindableProperty.Create("Orientation",
-                                    typeof(StackOrientation),
-                                    typeof(RadioGroup),
-                                    StackOrientation.Horizontal,
-                                    propertyChanged: OrientationChanged);
-
+        public StackOrientation Orientation
+        {
+            get { return (StackOrientation)this.GetValue(OrientationProperty); }
+            set { this.SetValue(OrientationProperty, value); }
+        }
 
         private static void OrientationChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -27,28 +27,10 @@ namespace AsNum.XFControls
 
         }
 
-        /// <summary>
-        /// 方向
-        /// </summary>
-        public StackOrientation Orientation
-        {
-            get
-            {
-                return (StackOrientation)this.GetValue(OrientationProperty);
-            }
-            set
-            {
-                this.SetValue(OrientationProperty, value);
-            }
-        }
-        #endregion
-
+        //
         protected override Layout<View> GetContainer()
         {
-            return new StackLayout()
-            {
-                Orientation = this.Orientation
-            };
+            return new StackLayout() { Orientation = this.Orientation};
         }
     }
 }

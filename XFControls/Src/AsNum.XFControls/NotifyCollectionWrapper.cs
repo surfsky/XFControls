@@ -11,7 +11,6 @@ namespace AsNum.XFControls
     /// </summary>
     public class NotifyCollectionWrapper
     {
-
         public Action Begin { get; }
         public Action<IList, int> Add { get; }
         public Action<IList, int> Remove { get; }

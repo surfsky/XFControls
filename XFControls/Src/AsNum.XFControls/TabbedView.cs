@@ -451,6 +451,9 @@ namespace AsNum.XFControls
             Grid.SetColumnSpan(this.ChildrenContainer, colSpan);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public enum TabPositions
         {
             Top,

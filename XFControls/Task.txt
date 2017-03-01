@@ -38,10 +38,13 @@ Nuget : https://www.nuget.org/packages/XFControls
     完全的XamarinForms控件 
     用 DependencyService 扩展的平台控件
 规范和精简代码
-    改为c#风格
-    去掉多余的行
-    精简BindableProperty代码
-    修改不合适的属性名：如CheckBox.OnImg -> ImageOn
+    /改为c#风格
+    /去掉多余的行
+    /精简BindableProperty代码
+	/去掉废弃的注释代码
+    修改不合适的名称：如
+		/CircleBox -> Round
+		CheckBox.OnImg -> ImageOn
 
 UI优化
 	优化主界面，展示所有功能（或改为标准的nest list方式来展示控件）

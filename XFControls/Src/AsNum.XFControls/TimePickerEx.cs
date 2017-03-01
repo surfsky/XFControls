@@ -8,115 +8,47 @@ namespace AsNum.XFControls
     /// </summary>
     public class TimePickerEx : TimePicker
     {
-        //public static readonly BindableProperty TextColorProperty =
-        //    BindableProperty.Create(
-        //            "TextColor",
-        //            typeof(Color),
-        //            typeof(TimePickerEx),
-        //            Color.Default
-        //            );
-
-        /// <summary>
-        /// 占位文本颜色
-        /// </summary>
-        public static readonly BindableProperty PlaceHolderColorProperty =
-            BindableProperty.Create(
-                        "PlaceHolderColor",
-                        typeof(Color),
-                        typeof(TimePickerEx),
-                        Color.Default
-                        );
-
-
-        public static readonly BindableProperty PlaceHolderProperty =
-            BindableProperty.Create(
-                "PlaceHolder",
-                typeof(string),
-                typeof(TimePickerEx),
-                null
-                );
-
-        /// <summary>
-        /// 文字大小,默认15
-        /// </summary>
-        public static readonly BindableProperty FontSizeProperty =
-            BindableProperty.Create(
-                "FontSize",
-                typeof(double),
-                typeof(TimePickerEx),
-                15D);
-
-        /// <summary>
-        /// 文本水平对齐
-        /// </summary>
-        public static readonly BindableProperty HorizontalTextAlignmentProperty =
-            BindableProperty.Create(
-                "HorizontalTextAlignment",
-                typeof(TextAlignment),
-                typeof(TimePickerEx),
-                TextAlignment.Start,
-                BindingMode.OneWay
-                );
-
-        //public Color TextColor {
-        //    get {
-        //        return (Color)this.GetValue(TextColorProperty);
-        //    }
-        //    set {
-        //        this.SetValue(TextColorProperty, value);
-        //    }
-        //}
+        // BindableProperty
+        public static readonly BindableProperty PlaceHolderColorProperty = BindableProperty.Create( "PlaceHolderColor", typeof(Color), typeof(TimePickerEx), Color.Default );
+        public static readonly BindableProperty PlaceHolderProperty = BindableProperty.Create( "PlaceHolder", typeof(string), typeof(TimePickerEx), null );
+        public static readonly BindableProperty FontSizeProperty = BindableProperty.Create( "FontSize", typeof(double), typeof(TimePickerEx), 15D);
+        public static readonly BindableProperty HorizontalTextAlignmentProperty = BindableProperty.Create( "HorizontalTextAlignment", typeof(TextAlignment), typeof(TimePickerEx), TextAlignment.Start, BindingMode.OneWay );
 
         /// <summary>
         /// 占位文本颜色
         /// </summary>
         public Color PlaceHolderColor
         {
-            get
-            {
-                return (Color)this.GetValue(PlaceHolderColorProperty);
-            }
-            set
-            {
-                this.SetValue(PlaceHolderColorProperty, value);
-            }
+            get { return (Color)this.GetValue(PlaceHolderColorProperty); }
+            set { this.SetValue(PlaceHolderColorProperty, value); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string PlaceHolder
         {
-            get
-            {
-                return (string)this.GetValue(PlaceHolderProperty);
-            }
-            set
-            {
-                this.SetValue(PlaceHolderProperty, value);
-            }
+            get { return (string)this.GetValue(PlaceHolderProperty); }
+            set { this.SetValue(PlaceHolderProperty, value); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [TypeConverter(typeof(FontSizeConverter))]
         public double FontSize
         {
-            get
-            {
-                return (double)this.GetValue(FontSizeProperty);
-            }
-            set
-            {
-                this.SetValue(FontSizeProperty, (object)value);
-            }
+            get { return (double)this.GetValue(FontSizeProperty); }
+            set { this.SetValue(FontSizeProperty, (object)value); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public TextAlignment HorizontalTextAlignment
         {
-            get
-            {
-                return (TextAlignment)this.GetValue(HorizontalTextAlignmentProperty);
-            }
-            set
-            {
-                this.SetValue(HorizontalTextAlignmentProperty, value);
-            }
+            get { return (TextAlignment)this.GetValue(HorizontalTextAlignmentProperty); }
+            set { this.SetValue(HorizontalTextAlignmentProperty, value); }
         }
     }
 }

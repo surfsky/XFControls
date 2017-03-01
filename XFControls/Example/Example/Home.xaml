@@ -46,9 +46,9 @@
     
 	<!--Border Example-->
     <StackLayout Grid.Row="2" Orientation="Horizontal" Margin="2">
-		<ctrls:Border BackgroundColor="Red" CornerRadius="10" WidthRequest="40" Padding="5,2">
-			<Label Text="快报" TextColor="White" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
-		</ctrls:Border>
+		  <ctrls:Border BackgroundColor="Red" CornerRadius="10" WidthRequest="40" Padding="5,2">
+			  <Label Text="快报" TextColor="White" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+		  </ctrls:Border>
 	    <ctrls:Border Grid.Row="2" WidthRequest="100" HeightRequest="100"
 	      IsClippedToBorder="True" CornerRadius="10,0" Stroke="Green" StrokeThickness="1,1,1,1">
 	      <Image Source="https://avatars2.githubusercontent.com/u/7332414" Aspect="AspectFit" />
@@ -56,9 +56,9 @@
     </StackLayout>
 
     <!--CircleBox Example-->
-    <ctrls:CircleBox Grid.Row="3" Radius="100"  BackgroundColor="Lime">
+    <ctrls:Round Grid.Row="3" Radius="100"  BackgroundColor="Lime">
         <Image Source="http://v1.qzone.cc/pic/201407/13/11/05/53c1f77cdbd01600.jpg%21600x600.jpg" WidthRequest="100" HeightRequest="100" Aspect="AspectFill" />
-    </ctrls:CircleBox>
+    </ctrls:Round>
 
     <!--CheckBox Example-->
     <ctrls:CheckBox Grid.Row="4" Checked="True" Text="Just a label" ShowLabel="True" />

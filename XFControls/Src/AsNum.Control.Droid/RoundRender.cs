@@ -6,30 +6,24 @@ using Java.Lang;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(CircleBox), typeof(CircleBoxRender))]
+[assembly: ExportRenderer(typeof(Round), typeof(RoundRender))]
 namespace AsNum.XFControls.Droid
 {
-    public class CircleBoxRender : VisualElementRenderer<CircleBox>
+    /// <summary>
+    /// 
+    /// </summary>
+    public class RoundRender : VisualElementRenderer<Round>
     {
-
         private static bool Flag;
-
-        //private static Paint Paint;
-
         private Android.Graphics.Color BgColor;
 
-        static CircleBoxRender()
+        static RoundRender()
         {
             //clipPath with hardware acceleration is only supported in API level 18 and higher
             Flag = (int)Build.VERSION.SdkInt >= 18;
-            //if (!Flag) {
-            //    Paint = new Paint(PaintFlags.AntiAlias | PaintFlags.FilterBitmap);
-            //}
         }
 
-
-
-        protected override void OnElementChanged(ElementChangedEventArgs<CircleBox> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Round> e)
         {
             base.OnElementChanged(e);
             this.Element.HorizontalOptions = LayoutOptions.Center;
@@ -39,13 +33,7 @@ namespace AsNum.XFControls.Droid
             {
                 this.Element.Content.HorizontalOptions = LayoutOptions.Center;
                 this.Element.Content.VerticalOptions = LayoutOptions.Center;
-
-                //if (!Flag) {
-                //    this.BgColor = this.Element.BackgroundColor.ToAndroid();
-                //    this.Element.BackgroundColor = Xamarin.Forms.Color.Transparent;
-                //}
             }
-
 
             //这种方法虽然可以解决 ClipPath 的问题，但是锯齿明显
             //if (!Flag)
@@ -104,12 +92,7 @@ namespace AsNum.XFControls.Droid
             paint.SetStyle(Paint.Style.Fill);
             paint.AntiAlias = true;
             canvas.DrawARGB(0, 0, 0, 0);
-            //paint.setColor(color);
-            canvas.DrawCircle(
-                            width / 2,
-                            height / 2,
-                            Math.Max(width, height) / 2,
-                            paint);
+            canvas.DrawCircle( width / 2, height / 2, Math.Max(width, height) / 2, paint);
             // change the parameters accordin to your needs.
             paint.SetXfermode(new PorterDuffXfermode(PorterDuff.Mode.SrcIn));
             //canvas.DrawBitmap(bitmap, rect, rect, paint);

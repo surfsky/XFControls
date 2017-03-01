@@ -4,19 +4,13 @@ using Xamarin.Forms;
 
 namespace AsNum.XFControls.Effects
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
     [Obsolete("未完成")]
     public class Clip
     {
-
-        #region Bounds
-        public static BindableProperty BoundsProperty =
-            BindableProperty.CreateAttached("Bounds",
-                typeof(Thickness?),
-                typeof(Clip),
-                null,
-                propertyChanged: Changed
-                );
+        public static BindableProperty BoundsProperty = BindableProperty.CreateAttached("Bounds", typeof(Thickness?), typeof(Clip), null, propertyChanged: Changed );
 
         public static Thickness GetBounds(BindableObject view)
         {
@@ -36,13 +30,13 @@ namespace AsNum.XFControls.Effects
                 }
             }
         }
-        #endregion
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         class ClipEffect : RoutingEffect
         {
-            public ClipEffect()
-                : base("AsNum.ClipEffect")
+            public ClipEffect() : base("AsNum.ClipEffect")
             {
             }
         }

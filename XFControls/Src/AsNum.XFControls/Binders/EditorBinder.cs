@@ -3,30 +3,18 @@ using Xamarin.Forms;
 
 namespace AsNum.XFControls.Binders
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class EditorBinder
     {
-
-        public static readonly BindableProperty PlaceHolderProperty =
-            BindableProperty.CreateAttached("PlaceHolder",
-                typeof(string),
-                typeof(EditorBinder),
-                null,
-                propertyChanged: Changed
-                );
+        public static readonly BindableProperty PlaceHolderProperty = BindableProperty.CreateAttached("PlaceHolder",typeof(string),typeof(EditorBinder),null,propertyChanged: Changed);
+        public static readonly BindableProperty PlaceHolderColorProperty = BindableProperty.CreateAttached("PlaceHolderColor", typeof(Color), typeof(EditorBinder), Color.FromHex("#cccccc"), propertyChanged: Changed);
 
         public static string GetPlaceHolder(BindableObject view)
         {
             return (string)view.GetValue(PlaceHolderProperty);
         }
-
-
-        public static readonly BindableProperty PlaceHolderColorProperty =
-            BindableProperty.CreateAttached("PlaceHolderColor",
-                typeof(Color),
-                typeof(EditorBinder),
-                Color.FromHex("#cccccc"),
-                propertyChanged: Changed
-                );
 
         public static Color GetPlaceHolderColor(BindableObject view)
         {
@@ -47,11 +35,12 @@ namespace AsNum.XFControls.Binders
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         class EditorEffect : RoutingEffect
         {
-            public EditorEffect()
-                : base("AsNum.EditorEffect")
+            public EditorEffect() : base("AsNum.EditorEffect")
             {
             }
         }

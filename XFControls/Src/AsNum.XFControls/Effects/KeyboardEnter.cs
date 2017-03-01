@@ -4,44 +4,26 @@ using Xamarin.Forms;
 
 namespace AsNum.XFControls.Effects
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class KeyboardEnter
     {
+        //
+        public static readonly BindableProperty CmdProperty = BindableProperty.CreateAttached("Cmd", typeof(ICommand), typeof(KeyboardEnter), null );
+        public static readonly BindableProperty ParamProperty = BindableProperty.CreateAttached("Param", typeof(object), typeof(KeyboardEnter), null);
+        public static readonly BindableProperty TypeProperty = BindableProperty.CreateAttached("Type", typeof(KeyboardEnterTypes?), typeof(KeyboardEnter), null, propertyChanged: Changed);
 
-        #region Cmd
-        public static readonly BindableProperty CmdProperty =
-            BindableProperty.CreateAttached("Cmd",
-                typeof(ICommand),
-                typeof(KeyboardEnter),
-                null
-                );
-
+        //
         public static ICommand GetCmd(BindableObject view)
         {
             return (ICommand)view.GetValue(CmdProperty);
         }
-        #endregion
-
-        #region Param
-        public static readonly BindableProperty ParamProperty =
-            BindableProperty.CreateAttached("Param",
-                typeof(object),
-                typeof(KeyboardEnter),
-                null
-                );
 
         public static object GetParam(BindableObject view)
         {
             return view.GetValue(ParamProperty);
         }
-        #endregion
-
-        #region Type
-        public static readonly BindableProperty TypeProperty =
-            BindableProperty.CreateAttached("Type",
-                typeof(KeyboardEnterTypes?),
-                typeof(KeyboardEnter),
-                null,
-                propertyChanged: Changed);
 
         public static void SetType(BindableObject view, KeyboardEnterTypes key)
         {
@@ -67,18 +49,21 @@ namespace AsNum.XFControls.Effects
                 }
             }
         }
-        #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
         class KeyboardEnterEffect : RoutingEffect
         {
-            public KeyboardEnterEffect()
-                : base("AsNum.KeyboardEnterEffect")
+            public KeyboardEnterEffect() : base("AsNum.KeyboardEnterEffect")
             {
             }
         }
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public enum KeyboardEnterTypes
     {
         Default,

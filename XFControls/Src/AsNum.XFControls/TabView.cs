@@ -11,6 +11,49 @@ using Xamarin.Forms;
 
 namespace AsNum.XFControls
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum TabViewPositions
+    {
+        /// <summary>顶部</summary>
+        Top,
+        /// <summary>底部</summary>
+        Bottom,
+        /// <summary>左</summary>
+        Left,
+        /// <summary>右</summary>
+        Right
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum TabViewTransitionTypes
+    {
+        /// <summary>无动画</summary>
+        None,
+        /// <summary>淡入淡出</summary>
+        Fade
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    class TabViewAnimationTypeFactory
+    {
+        public static SelectChangeBehaviorBase GetBehavior(TabViewTransitionTypes transitionType)
+        {
+            switch (transitionType)
+            {
+                case TabViewTransitionTypes.None:
+                    return new VisibilityBehavior();
+                case TabViewTransitionTypes.Fade:
+                    return new FadeBehavior();
+            }
+            throw new NotSupportedException();
+        }
+    }
 
     /// <summary>
     /// 选项卡
@@ -18,33 +61,38 @@ namespace AsNum.XFControls
     [ContentProperty("Pages")]
     public class TabView : Grid
     {
-
+        // private
         private bool IsInnerUpdate = false;
+        private Grid PageContainer = null;/// 子视图容器
+        private ScrollView TabBarScroller = null;/// 标签容器的父容器, 如果标签过多，可以滚
+        private StackLayout TabBarInner = null;/// 内层标签容器
+        private ContentView TabBar = null;/// 外层标签容器
 
-        #region itemsSource 数据源
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create("ItemsSource",
-                typeof(IEnumerable),
-                typeof(TabView),
-                null,
-                propertyChanged: ItemsSourceChanged);
+        // BindableProperty
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(TabView), null, propertyChanged: ItemsSourceChanged);
+        public static readonly BindableProperty TabBarControlTemplateProperty = BindableProperty.Create("TabBarControlTemplate", typeof(ControlTemplate), typeof(TabView), new TabViewTabBarControlTemplate(), BindingMode.Default, propertyChanged: TabBarControlChanged);
+        public static readonly BindableProperty TabTemplateProperty = BindableProperty.Create("TabTemplate", typeof(DataTemplate), typeof(TabView));
+        public static readonly BindableProperty TabTemplateSelectorProperty = BindableProperty.Create("TabTemplateSelector", typeof(DataTemplateSelector), typeof(TabView), null);
+        public static readonly BindableProperty TabControlTemplateProperty = BindableProperty.Create("TabControlTemplate", typeof(ControlTemplate), typeof(TabView), new TabViewTabControlTemplate());
+        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create("ItemTemplate", typeof(DataTemplate), typeof(TabView), null);
+        public static readonly BindableProperty ItemTemplateSelectorProperty = BindableProperty.Create("ItemTemplateSelector", typeof(DataTemplateSelector), typeof(TabView), null);
+        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create("SelectedItem", typeof(object), typeof(TabView), null, BindingMode.TwoWay, propertyChanged: SelectedItemChanged);
+        public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create("SelectedIndex", typeof(int), typeof(TabView), -1, propertyChanged: SelectedIndexChanged);
+        public static readonly BindableProperty TabWidthRequestProperty = BindableProperty.Create("TabWidthRequest", typeof(double), typeof(TabView), 80D);
+        public static readonly BindableProperty TabHeightRequestProperty = BindableProperty.Create("TabHeightRequest", typeof(double), typeof(TabView), 40D);
+        public static readonly BindableProperty TabPositionProperty = BindableProperty.Create("TabPosition", typeof(TabViewPositions), typeof(TabView), TabViewPositions.Top, propertyChanged: TabPositionChanged);
+        public static readonly BindableProperty TabBarBackgroundColorProperty = BindableProperty.Create("TabBarBackgroundColor", typeof(Color), typeof(TabView), Color.FromHex("EEEEEE"));
+        public static readonly BindableProperty TransitionTypeProperty = BindableProperty.Create("TransitionType", typeof(TabViewTransitionTypes), typeof(TabView), TabViewTransitionTypes.Fade, propertyChanged: TransitionChanged);
 
+
+        #region Property
         /// <summary>
         /// 数据源
         /// </summary>
         public IEnumerable ItemsSource
         {
-            get
-            {
-                return (IEnumerable)this.GetValue(ItemsSourceProperty);
-            }
-            set
-            {
-                this.SetValue(ItemsSourceProperty, value);
-            }
+            get { return (IEnumerable)this.GetValue(ItemsSourceProperty); }
+            set { this.SetValue(ItemsSourceProperty, value); }
         }
 
         private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
@@ -56,34 +104,14 @@ namespace AsNum.XFControls
             var p = tv.TabPages.OrderBy(t => ((TabPageView)t).Index).ElementAtOrDefault(tv.SelectedIndex) ?? tv.TabPages.FirstOrDefault();
             tv.TabSelectedCmd.Execute(p);
         }
-        #endregion
-
-
-        #region TabBarControlTemplate 标签条的控件模板
-        /// <summary>
-        /// 标签条的控件模板
-        /// </summary>
-        public static readonly BindableProperty TabBarControlTemplateProperty =
-            BindableProperty.Create("TabBarControlTemplate",
-                typeof(ControlTemplate),
-                typeof(TabView),
-                new TabViewTabBarControlTemplate(),
-                BindingMode.Default,
-                propertyChanged: TabBarControlChanged);
 
         /// <summary>
         /// 标签条的控件模板
         /// </summary>
         public ControlTemplate TabBarControlTemplate
         {
-            get
-            {
-                return (ControlTemplate)this.GetValue(TabBarControlTemplateProperty);
-            }
-            set
-            {
-                this.SetValue(TabBarControlTemplateProperty, value);
-            }
+            get { return (ControlTemplate)this.GetValue(TabBarControlTemplateProperty); }
+            set { this.SetValue(TabBarControlTemplateProperty, value); }
         }
 
         private static void TabBarControlChanged(BindableObject bindable, object oldValue, object newValue)
@@ -92,171 +120,59 @@ namespace AsNum.XFControls
             tv.TabBar.ControlTemplate = (ControlTemplate)newValue;
         }
 
-        #endregion
-
-
-
-
-        #region TabTemplate 标签头的数据模板
-        /// <summary>
-        /// 标签头的数据模板
-        /// </summary>
-        public static readonly BindableProperty TabTemplateProperty =
-            BindableProperty.Create("TabTemplate",
-                typeof(DataTemplate),
-                typeof(TabView));
-
         /// <summary>
         /// 标签头的数据模板
         /// </summary>
         public DataTemplate TabTemplate
         {
-            get
-            {
-                return (DataTemplate)GetValue(TabTemplateProperty);
-            }
-            set
-            {
-                SetValue(TabTemplateProperty, value);
-            }
+            get { return (DataTemplate)GetValue(TabTemplateProperty); }
+            set { SetValue(TabTemplateProperty, value); }
         }
-        #endregion
-
-        #region TabTemplateSelector 标签头模板选择器
-        /// <summary>
-        /// 标签头模板选择器
-        /// </summary>
-        public static readonly BindableProperty TabTemplateSelectorProperty =
-            BindableProperty.Create("TabTemplateSelector",
-                typeof(DataTemplateSelector),
-                typeof(TabView),
-                null);
 
         /// <summary>
         /// 标签头模板选择器
         /// </summary>
         public DataTemplateSelector TabTemplateSelector
         {
-            get
-            {
-                return (DataTemplateSelector)GetValue(TabTemplateSelectorProperty);
-            }
-            set
-            {
-                SetValue(TabTemplateSelectorProperty, value);
-            }
+            get { return (DataTemplateSelector)GetValue(TabTemplateSelectorProperty); }
+            set { SetValue(TabTemplateSelectorProperty, value); }
         }
-        #endregion
-
-        #region TabControlTemplate 标签头的控件模板
-        /// <summary>
-        /// 标签头的控件模板
-        /// </summary>
-        public static readonly BindableProperty TabControlTemplateProperty =
-            BindableProperty.Create("TabControlTemplate",
-                typeof(ControlTemplate),
-                typeof(TabView),
-                new TabViewTabControlTemplate()
-                );
 
         /// <summary>
         /// 标签头的控件模板
         /// </summary>
         public ControlTemplate TabControlTemplate
         {
-            get
-            {
-                return (ControlTemplate)this.GetValue(TabControlTemplateProperty);
-            }
-            set
-            {
-                this.SetValue(TabControlTemplateProperty, value);
-            }
+            get { return (ControlTemplate)this.GetValue(TabControlTemplateProperty); }
+            set { this.SetValue(TabControlTemplateProperty, value); }
         }
-        #endregion
-
-
-
-        #region ItemTemplate 标签页数据模板
-        /// <summary>
-        /// 标签页数据模板
-        /// </summary>
-        public static readonly BindableProperty ItemTemplateProperty =
-            BindableProperty.Create("ItemTemplate",
-                typeof(DataTemplate),
-                typeof(TabView),
-                null);
 
         /// <summary>
         /// 标签页数据模板
         /// </summary>
         public DataTemplate ItemTemplate
         {
-            get
-            {
-                return (DataTemplate)GetValue(ItemTemplateProperty);
-            }
-            set
-            {
-                SetValue(ItemTemplateProperty, value);
-            }
+            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
+            set { SetValue(ItemTemplateProperty, value); }
         }
-        #endregion
-
-        #region ItemTemplateSelector 标签页模板选择器
-        /// <summary>
-        /// 标签页模板选择器
-        /// </summary>
-        public static readonly BindableProperty ItemTemplateSelectorProperty =
-            BindableProperty.Create("ItemTemplateSelector",
-                typeof(DataTemplateSelector),
-                typeof(TabView),
-                null);
 
         /// <summary>
         /// 标签页模板选择器
         /// </summary>
         public DataTemplateSelector ItemTemplateSelector
         {
-            get
-            {
-                return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty);
-            }
-            set
-            {
-                SetValue(ItemTemplateSelectorProperty, value);
-            }
+            get { return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty); }
+            set { SetValue(ItemTemplateSelectorProperty, value); }
         }
-        #endregion
 
-
-
-
-        #region selectedItem 选中的数据
-        /// <summary>
-        /// 选中的数据
-        /// </summary>
-        public static readonly BindableProperty SelectedItemProperty =
-            BindableProperty.Create("SelectedItem",
-                typeof(object),
-                typeof(TabView),
-                null,
-                BindingMode.TwoWay,
-                propertyChanged: SelectedItemChanged);
 
         /// <summary>
         /// 选中的数据
         /// </summary>
         public object SelectedItem
         {
-            get
-            {
-                return GetValue(SelectedItemProperty);
-            }
-            set
-            {
-                SetValue(SelectedItemProperty, value);
-            }
+            get { return GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
         }
 
         private static void SelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
@@ -271,33 +187,15 @@ namespace AsNum.XFControls
             var p = tv.TabPages.FirstOrDefault(t => t.BindingContext.Equals(newValue)) ?? tv.TabPages.FirstOrDefault();
             tv.UpdateSelected((TabPageView)p);
         }
-        #endregion
 
-        #region SelectedIndex
-        /// <summary>
-        /// 当前选中的序号
-        /// </summary>
-        public static readonly BindableProperty SelectedIndexProperty =
-            BindableProperty.Create("SelectedIndex",
-                typeof(int),
-                typeof(TabView),
-                -1,
-                propertyChanged: SelectedIndexChanged
-                );
 
         /// <summary>
         /// 当前选中的序号
         /// </summary>
         public int SelectedIndex
         {
-            get
-            {
-                return (int)this.GetValue(SelectedIndexProperty);
-            }
-            set
-            {
-                this.SetValue(SelectedIndexProperty, value);
-            }
+            get { return (int)this.GetValue(SelectedIndexProperty); }
+            set { this.SetValue(SelectedIndexProperty, value); }
         }
 
         private static void SelectedIndexChanged(BindableObject bindable, object oldValue, object newValue)
@@ -312,92 +210,33 @@ namespace AsNum.XFControls
             tv.UpdateSelected(page);
         }
 
-        #endregion
-
-
-
-
-
-        #region TabWidthRequest 标签头宽度
-        /// <summary>
-        /// 标签头宽度 默认80
-        /// </summary>
-        public static readonly BindableProperty TabWidthRequestProperty =
-            BindableProperty.Create("TabWidthRequest",
-                typeof(double),
-                typeof(TabView),
-                80D
-                );
 
         /// <summary>
         /// 标签头宽度 默认80
         /// </summary>
         public double TabWidthRequest
         {
-            get
-            {
-                return (double)this.GetValue(TabWidthRequestProperty);
-            }
-            set
-            {
-                this.SetValue(TabWidthRequestProperty, value);
-            }
+            get { return (double)this.GetValue(TabWidthRequestProperty); }
+            set { this.SetValue(TabWidthRequestProperty, value); }
         }
-        #endregion
 
-        #region TabHeightRequest 标签头高度
-        /// <summary>
-        /// 标签头高度,默认40
-        /// </summary>
-        public static readonly BindableProperty TabHeightRequestProperty =
-            BindableProperty.Create("TabHeightRequest",
-                typeof(double),
-                typeof(TabView),
-                40D
-                );
 
         /// <summary>
         /// 标签头高度,默认40
         /// </summary>
         public double TabHeightRequest
         {
-            get
-            {
-                return (double)this.GetValue(TabHeightRequestProperty);
-            }
-            set
-            {
-                this.SetValue(TabHeightRequestProperty, value);
-            }
+            get { return (double)this.GetValue(TabHeightRequestProperty); }
+            set { this.SetValue(TabHeightRequestProperty, value); }
         }
-        #endregion
-
-
-
-        #region TabPosition 标签位置
-        /// <summary>
-        /// 标签条的位置,默认 Top
-        /// </summary>
-        public static readonly BindableProperty TabPositionProperty =
-            BindableProperty.Create("TabPosition",
-                typeof(TabViewPositions),
-                typeof(TabView),
-                TabViewPositions.Top,
-                propertyChanged: TabPositionChanged);
 
         /// <summary>
         /// 标签条的位置,默认 Top
         /// </summary>
         public TabViewPositions TabPosition
         {
-            get
-            {
-                return (TabViewPositions)(this.GetValue(TabPositionProperty));
-            }
-            set
-            {
-                this.SetValue(TabPositionProperty, value);
-            }
+            get { return (TabViewPositions)(this.GetValue(TabPositionProperty)); }
+            set { this.SetValue(TabPositionProperty, value);  }
         }
 
         private static void TabPositionChanged(BindableObject bindable, object oldValue, object newValue)
@@ -405,60 +244,24 @@ namespace AsNum.XFControls
             var tv = (TabView)bindable;
             tv.UpdatePosition();
         }
-        #endregion
 
-        #region TabBarBackgroundColor
-        /// <summary>
-        /// 标签条的背景颜色,默认透明
-        /// </summary>
-        public static readonly BindableProperty TabBarBackgroundColorProperty =
-            BindableProperty.Create("TabBarBackgroundColor",
-                typeof(Color),
-                typeof(TabView),
-                Color.FromHex("EEEEEE")
-                );
 
         /// <summary>
         /// 标签条的背景颜色,默认透明
         /// </summary>
         public Color TabBarBackgroundColor
         {
-            get
-            {
-                return (Color)this.GetValue(TabBarBackgroundColorProperty);
-            }
-            set
-            {
-                this.SetValue(TabBarBackgroundColorProperty, value);
-            }
+            get { return (Color)this.GetValue(TabBarBackgroundColorProperty); }
+            set { this.SetValue(TabBarBackgroundColorProperty, value); }
         }
-        #endregion
-
-        #region TransitionTypes
-        /// <summary>
-        /// 转场动画类型,默认 Fade
-        /// </summary>
-        public static readonly BindableProperty TransitionTypeProperty =
-            BindableProperty.Create("TransitionType",
-                typeof(TabViewTransitionTypes),
-                typeof(TabView),
-                TabViewTransitionTypes.Fade,
-                propertyChanged: TransitionChanged
-                );
 
         /// <summary>
         /// 转场动画类型,默认 Fade
         /// </summary>
         public TabViewTransitionTypes TransitionType
         {
-            get
-            {
-                return (TabViewTransitionTypes)this.GetValue(TransitionTypeProperty);
-            }
-            set
-            {
-                this.SetValue(TransitionTypeProperty, value);
-            }
+            get { return (TabViewTransitionTypes)this.GetValue(TransitionTypeProperty); }
+            set { this.SetValue(TransitionTypeProperty, value); }
         }
 
         private static void TransitionChanged(BindableObject bindable, object oldValue, object newValue)
@@ -470,40 +273,10 @@ namespace AsNum.XFControls
             }
         }
 
-        #endregion
-
-        #region 直接在XAML里写子控件,未调试通地,
-        //public static readonly BindableProperty PagesProperty =
-        //    BindableProperty.Create("Pages",
-        //        typeof(IList<TabPageView>),
-        //        typeof(TabView),
-        //        null,
-        //        propertyChanged: PagesChanged
-        //        );
-
-        //public IList<TabPageView> Pages {
-        //    get {
-        //        return (IList<TabPageView>)this.GetValue(PagesProperty);
-        //    }
-        //    set {
-        //        this.SetValue(PagesProperty, value);
-        //    }
-        //}
-
-        //private static void PagesChanged(BindableObject bindable, object oldValue, object newValue) {
-        //    var tv = (TabView)bindable;
-        //    tv.ItemsSource = (IList<TabPageView>)newValue;
-        //}
-
-        #endregion
-
         /// <summary>
         /// 使用 Pages 就不能使用 ItemsSource
         /// </summary>
-        public ObservableCollection<TabPageView> Pages
-        {
-            get;
-        } = new ObservableCollection<TabPageView>();
+        public ObservableCollection<TabPageView> Pages { get; } = new ObservableCollection<TabPageView>();
 
         /// <summary>
         /// 标签头的 Tap 触发命令，内部使用，用于切换标签
@@ -520,31 +293,7 @@ namespace AsNum.XFControls
         /// 当前选中的标签
         /// </summary>
         public TabPageView CurrentTabPage { get; private set; }
-
-
-
-        #region 容器
-        /// <summary>
-        /// 子视图容器
-        /// </summary>
-        private Grid PageContainer = null;
-
-        /// <summary>
-        /// 标签容器的父容器, 如果标签过多，可以滚
-        /// </summary>
-        private ScrollView TabBarScroller = null;
-
-        /// <summary>
-        /// 内层标签容器
-        /// </summary>
-        private StackLayout TabBarInner = null;
-
-        /// <summary>
-        /// 外层标签容器
-        /// </summary>
-        private ContentView TabBar = null;
         #endregion
-
 
 
         /// <summary>
@@ -553,26 +302,17 @@ namespace AsNum.XFControls
         public TabView()
         {
             this.PrepareLayout();
-
-            this.TabSelectedCmd = new Command(o => {
-                this.UpdateSelected((TabPageView)o);
-            });
-
+            this.TabSelectedCmd = new Command(o => {this.UpdateSelected((TabPageView)o);});
             this.WrapItemsSource();
-
             this.Pages.CollectionChanged += Pages_CollectionChanged;
         }
 
         private void Pages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (this.ItemsSource == null)
-            {
                 this.ItemsSource = this.Pages;
-            }
             else if (!this.ItemsSource.Equals(this.Pages))
-            {
                 throw new Exception("Can't set TabView Pages when ItemsSource is not null");
-            }
         }
 
         private void UpdateSelected(TabPageView o)
@@ -581,7 +321,6 @@ namespace AsNum.XFControls
                 return;
 
             this.IsInnerUpdate = true;
-
             var item = (TabPageView)o;
             if (item.Index == this.SelectedIndex &&
                 item.BindingContext != null &&
@@ -598,16 +337,12 @@ namespace AsNum.XFControls
             item.IsSelected = true;
             if (item.BindingContext != null && !item.BindingContext.Equals(this.SelectedItem))
                 this.SelectedItem = item.BindingContext;
-
             this.NotifySelected(item.BindingContext, true);
-
             if (item.Index != this.SelectedIndex)
                 this.SelectedIndex = item.Index;
-
             this.CurrentTabPage = item;
             //IOS下,必须加上这一句,否则会导至 item 不可操作
             this.PageContainer.RaiseChild(item);
-
             this.IsInnerUpdate = false;
         }
 
@@ -640,9 +375,7 @@ namespace AsNum.XFControls
         {
             TabPageView item;
             if (data is TabPageView)
-            {
                 item = (TabPageView)data;
-            }
             else
             {
                 item = new TabPageView()
@@ -651,7 +384,7 @@ namespace AsNum.XFControls
                     BindingContext = data
                 };
 
-                #region headView
+                #region headView 用方法重构掉
                 View headView = null;
 
                 if (this.TabTemplate != null || this.TabTemplateSelector != null)
@@ -709,18 +442,14 @@ namespace AsNum.XFControls
 
                 item.Content = bodyView;
                 #endregion
-
             }
 
 
             item.Header.SetBinding(ContentView.ControlTemplateProperty, new Binding(nameof(this.TabControlTemplate), source: this));
             item.Header.SetBinding(View.WidthRequestProperty, new Binding("TabWidthRequest", source: this));
             item.Header.SetBinding(View.HeightRequestProperty, new Binding("TabHeightRequest", source: this));
-
             item.SetBinding(TabPageView.TabPositionProperty, new Binding(nameof(TabPosition), source: this));
-
             this.SetTransition(item);
-
             return item;
         }
 
@@ -979,50 +708,5 @@ namespace AsNum.XFControls
 
     }
 
-    public enum TabViewPositions
-    {
-        /// <summary>
-        /// 顶部
-        /// </summary>
-        Top,
-        /// <summary>
-        /// 底部
-        /// </summary>
-        Bottom,
-        /// <summary>
-        /// 左
-        /// </summary>
-        Left,
-        /// <summary>
-        /// 右
-        /// </summary>
-        Right
-    }
 
-    public enum TabViewTransitionTypes
-    {
-        /// <summary>
-        /// 无动画
-        /// </summary>
-        None,
-        /// <summary>
-        /// 淡入淡出
-        /// </summary>
-        Fade
-    }
-
-    class TabViewAnimationTypeFactory
-    {
-        public static SelectChangeBehaviorBase GetBehavior(TabViewTransitionTypes transitionType)
-        {
-            switch (transitionType)
-            {
-                case TabViewTransitionTypes.None:
-                    return new VisibilityBehavior();
-                case TabViewTransitionTypes.Fade:
-                    return new FadeBehavior();
-            }
-            throw new NotSupportedException();
-        }
-    }
 }

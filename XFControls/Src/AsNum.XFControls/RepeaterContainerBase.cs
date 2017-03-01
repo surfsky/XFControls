@@ -2,6 +2,9 @@
 
 namespace AsNum.XFControls
 {
+    /// <summary>
+    /// 
+    /// </summary>
     internal static class RepeaterContainerFactory
     {
         public static RepeaterContainerBase Get(RepeaterOrientation orientation)
@@ -18,28 +21,28 @@ namespace AsNum.XFControls
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     internal abstract class RepeaterContainerBase
     {
-
-        public abstract Layout<View> Layout
-        {
-            get;
-        }
-
+        public abstract Layout<View> Layout {get;}
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     internal class WrapRepeaterContainer : RepeaterContainerBase
     {
-
         public override Layout<View> Layout
         {
-            get
-            {
-                return new WrapLayout();
-            }
+            get {return new WrapLayout();}
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     internal class VerticalRepeaterContainer : RepeaterContainerBase
     {
         public override Layout<View> Layout
@@ -54,6 +57,9 @@ namespace AsNum.XFControls
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     internal class HorizontalRepeaterContainer : RepeaterContainerBase
     {
         public override Layout<View> Layout

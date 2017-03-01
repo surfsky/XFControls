@@ -14,7 +14,19 @@ namespace AsNum.XFControls
     [ContentProperty("Children")]
     public class Flip : View
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public class IndexRequestEventArgs : EventArgs
+        {
+            public int Index { get; }
+            public IndexRequestEventArgs(int idx)
+            {
+                this.Index = idx;
+            }
+        }
 
+        // Event
         /// <summary>
         /// 下一侦
         /// </summary>
@@ -25,32 +37,24 @@ namespace AsNum.XFControls
         /// </summary>
         public event EventHandler<IndexRequestEventArgs> IndexRequired;
 
-
-        #region ItemsSource
-        /// <summary>
-        /// 源
-        /// </summary>
-        public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create("ItemsSource",
-                typeof(IEnumerable),
-                typeof(Flip),
-                null,
-                propertyChanged: ItemsSourceChanged);
+        // BindableProperty
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(Flip), null, propertyChanged: ItemsSourceChanged);
+        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create("ItemTemplate", typeof(DataTemplate), typeof(Flip), null);
+        public static readonly BindableProperty AutoPlayProperty = BindableProperty.Create("AutoPlay", typeof(bool), typeof(Flip), false, propertyChanged: AutoPlayChanged);
+        public static readonly BindableProperty IntervalProperty = BindableProperty.Create("Interval", typeof(int), typeof(Flip), 2000);
+        public static readonly BindableProperty ShowIndicatorProperty = BindableProperty.Create("ShowIndicator", typeof(bool), typeof(Flip), true);
+        public static readonly BindableProperty CurrentProperty = BindableProperty.Create("Current", typeof(int), typeof(Flip), 0, propertyChanged: CurrentChanged, defaultBindingMode: BindingMode.TwoWay);
+        public static readonly BindablePropertyKey TotalPropertyKey = BindableProperty.CreateReadOnly("Total", typeof(int), typeof(Flip), 0);
 
 
+        #region Property
         /// <summary>
         /// 数据源
         /// </summary>
         public IEnumerable ItemsSource
         {
-            get
-            {
-                return (IEnumerable)this.GetValue(ItemsSourceProperty);
-            }
-            set
-            {
-                this.SetValue(ItemsSourceProperty, value);
-            }
+            get { return (IEnumerable)this.GetValue(ItemsSourceProperty); }
+            set { this.SetValue(ItemsSourceProperty, value); }
         }
 
         private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
@@ -58,83 +62,23 @@ namespace AsNum.XFControls
             var flip = (Flip)bindable;
             flip.WrapItemsSource();
         }
-        #endregion
-
-        #region Orientation
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public static readonly BindableProperty OrientationProperty =
-        //    BindableProperty.Create(
-        //        "Orientation",
-        //        typeof(ScrollOrientation),
-        //        typeof(Flip),
-        //        ScrollOrientation.Horizontal);
-
-        //public ScrollOrientation Orientation {
-        //    get {
-        //        return (ScrollOrientation)this.GetValue(OrientationProperty);
-        //    }
-        //    set {
-        //        this.SetValue(OrientationProperty, value);
-        //    }
-        //}
-        #endregion
-
-        #region ItemTemplate
-        /// <summary>
-        /// 数据模板
-        /// </summary>
-        public static readonly BindableProperty ItemTemplateProperty =
-            BindableProperty.Create(
-                "ItemTemplate",
-                typeof(DataTemplate),
-                typeof(Flip),
-                null
-                );
 
         /// <summary>
         /// 数据模板
         /// </summary>
         public DataTemplate ItemTemplate
         {
-            get
-            {
-                return (DataTemplate)this.GetValue(ItemTemplateProperty);
-            }
-            set
-            {
-                this.SetValue(ItemTemplateProperty, value);
-            }
+            get { return (DataTemplate)this.GetValue(ItemTemplateProperty); }
+            set { this.SetValue(ItemTemplateProperty, value); }
         }
-        #endregion
-
-        #region AutoPlay
-        /// <summary>
-        /// 是否自动播放
-        /// </summary>
-        public static readonly BindableProperty AutoPlayProperty =
-            BindableProperty.Create(
-                    "AutoPlay",
-                    typeof(bool),
-                    typeof(Flip),
-                    false,
-                    propertyChanged: AutoPlayChanged
-                );
 
         /// <summary>
         /// 是否自动播放
         /// </summary>
         public bool AutoPlay
         {
-            get
-            {
-                return (bool)this.GetValue(AutoPlayProperty);
-            }
-            set
-            {
-                this.SetValue(AutoPlayProperty, value);
-            }
+            get { return (bool)this.GetValue(AutoPlayProperty); }
+            set { this.SetValue(AutoPlayProperty, value); }
         }
 
 
@@ -142,96 +86,36 @@ namespace AsNum.XFControls
         {
             var flip = (Flip)bindable;
             if ((bool)newValue)
-            {
                 flip.Play();
-            }
             else
-            {
                 flip.Stop();
-            }
         }
-        #endregion
-
-        #region Interval
-        /// <summary>
-        /// 播放间隔, 单位毫秒,默认2000
-        /// </summary>
-        public static readonly BindableProperty IntervalProperty =
-            BindableProperty.Create("Interval",
-                typeof(int),
-                typeof(Flip),
-                2000);
 
         /// <summary>
         /// 播放间隔, 单位毫秒,默认2000
         /// </summary>
         public int Interval
         {
-            get
-            {
-                return (int)this.GetValue(IntervalProperty);
-            }
-            set
-            {
-                this.SetValue(IntervalProperty, value);
-            }
+            get { return (int)this.GetValue(IntervalProperty); }
+            set { this.SetValue(IntervalProperty, value); }
         }
-        #endregion
-
-        #region ShowIndicator
-        /// <summary>
-        /// 是否显示指示点
-        /// </summary>
-        public static readonly BindableProperty ShowIndicatorProperty =
-            BindableProperty.Create(
-                    "ShowIndicator",
-                    typeof(bool),
-                    typeof(Flip),
-                    true
-                );
 
         /// <summary>
         /// 是否显示指示点
         /// </summary>
         public bool ShowIndicator
         {
-            get
-            {
-                return (bool)this.GetValue(ShowIndicatorProperty);
-            }
-            set
-            {
-                this.SetValue(ShowIndicatorProperty, value);
-            }
+            get { return (bool)this.GetValue(ShowIndicatorProperty); }
+            set { this.SetValue(ShowIndicatorProperty, value); }
         }
-        #endregion
-
-        #region Current
-        /// <summary>
-        /// 当前侦序号,从0开始
-        /// </summary>
-        public static readonly BindableProperty CurrentProperty =
-            BindableProperty.Create("Current",
-                typeof(int),
-                typeof(Flip),
-                0,
-                propertyChanged: CurrentChanged,
-                defaultBindingMode: BindingMode.TwoWay
-                );
 
         /// <summary>
         /// 当前侦序号,从0开始
         /// </summary>
         public int Current
         {
-            get
-            {
-                return (int)this.GetValue(CurrentProperty);
-            }
-            set
-            {
-                this.SetValue(CurrentProperty, value);
-            }
+            get { return (int)this.GetValue(CurrentProperty); }
+            set { this.SetValue(CurrentProperty, value); }
         }
 
         /// <summary>
@@ -252,52 +136,31 @@ namespace AsNum.XFControls
         {
             var flip = (Flip)bindable;
             flip.OnPropertyChanged("Index");
-
             if (flip.IndexRequired != null && !oldValue.Equals(newValue))
-            {
                 flip.IndexRequired.Invoke(flip, new IndexRequestEventArgs((int)newValue));
-            }
         }
-        #endregion
 
-        #region Total
         //https://developer.xamarin.com/api/type/Xamarin.Forms.BindablePropertyKey/
         /// <summary>
-        /// 条目总数
-        /// </summary>
-        public static readonly BindablePropertyKey TotalPropertyKey =
-            BindableProperty.CreateReadOnly("Total",
-                typeof(int),
-                typeof(Flip),
-                0);
-
-        /// <summary>
-        /// 条目总数,为了方便界面显示
+        /// 条目总数,为了方便界面显示//注意: TotalPropertyKey.BindableProperty//注意: TotalPropertyKey
         /// </summary>
         public int Total
         {
-            get
-            {
-                //注意: TotalPropertyKey.BindableProperty
-                return (int)this.GetValue(TotalPropertyKey.BindableProperty);
-            }
-            private set
-            {
-                //注意: TotalPropertyKey
-                this.SetValue(TotalPropertyKey, value);
-            }
+            get { return (int)this.GetValue(TotalPropertyKey.BindableProperty); }
+            private set { this.SetValue(TotalPropertyKey, value); }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ObservableCollection<View> Children { get; } = new ObservableCollection<View>();
 
         #endregion
 
 
-        public ObservableCollection<View> Children
-        {
-            get;
-        } = new ObservableCollection<View>();
 
 
-        #region 数据源变动事件
+        // private methods
         /// <summary>
         /// 订阅数据源变化通知
         /// </summary>
@@ -316,26 +179,20 @@ namespace AsNum.XFControls
         private void Add(IList datas, int idx)
         {
             var c = this.Children.Count();
-
             foreach (var d in datas)
             {
                 var i = idx++;
                 var v = this.GetChild(d);
                 if (i < c)
-                {
                     this.Children.Insert(i, v);
-                }
                 else
-                {
                     this.Children.Add(v);
-                }
             }
         }
 
         private void Remove(IList datas, int idx)
         {
             var headers = this.Children.Skip(idx).Take(datas.Count);
-
             for (var i = idx; i < datas.Count; i++)
             {
                 this.Children.RemoveAt(i);
@@ -345,7 +202,6 @@ namespace AsNum.XFControls
         private void Reset()
         {
             this.Children.Clear();
-
             if (this.ItemsSource != null)
             {
                 var idx = 0;
@@ -357,7 +213,7 @@ namespace AsNum.XFControls
                 }
             }
         }
-        #endregion
+
 
         /// <summary>
         /// 根据数据模板,生成子元素
@@ -383,7 +239,6 @@ namespace AsNum.XFControls
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-
             foreach (var c in this.Children)
             {
                 if (c.Parent == null)
@@ -420,16 +275,6 @@ namespace AsNum.XFControls
 
 
 
-        public class IndexRequestEventArgs : EventArgs
-        {
-
-            public int Index { get; }
-
-            public IndexRequestEventArgs(int idx)
-            {
-                this.Index = idx;
-            }
-        }
     }
 
 }

@@ -6,15 +6,11 @@ namespace AsNum.XFControls.Binders
 {
     public class TapBinder
     {
+        public static readonly BindableProperty CmdProperty = BindableProperty.CreateAttached("Cmd", typeof(ICommand), typeof(TapBinder), null, propertyChanged: Changed);
+        public static readonly BindableProperty ParamProperty = BindableProperty.CreateAttached("Param", typeof(object), typeof(TapBinder), null, propertyChanged: Changed);
+        public static readonly BindableProperty WithFeedbackProperty = BindableProperty.CreateAttached("WithFeedback", typeof(bool), typeof(TapBinder), true, propertyChanged: Changed);
 
-        #region Command
-        public static readonly BindableProperty CmdProperty =
-            BindableProperty.CreateAttached("Cmd",
-                typeof(ICommand),
-                typeof(TapBinder),
-                null,
-                propertyChanged: Changed);
-
+        // Cmd
         public static void SetCmd(BindableObject view, ICommand cmd)
         {
             view.SetValue(CmdProperty, cmd);
@@ -24,16 +20,8 @@ namespace AsNum.XFControls.Binders
         {
             return (ICommand)view.GetValue(CmdProperty);
         }
-        #endregion
 
-        #region Param
-        public static readonly BindableProperty ParamProperty =
-            BindableProperty.CreateAttached("Param",
-                typeof(object),
-                typeof(TapBinder),
-                null,
-                propertyChanged: Changed);
-
+        // Param
         public static void SetParam(BindableObject view, object param)
         {
             view.SetValue(ParamProperty, param);
@@ -43,17 +31,9 @@ namespace AsNum.XFControls.Binders
         {
             return view.GetValue(ParamProperty);
         }
-        #endregion
 
-        #region WithFeedback
-        public static readonly BindableProperty WithFeedbackProperty =
-            BindableProperty.CreateAttached("WithFeedback",
-                typeof(bool),
-                typeof(TapBinder),
-                true,
-                propertyChanged: Changed
-                );
 
+        // WithFeedback
         public static void SetWithFeedback(BindableObject view, bool withFeedback)
         {
             view.SetValue(WithFeedbackProperty, withFeedback);
@@ -63,14 +43,12 @@ namespace AsNum.XFControls.Binders
         {
             return (bool)view.GetValue(WithFeedbackProperty);
         }
-        #endregion
 
+        //
         private static void Changed(BindableObject bindable, object oldValue, object newValue)
         {
             var view = (View)bindable;
-
             var gesture = (TapGestureRecognizer)view.GestureRecognizers.FirstOrDefault(g => g is TapGestureRecognizer);
-
             if (gesture == null)
             {
                 gesture = new TapGestureRecognizer();
@@ -96,11 +74,12 @@ namespace AsNum.XFControls.Binders
 
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         class TapEffect : RoutingEffect
         {
-            public TapEffect()
-                : base("AsNum.TapEffect")
+            public TapEffect() : base("AsNum.TapEffect")
             {
             }
         }

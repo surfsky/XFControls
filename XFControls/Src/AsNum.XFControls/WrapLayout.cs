@@ -14,22 +14,7 @@ namespace AsNum.XFControls
     public class WrapLayout : Layout<View>
     {
         Dictionary<View, SizeRequest> layoutCache = new Dictionary<View, SizeRequest>();
-
-        /// <summary>
-        /// Backing Storage for the Spacing property
-        /// </summary>
-        public static readonly BindableProperty SpacingProperty =
-            BindableProperty.Create("Spacing",
-                                    typeof(double),
-                                    typeof(WrapLayout),
-                                    5D,
-                                    propertyChanged: SpacingChanged
-                                    );
-
-        private static void SpacingChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            ((WrapLayout)bindable).layoutCache.Clear();
-        }
+        public static readonly BindableProperty SpacingProperty = BindableProperty.Create("Spacing", typeof(double), typeof(WrapLayout), 5D, propertyChanged: SpacingChanged );
 
         /// <summary>
         /// Spacing added between elements (both directions)
@@ -41,6 +26,15 @@ namespace AsNum.XFControls
             set { SetValue(SpacingProperty, value); }
         }
 
+        private static void SpacingChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            ((WrapLayout)bindable).layoutCache.Clear();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
         public WrapLayout()
         {
             VerticalOptions = HorizontalOptions = LayoutOptions.FillAndExpand;
@@ -95,8 +89,6 @@ namespace AsNum.XFControls
             double right = width;
             double nextY = 0;
 
-
-
             lastX = 0;
             lastY = 0;
 
@@ -128,19 +120,9 @@ namespace AsNum.XFControls
                     }
                 }
 
-                currentList.Add(new Tuple<View, Rectangle>(
-                                            child,
-                                            new Rectangle(
-                                                startX,
-                                                startY,
-                                                sizeRequest.Request.Width,
-                                                sizeRequest.Request.Height)
-                                                )
-                                 );
-
+                currentList.Add(new Tuple<View, Rectangle>( child, new Rectangle( startX, startY, sizeRequest.Request.Width, sizeRequest.Request.Height) ) );
                 lastX = Math.Max(lastX, startX + paddedWidth);
                 lastY = Math.Max(lastY, startY + paddedHeight);
-
                 nextY = Math.Max(nextY, paddedHeight);
                 startX += paddedWidth;
             }

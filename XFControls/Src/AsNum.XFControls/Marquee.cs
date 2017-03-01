@@ -12,126 +12,72 @@ namespace AsNum.XFControls
     /// </summary>
     public class Marquee : AbsoluteLayout
     {
+        // BindableProperty
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(Marquee), null, propertyChanged: ItemsSourceChanged);
+        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create("ItemTemplate", typeof(DataTemplate), typeof(Marquee));
+        public static readonly BindableProperty IntervalProperty = BindableProperty.Create("Interval", typeof(int), typeof(Marquee), 3000);
 
-        #region itemsSource 数据源
-
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create("ItemsSource",
-                typeof(IEnumerable),
-                typeof(Marquee),
-                null,
-                propertyChanged: ItemsSourceChanged);
-
+        #region Property
         /// <summary>
         /// 数据源
         /// </summary>
         public IEnumerable ItemsSource
         {
-            get
-            {
-                return (IList)this.GetValue(ItemsSourceProperty);
-            }
-            set
-            {
-                this.SetValue(ItemsSourceProperty, value);
-            }
+            get { return (IList)this.GetValue(ItemsSourceProperty); }
+            set { this.SetValue(ItemsSourceProperty, value); }
         }
 
         private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var tv = (Marquee)bindable;
             tv.UpdateChildren();
-
             if (newValue is INotifyCollectionChanged)
             {
                 var newCollection = (INotifyCollectionChanged)newValue;
                 tv.InitCollection(newCollection);
             }
         }
-        #endregion
-
-        #region ItemTemplate 数据模板
-        /// <summary>
-        /// 数据模板
-        /// </summary>
-        public static readonly BindableProperty ItemTemplateProperty =
-            BindableProperty.Create("ItemTemplate",
-                typeof(DataTemplate),
-                typeof(Marquee)
-                );
 
         /// <summary>
         /// 数据模板
         /// </summary>
         public DataTemplate ItemTemplate
         {
-            get
-            {
-                return (DataTemplate)GetValue(ItemTemplateProperty);
-            }
-            set
-            {
-                SetValue(ItemTemplateProperty, value);
-            }
+            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
+            set { SetValue(ItemTemplateProperty, value); }
         }
-        #endregion
-
-        #region Interval
-        /// <summary>
-        /// 切换间隔, 单位毫秒,默认3000
-        /// </summary>
-        public static readonly BindableProperty IntervalProperty =
-            BindableProperty.Create("Interval",
-                typeof(int),
-                typeof(Marquee),
-                3000);
 
         /// <summary>
         /// 切换间隔, 单位毫秒,默认3000
         /// </summary>
         public int Interval
         {
-            get
-            {
-                return (int)this.GetValue(IntervalProperty);
-            }
-            set
-            {
-                this.SetValue(IntervalProperty, value);
-            }
+            get { return (int)this.GetValue(IntervalProperty); }
+            set { this.SetValue(IntervalProperty, value); }
         }
-        #endregion
 
-        private int? _current = null;
         /// <summary>
         /// 当前序号
         /// </summary>
         private int? Current
         {
-            get
-            {
-                return this._current;
-            }
-            set
-            {
-                this._current = value < 0 ? 0 : value >= this.Children.Count ? 0 : value;
-            }
+            get { return this._current; }
+            set { this._current = value < 0 ? 0 : value >= this.Children.Count ? 0 : value; }
         }
+        #endregion
+
+        // private
+        private bool _running = false;
+        private int? _current = null;
 
         /// <summary>
-        /// 是否正在运行
+        /// 
         /// </summary>
-        private bool IsRunning = false;
-
         public Marquee()
         {
             //可视范围之外的内容不可见
             this.IsClippedToBounds = true;
             this.ChildAdded += Marquee_ChildAdded;
-            //this.Loop();
         }
 
         private async Task Animate(View view, bool isCurrent)
@@ -163,7 +109,7 @@ namespace AsNum.XFControls
 
         private void Begin()
         {
-            if (this.IsRunning)
+            if (this._running)
                 return;
             else
                 this.Run();
@@ -173,8 +119,7 @@ namespace AsNum.XFControls
         {
             if (this.Children.Count > 0)
             {
-                this.IsRunning = true;
-
+                this._running = true;
                 if (this.Current.HasValue)
                 {
                     var outEle = this.Children[this.Current.Value];
@@ -190,8 +135,7 @@ namespace AsNum.XFControls
                 await this.Animate(inEle, true);
             }
 
-            await Task.Delay(this.Interval)
-                    .ContinueWith(t => this.Run(), TaskScheduler.FromCurrentSynchronizationContext());
+            await Task.Delay(this.Interval).ContinueWith(t => this.Run(), TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private void Marquee_ChildAdded(object sender, ElementEventArgs e)

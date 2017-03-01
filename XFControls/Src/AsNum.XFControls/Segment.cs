@@ -8,6 +8,33 @@ using Xamarin.Forms;
 
 namespace AsNum.XFControls
 {
+    /// <summary>
+    /// Segment item
+    /// </summary>
+    public class SegmentItem : ContentView
+    {
+
+        public static BindableProperty ValueProperty = BindableProperty.Create("Value", typeof(object), typeof(SegmentItem));
+        public static BindableProperty IsSelectedProperty = BindableProperty.Create("IsSelected", typeof(bool), typeof(SegmentItem), false, BindingMode.TwoWay, propertyChanged: IsSelectedChanged);
+
+        public object Value
+        {
+            get { return this.GetValue(ValueProperty); }
+            set { this.SetValue(ValueProperty, value); }
+        }
+
+        public bool IsSelected
+        {
+            get { return (bool)this.GetValue(IsSelectedProperty); }
+            set { this.SetValue(IsSelectedProperty, value); }
+        }
+
+        private static void IsSelectedChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+
+        }
+    }
+
 
     /// <summary>
     /// Segment 模拟
@@ -15,163 +42,60 @@ namespace AsNum.XFControls
     [ContentProperty("Items")]
     public class Segment : ContentView
     {
+        // BindableProperty
+        public static readonly BindableProperty IsMutliSelectableProperty = BindableProperty.Create("IsMutliSelectable", typeof(bool), typeof(Segment), false);
+        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create("SelectedItem", typeof(object), typeof(Segment), null, BindingMode.TwoWay);
+        public static readonly BindablePropertyKey SelectedItemsPropertyKey = BindableProperty.CreateReadOnly("SelectedItems", typeof(IList), typeof(Segment), new List<object>(), BindingMode.TwoWay);
+        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create("ItemTemplate", typeof(DataTemplate), typeof(Segment), null);
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(Segment), null, propertyChanged: ItemsSourceChanged);
+        public static readonly BindableProperty SelectedItemBackgroundColorProperty = BindableProperty.Create("SelectedItemBackgroundColor", typeof(Color), typeof(Segment), Color.Blue);
 
 
-        #region IsMutliSelectable
-        /// <summary>
-        /// 是否可多选
-        /// </summary>
-        public static readonly BindableProperty IsMutliSelectableProperty =
-            BindableProperty.Create("IsMutliSelectable",
-                typeof(bool),
-                typeof(Segment),
-                false);
 
+        #region Property
         /// <summary>
         /// 是否可多选
         /// </summary>
         public bool IsMutliSelectable
         {
-            get
-            {
-                return (bool)this.GetValue(IsMutliSelectableProperty);
-            }
-            set
-            {
-                this.SetValue(IsMutliSelectableProperty, value);
-            }
+            get { return (bool)this.GetValue(IsMutliSelectableProperty); }
+            set { this.SetValue(IsMutliSelectableProperty, value); }
         }
-
-        #endregion
-
-        #region SelectedItem
-        /// <summary>
-        /// 选中的数据
-        /// </summary>
-        public static readonly BindableProperty SelectedItemProperty =
-            BindableProperty.Create("SelectedItem",
-                typeof(object),
-                typeof(Segment),
-                null,
-                BindingMode.TwoWay);
-
 
         /// <summary>
         /// 选中的数据
         /// </summary>
         public object SelectedItem
         {
-            get
-            {
-                return this.GetValue(SelectedItemProperty);
-            }
-            set
-            {
-                this.SetValue(SelectedItemProperty, value);
-            }
+            get { return this.GetValue(SelectedItemProperty); }
+            set { this.SetValue(SelectedItemProperty, value); }
         }
-
-        #endregion
-
-        #region SelectedItems
-        /// <summary>
-        /// 选中的数据, 仅作用于 IsMutliSelectable = true
-        /// </summary>
-        public static readonly BindablePropertyKey SelectedItemsPropertyKey
-            = BindableProperty.CreateReadOnly("SelectedItems",
-                typeof(IList),
-                typeof(Segment),
-                new List<object>(),
-                BindingMode.TwoWay
-                );
-
-        //private static void SelectedItemsChanged(BindableObject bindable, object oldValue, object newValue) {
-        //    throw new NotImplementedException();
-        //}
 
         /// <summary>
         /// 选中的数据, 仅作用于 IsMutliSelectable = true
         /// </summary>
         public IList SelectedItems
         {
-            get
-            {
-                return (IList)this.GetValue(SelectedItemsPropertyKey.BindableProperty);
-            }
-            set
-            {
-                this.SetValue(SelectedItemsPropertyKey, value);
-            }
+            get { return (IList)this.GetValue(SelectedItemsPropertyKey.BindableProperty); }
+            set { this.SetValue(SelectedItemsPropertyKey, value); }
         }
-        #endregion
-
-        #region ItemTemplate
-        /// <summary>
-        /// 数据模板
-        /// </summary>
-        public static readonly BindableProperty ItemTemplateProperty =
-            BindableProperty.Create("ItemTemplate",
-                typeof(DataTemplate),
-                typeof(Segment),
-                null);
 
         /// <summary>
         /// 数据模板
         /// </summary>
         public DataTemplate ItemTemplate
         {
-            get
-            {
-                return (DataTemplate)this.GetValue(ItemTemplateProperty);
-            }
-            set
-            {
-                this.SetValue(ItemTemplateProperty, value);
-            }
+            get { return (DataTemplate)this.GetValue(ItemTemplateProperty); }
+            set { this.SetValue(ItemTemplateProperty, value); }
         }
-        #endregion
-
-        //#region SelectedItemTemplate
-        //public static readonly BindableProperty SelectedItemControlTemplateProperty =
-        //    BindableProperty.Create("SelectedItemControlTemplate",
-        //        typeof(ControlTemplate),
-        //        typeof(Segment),
-        //        null);
-
-        //public ControlTemplate SelectedItemControlTemplate {
-        //    get {
-        //        return (ControlTemplate)this.GetValue(SelectedItemControlTemplateProperty);
-        //    }
-        //    set {
-        //        this.SetValue(SelectedItemControlTemplateProperty, value);
-        //    }
-        //}
-        //#endregion
-
-        #region itemsSource 数据源
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        public static readonly BindableProperty ItemsSourceProperty =
-            BindableProperty.Create("ItemsSource",
-                typeof(IEnumerable),
-                typeof(Segment),
-                null,
-                propertyChanged: ItemsSourceChanged);
 
         /// <summary>
         /// 数据源
         /// </summary>
         public IEnumerable ItemsSource
         {
-            get
-            {
-                return (IEnumerable)this.GetValue(ItemsSourceProperty);
-            }
-            set
-            {
-                this.SetValue(ItemsSourceProperty, value);
-            }
+            get { return (IEnumerable)this.GetValue(ItemsSourceProperty); }
+            set { this.SetValue(ItemsSourceProperty, value); }
         }
 
         private static void ItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
@@ -184,52 +108,38 @@ namespace AsNum.XFControls
                 seg.Add(source.ToList(), 0);
             }
         }
-        #endregion
 
-        #region SelectedItemBackgroundColor
-        /// <summary>
-        /// 选中项的背景颜色
-        /// </summary>
-        public static readonly BindableProperty SelectedItemBackgroundColorProperty =
-            BindableProperty.Create("SelectedItemBackgroundColor",
-                typeof(Color),
-                typeof(Segment),
-                Color.Blue);
 
         /// <summary>
         /// 选中项的背景颜色
         /// </summary>
         public Color SelectedItemBackgroundColor
         {
-            get
-            {
-                return (Color)this.GetValue(SelectedItemBackgroundColorProperty);
-            }
-            set
-            {
-                this.SetValue(SelectedItemBackgroundColorProperty, value);
-            }
+            get { return (Color)this.GetValue(SelectedItemBackgroundColorProperty); }
+            set { this.SetValue(SelectedItemBackgroundColorProperty, value); }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ObservableCollection<SegmentItem> Items { get; } = new ObservableCollection<SegmentItem>();
 
         #endregion
 
 
+        /// <summary>
+        /// private
+        /// </summary>
         private Grid Container;
-        public ObservableCollection<SegmentItem> Items
-        {
-            get;
-        } = new ObservableCollection<SegmentItem>();
-
         private ICommand SelectedCmd { get; }
-
         private SegmentItem SelectedSegment = null;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Segment()
         {
-            this.Container = new Grid()
-            {
-                ColumnSpacing = 0
-            };
+            this.Container = new Grid() { ColumnSpacing = 0 };
             this.Content = this.Container;
 
             this.SelectedCmd = new Command((o) => {
@@ -357,56 +267,4 @@ namespace AsNum.XFControls
         }
     }
 
-    public class SegmentItem : ContentView
-    {
-
-        #region value
-        public static BindableProperty ValueProperty =
-            BindableProperty.Create("Value",
-                typeof(object),
-                typeof(SegmentItem));
-
-        public object Value
-        {
-            get
-            {
-                return this.GetValue(ValueProperty);
-            }
-            set
-            {
-                this.SetValue(ValueProperty, value);
-            }
-        }
-        #endregion
-
-        #region isSelected
-        public static BindableProperty IsSelectedProperty =
-            BindableProperty.Create("IsSelected",
-                typeof(bool),
-                typeof(SegmentItem),
-                false,
-                BindingMode.TwoWay,
-                propertyChanged: IsSelectedChanged
-                );
-
-        private static void IsSelectedChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-
-        }
-
-        public bool IsSelected
-        {
-            get
-            {
-                return (bool)this.GetValue(IsSelectedProperty);
-            }
-            set
-            {
-                this.SetValue(IsSelectedProperty, value);
-            }
-        }
-        #endregion
-
-
-    }
 }

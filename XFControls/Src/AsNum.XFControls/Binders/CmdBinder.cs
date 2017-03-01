@@ -5,31 +5,15 @@ using Xamarin.Forms;
 
 namespace AsNum.XFControls.Binders
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CmdBinder
     {
-
-
         #region
-        public static readonly BindableProperty EventProperty =
-            BindableProperty.CreateAttached("Event",
-                typeof(string),
-                typeof(CmdBinder),
-                null
-                );
-
-        public static readonly BindableProperty CmdProperty =
-            BindableProperty.CreateAttached("Cmd",
-                typeof(ICommand),
-                typeof(CmdBinder),
-                null,
-                propertyChanged: CommandChanged
-                );
-
-        public static readonly BindableProperty ParamProperty =
-            BindableProperty.CreateAttached("Param",
-                typeof(object),
-                typeof(CmdBinder),
-                null);
+        public static readonly BindableProperty EventProperty = BindableProperty.CreateAttached("Event", typeof(string), typeof(CmdBinder), null );
+        public static readonly BindableProperty CmdProperty =  BindableProperty.CreateAttached("Cmd", typeof(ICommand), typeof(CmdBinder), null, propertyChanged: CommandChanged );
+        public static readonly BindableProperty ParamProperty = BindableProperty.CreateAttached("Param", typeof(object), typeof(CmdBinder), null);
 
         public static object GetParam(BindableObject o)
         {
@@ -47,38 +31,28 @@ namespace AsNum.XFControls.Binders
         }
         #endregion
 
-        private static MethodInfo CreateDelegateMethod = null;
-        private static MethodInfo FireMethod = null;
-        private static bool CanUse = false;
+        private static MethodInfo _createDelegateMethod = null;
+        private static MethodInfo _fireMethod = null;
+        private static bool _canUse = false;
 
         static CmdBinder()
         {
-            //CreateDelegateMethod = typeof(Delegate)
-            //    .GetRuntimeMethods()
-            //    .FirstOrDefault(m => m.Name.Equals("CreateDelegate"));
-
-
-            CreateDelegateMethod = typeof(Delegate)
-                .GetRuntimeMethod("CreateDelegate", new Type[] { typeof(Type), typeof(MethodInfo) });
-
-            if (CreateDelegateMethod != null)
+            _createDelegateMethod = typeof(Delegate).GetRuntimeMethod("CreateDelegate", new Type[] { typeof(Type), typeof(MethodInfo) });
+            if (_createDelegateMethod != null)
             {
-                FireMethod = typeof(CmdBinder).GetTypeInfo()
-                    .GetDeclaredMethod("Fire");
-
-                CanUse = true;
+                _fireMethod = typeof(CmdBinder).GetTypeInfo().GetDeclaredMethod("Fire");
+                _canUse = true;
             }
         }
 
         private static void CommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (CanUse)
+            if (_canUse)
             {
                 var evt = bindable.GetType().GetTypeInfo().GetDeclaredEvent(GetEvent(bindable));
-
                 if (evt != null)
                 {
-                    var handler = (Delegate)CreateDelegateMethod.Invoke(null, new object[] { evt.EventHandlerType, FireMethod });
+                    var handler = (Delegate)_createDelegateMethod.Invoke(null, new object[] { evt.EventHandlerType, _fireMethod });
                     evt.AddEventHandler(bindable, handler);
                 }
             }

@@ -15,7 +15,7 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v4.4.87</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <AndroidTlsProvider>
@@ -102,7 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BorderRender.cs" />
-    <Compile Include="CircleBoxRender.cs" />
+    <Compile Include="RoundRender.cs" />
     <Compile Include="AsNumAssemblyHelper.cs" />
     <Compile Include="ColorNumberPicker.cs" />
     <Compile Include="DataPickerRender.cs" />
